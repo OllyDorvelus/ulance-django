@@ -1,0 +1,9 @@
+{
+	"version": 3,
+	"file": "C:/Users/13477/Documents/Code/Dev/Ulance/env/src/ulance/static-storage/static/css/main.css",
+	"sources": [
+		"C:/Users/13477/Documents/Code/Dev/Ulance/env/src/ulance/static-storage/static/css/main.scss"
+	],
+	"names": [],
+	"mappings": "AAEA,AAAA,IAAI,CAAC;EACH,gBAAgB,EAAE,GAAG,GACtB;;AAED,AAAA,CAAC,CAAC;EACA,gBAAgB,EAPL,IAAI,GAQhB"
+}

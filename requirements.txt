@@ -1,0 +1,6 @@
+Django==2.1
+django-filter==2.0.0
+django-rest-framework==0.1.0
+djangorestframework==3.8.2
+Markdown==2.6.11
+pytz==2018.5

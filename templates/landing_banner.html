@@ -1,0 +1,25 @@
+{% load static %}
+{% load staticfiles %}
+<div class="landing-intro">
+    <div class="text-center align-middle">
+    <img src = "{% static 'static/img/ulance.png' %}" class="img-fluid"/></br>
+        {% if request.user.is_authenticated %}
+        <a href="{% url 'accounts:register' %}"/><span class="ulance-btn">Become a Seller</span></a>
+        <a href="{% url 'accounts:register' %}"/><span class="ulance-btn">Start Exploring Services</span>
+        <span class="ulance-btn logout-btn">Logout</span>
+        {% else %}
+            <a href="{% url 'accounts:register' %}"/><span class="ulance-btn">Join</span></a>
+            <a href="{% url 'accounts:login' %}"><span class="ulance-btn">Login</span></a>
+        {% endif %}
+    </div>
+
+
+    <!--<div class="row" style="display:table-cell">-->
+        <!--<div class="col-md-4">-->
+            <!--<p>Join</p>-->
+        <!--</div>-->
+    <!--</div>-->
+</div>
+
+{% include "_errors.html" %}
+

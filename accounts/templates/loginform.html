@@ -1,0 +1,36 @@
+{% extends 'base.html' %}
+{% block content %}
+{% include '_errors.html' %}
+<!--<div class="" style="text-align:center">-->
+<div class="row h-75 justify-content-center align-items-center">
+<form id="loginform">
+    {% csrf_token %}
+  <div class="form-group row" style="width:400px">
+    <div class="col-md-12">
+      <span class="text-center text-danger" id="username"></span>
+      <span class="text-center text-danger" id="non_field_errors">Unable to log in with provided credentials.</span>
+      <input type="text" name="username" class="form-control" placeholder="Username">
+    </div>
+  </div>
+  <div class="form-group row">
+    <div class="col-md-12">
+      <span class="text-center text-danger" id="email"></span>
+      <input type="email" name="email" class="form-control" placeholder="Email">
+    </div>
+  </div>
+  <div class="form-group row">
+    <div class="col-md-12">
+      <span class="text-center text-danger" id="password"></span>
+      <input type="password" name="password" class="form-control"  placeholder="Password">
+    </div>
+  </div>
+  <div class="form-group row text-center">
+    <div class="col-sm-10">
+      <button type="submit" class="ulance-btn" style="font-size:14px">Login</button>
+    </div>
+  </div>
+</form>
+</div>
+<!--</div>-->
+
+{% endblock content %}

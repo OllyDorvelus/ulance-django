@@ -1,0 +1,40 @@
+$primary-cl: c9b241;
+$white: #fff;
+$bg: #f2f2f2;
+$black: #000;
+$primary-font: 'Nunito';
+
+// Imports
+@import 'index/index';
+
+body {
+  font-family: $primary-font;
+  background-color: $bg;
+}
+
+  .ulance-btn {
+    border: 1px solid;
+    border-color: $primary-cl;
+    padding:10px 2.5em;
+    font-weight: 600;
+    color: $primary-cl;
+    background-color: #262626;
+  }
+
+  .ulance-btn:hover {
+    opacity: 0.75;
+    background-color: $primary-cl;
+    color:black;
+    cursor: pointer;
+  }
+
+a:hover {
+  text-decoration: none;
+}
+
+.form-group > div > span {
+  display: none;
+}
+
+
+

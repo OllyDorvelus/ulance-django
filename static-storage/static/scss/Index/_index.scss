@@ -1,0 +1,30 @@
+.landing-intro {
+  height: 500px;
+  width: 100%;
+  background-color: gray;
+  display: table;
+  color: $primary-cl;
+
+  div {
+    display: table-cell;
+    vertical-align: middle;
+
+    img {
+      height: 65%;
+    }
+  }
+
+  h2 {
+    color: $primary-cl;
+    display: table-cell;
+    font-weight: 600;
+  }
+
+  span {
+    border: 1px solid;
+    border-color: $primary-cl;
+    padding:10px 2.5em;
+    font-weight: 600;
+  }
+}
+
