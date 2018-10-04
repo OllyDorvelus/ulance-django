@@ -1,0 +1,34 @@
+{% if request.user.is_authenticated %}
+{% load static %}
+{% load staticfiles %}
+<!--<div class="subnav">-->
+        <!--<div class="dropdown-hover">Graphic Design-->
+            <!--<div class="dropdown-content">-->
+                <!--<a href="#">Hello World</a>-->
+                <!--<a href="#">Hello World</a>-->
+                <!--<a href="#">Hello World</a>-->
+            <!--</div>-->
+        <!--</div>-->
+        <!--<div class="dropdown-hover">Graphic Design-->
+            <!--<div class="dropdown-content">-->
+                <!--<a href="#">Hello World Hello World Hello World</a>-->
+                <!--<a href="#">Hello World</a>-->
+                <!--<a href="#">Hello World</a>-->
+            <!--</div>-->
+        <!--</div>-->
+    <!--</div>-->
+<div class="subnav">
+    <hr>
+    {% for parent_category in parent_categories %}
+        <div class="dropdown-hover">
+            <div class="subnav-item">{{ parent_category.name }}</div>
+            <div class="dropdown-content">
+                {% for sub_category in parent_category.children.all %}
+                    <a href="#">{{sub_category.name}}</a>
+                {% endfor %}
+            </div>
+        </div>
+    {% endfor %}
+    <hr>
+</div>
+{% endif %}

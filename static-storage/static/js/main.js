@@ -1,9 +1,15 @@
 /**
  * Created by 13477 on 9/1/2018.
  */
-//$(document).ready(function() {
-//    $('body').fadeOut(2000)
-//})
+$(document).ready(function() {
+    $('.subnav-item').mouseenter(function(){
+    //$(this).animate({backgroundColor: 'yellow'},500)
+    $(this).animate({borderWidth: '2px'},250)
+  }).mouseleave(function(){
+    $(this).animate({borderWidth: '0px'},250)
+  })
+
+})
 
 function getCookie(name) {
     var cookieValue = null;

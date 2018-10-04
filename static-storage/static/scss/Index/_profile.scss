@@ -1,0 +1,67 @@
+#user-section {
+
+}
+
+#service-section {
+
+}
+
+.card-header-section {
+  font-weight:bold;
+  border-bottom: 0.125rem solid lightgray;
+  text-transform: uppercase;
+  font-size: 0.8rem;
+}
+
+.badge-info {
+  background-color: $primary-cl;
+  font-size: 0.7rem;
+  margin-top: 0.3rem;
+}
+
+#talent-section {
+  font-size: 0.8rem;
+
+  button {
+   padding-top: 0.5rem;
+   padding-bottom: 0.5rem;
+   margin-top: 0.5rem;
+   margin-bottom: 0.5rem;
+   width: 100%;
+  }
+
+  p {
+    padding: 0.1rem;
+    margin: 0;
+  }
+
+  #skills {
+    padding-bottom: 0.5rem;
+  }
+
+  #certifications {
+    padding-bottom: 0.5rem;
+
+  }
+
+  #links {
+    div {
+      background-color:#f0e9df;
+      padding-top: 0.5rem;
+      padding-bottom: 0.5rem;
+
+      p {
+        font-weight:bold;
+        text-transform: uppercase;
+      }
+    }
+  }
+
+  button {
+
+  }
+}
+
+#add-link {
+  display:none;
+}

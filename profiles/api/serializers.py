@@ -1,6 +1,7 @@
 __author__ = '13477'
 from profiles.models import (ProfileModel, SkillModel, PortfolioModel, PictureModel, LinkModel, LevelModel)
 from rest_framework import serializers
+from services.api.serializers import ServiceSerializer
 from rest_framework.serializers import (
     EmailField,
     CharField,
@@ -45,7 +46,8 @@ class PortfolioSerializer(serializers.ModelSerializer):
 
 class LevelSerializer(serializers.ModelSerializer):
     user = UserModelSerializer(read_only=True)
-    skill = SkillSerializer()
+  #  skill = SkillSerializer(read_only=True)
+    skill = serializers.ChoiceField(choices=list(SkillModel.objects.all().values_list('name', flat=True)))
     class Meta:
         model = LevelModel
         fields = '__all__'

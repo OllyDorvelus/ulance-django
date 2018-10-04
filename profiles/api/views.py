@@ -1,5 +1,5 @@
-__author__ = '13477'
 from rest_framework import generics, permissions, mixins
+from rest_framework.parsers import FileUploadParser
 from .serializers import ( ProfileSerializer, SkillSerializer, LinkSerializer, PortfolioSerializer, LevelSerializer )
 from profiles.models import ProfileModel, SkillModel, LinkModel, PortfolioModel, LevelModel
 from ulance import pagination
@@ -24,11 +24,9 @@ class ProfileDetailAPIView(generics.RetrieveAPIView, mixins.DestroyModelMixin, m
     queryset = ProfileModel.objects.all()
     lookup_field = 'user__username'
     permission_classes = [MyUserPermissions]
+  #  parser_classes = [FileUploadParser]
 
     def put(self, request, *args, **kwargs):
-        return self.update(request, *args, **kwargs)
-
-    def post(self, request, *args, **kwargs):
         return self.update(request, *args, **kwargs)
 
     def delete(self, request, *args, **kwargs):
@@ -50,9 +48,6 @@ class SkillDetailAPIView(generics.RetrieveAPIView, mixins.DestroyModelMixin, mix
     lookup_field = 'id'
 
     def put(self, request, *args, **kwargs):
-        return self.update(request, *args, **kwargs)
-
-    def post(self, request, *args, **kwargs):
         return self.update(request, *args, **kwargs)
 
     def delete(self, request, *args, **kwargs):
@@ -77,9 +72,6 @@ class LinkDetailAPIView(generics.RetrieveAPIView, mixins.DestroyModelMixin, mixi
     permission_classes = [MyUserPermissions]
 
     def put(self, request, *args, **kwargs):
-        return self.update(request, *args, **kwargs)
-
-    def post(self, request, *args, **kwargs):
         return self.update(request, *args, **kwargs)
 
     def delete(self, request, *args, **kwargs):
@@ -114,8 +106,6 @@ class PortfolioDetailAPIView(generics.RetrieveAPIView, mixins.DestroyModelMixin,
     def put(self, request, *args, **kwargs):
         return self.update(request, *args, **kwargs)
 
-    def post(self, request, *args, **kwargs):
-        return self.update(request, *args, **kwargs)
 
     def delete(self, request, *args, **kwargs):
         return self.destroy(self, request, *args, **kwargs)
@@ -128,7 +118,10 @@ class LevelCreateAPIView(generics.CreateAPIView):
     permission_classes = [permissions.IsAuthenticated]
 
     def perform_create(self, serializer, *args, **kwargs):
-        serializer.save(user=self.request.user)
+        skill_name = serializer.validated_data['skill']
+        skill = SkillModel.objects.get(name__iexact=skill_name)
+        serializer.save(user=self.request.user, skill=skill)
+
 
 class LevelDetailAPIView(generics.RetrieveAPIView, mixins.DestroyModelMixin, mixins.UpdateModelMixin):
     serializer_class = LevelSerializer
@@ -138,8 +131,6 @@ class LevelDetailAPIView(generics.RetrieveAPIView, mixins.DestroyModelMixin, mix
     def put(self, request, *args, **kwargs):
         return self.update(request, *args, **kwargs)
 
-    def post(self, request, *args, **kwargs):
-        return self.update(request, *args, **kwargs)
 
     def delete(self, request, *args, **kwargs):
         return self.destroy(self, request, *args, **kwargs)

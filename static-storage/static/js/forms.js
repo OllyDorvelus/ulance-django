@@ -66,6 +66,23 @@ $('.logout-btn').click(function(e) {
     }
 )
 
+$('.cancel-btn').click(function(e) {
+    e.preventDefault();
+    var form_id = $(this).attr('cancel')
+    $('#' + form_id).hide()
+    var section = 'no-' + form_id
+    $('#' + section).show()
+})
+
+$('.add-btn').click(function(e) {
+    e.preventDefault();
+    var section = $(this).attr('show')
+    $('#' + section).hide()
+    var form_id = section.replace('no-', '')
+    $('#' + form_id).show()
+})
+
+
 })
 
 

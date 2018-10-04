@@ -1,5 +1,6 @@
 from django.db import models
 from django.conf import settings
+from django.urls import reverse, reverse_lazy
 import uuid
 # Create your models here.
 
@@ -40,7 +41,7 @@ class SkillModel(models.Model):
 
 class LevelModel(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-    user = models.ForeignKey(settings.AUTH_USER_MODEL, blank=False, null=False, on_delete=models.CASCADE)
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, blank=False, null=False, on_delete=models.CASCADE, related_name='skills')
     skill = models.ForeignKey(SkillModel, blank=False, null=False, on_delete=models.CASCADE)
     BEGINNER = 'BG'
     INTERMEDIATE = 'IT'
@@ -72,6 +73,9 @@ class ProfileModel(models.Model):
     def __str__(self):
         return self.user.username
 
+    def get_absolute_url(self):
+        return reverse('profiles:profile-detail', kwargs={'username': self.user.username})
+
 class LinkModel(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     link = models.URLField(blank=False, null=False, max_length=1000)
@@ -79,6 +83,56 @@ class LinkModel(models.Model):
     brief_description = models.CharField(max_length=75, blank=False, null=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
+
+class MajorModel(models.Model):
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    major_name = models.CharField(max_length=150, blank=False, null=False)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+class EducationModel(models.Model):
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, related_name='educations', on_delete=models.CASCADE, null=False)
+    major = models.OneToOneField(MajorModel, on_delete=models.SET_NULL, null=True, blank=False)
+    school_name = models.CharField(max_length=100, blank=False, null=False)
+    FRESHMAN = 'FR'
+    SOPHMORE = 'SO'
+    JUNIOR = 'JR'
+    SENIOR = 'SR'
+    GRADUATE = 'GR'
+    YEAR_CHOICES = (
+        (FRESHMAN, 'Freshman'),
+        (SOPHMORE, 'Sophmore'),
+        (JUNIOR, 'Junior'),
+        (SENIOR, 'Senior'),
+        (GRADUATE, 'Graduate')
+    )
+    DEGREE_TYPE_CHOICES = (
+        ('AS', 'A.S.'),
+        ('BS', 'B.S.'),
+        ('MA', 'M.A.')
+    )
+    STATUS_CHOICES = (
+        ('ONG', 'Ongoing'),
+        ('INC', 'Incomplete'),
+        ('COM', 'Complete'),
+    )
+    status = models.CharField(max_length=3, choices=STATUS_CHOICES, blank=False, null=False),
+    degree_type = models.CharField(max_length=5, choices=DEGREE_TYPE_CHOICES, blank=False, null=False)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+class CertificationModel(models.Model):
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, related_name='certifications', on_delete=models.CASCADE)
+    name = models.CharField(max_length=200, blank=False, null=False)
+    issued_from = models.CharField(max_length=200, blank=False, null=False)
+    year_issued = models.DateField()
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+
+
 
 
 

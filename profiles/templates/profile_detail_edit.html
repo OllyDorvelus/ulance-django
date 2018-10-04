@@ -1,0 +1,80 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container">
+    <div class="text-center" style="padding-bottom:20px">
+        <img src="{{ User.profile.profile_pic.url }}" class="rounded-circle" style="height:150px;width:200px"/>
+    </div>
+    <div class="row" id="user-info-section">
+        <div id="user-section" class="col-4">
+            <div class="card text-center">
+                <div class="card-body">
+                    <p class="card-header-section">Description</p>
+                    <p id="description" class="description">{{ User.profile.description }}</p>
+                </div>
+            </div>
+        </div>
+        <div id="talent-section" class="col-4">
+            <div class="card text-center">
+
+                <div class="card-body">
+                    <div id="skills" class="model-section">
+                        <p class="card-header-section">Skills</p>
+                            <!--{% for level in Levels %}-->
+                                <!--<a href="#"/><span class="badge badge-pill badge-info" data-id="{{level.id}}" id="{{level.id}}">{{ level.skill.name }} - {{ level.skill_level}}</span></a>-->
+                            <!--{% endfor %}-->
+                        <!--<button class="ulance-btn" role="button">Add New Skill</button>-->
+                        <form id="add-skill">
+                            <div class="form-group">
+
+                            </div>
+                        </form>
+                    </div>
+
+                    <div id="certifications" class="model-section">
+                        <p class="card-header-section">Certifications</p>
+                        {% for certification in Certifications %}
+                           <p>{{ certification.issued_from }} - {{ certification.name}} | {{ certification.year_issued }}</p>
+                        {% endfor %}
+                        <button class="ulance-btn" role="button">Add New Certification</button>
+                    </div>
+
+                <div id="links" class="model-section">
+                    <p class="card-header-section">Links</p>
+                    <div id="no-add-link">
+                        {% for link in Links %}
+                            <div class="link-list" id="{{ link.id }}">
+                            <p>{{ link.brief_description }}</p>
+                            <a href="{{ link.link }}" target="_blank" >{{ link.link }}</a>
+                            </div>
+                        {% endfor %}
+                    <button class="ulance-btn add-btn" role="button" show="no-add-link">Add New Link</button>
+                    </div>
+                        <form id="add-link">
+                            <div class="form-group">
+                                <span class="text-center text-danger" id="link"></span>
+                                <input type="url" name="link" class="form-control"  placeholder="Enter New Url Here">
+                            </div>
+                            <div class="form-group">
+                                <span class="text-center text-danger" id="brief_description"></span>
+                                <input type="text" name="brief_description" class="form-control"  placeholder="Enter Brief Description Here">
+                            </div>
+                            <div class="form-group row">
+                                <button type="submit" id="add-link-btn" class="ulance-btn col-6">Add Link</button>
+                                <button role="button" class="cancel-btn col-6" cancel="add-link">Cancel</button>
+                            </div>
+                        </form>
+                </div>
+                </div>
+            </div>
+        </div>
+        <div id="some-section" class="col-4">
+            <div class="card text-center">
+                <div class="card-body">
+                    <h4>Some Text</h4>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock content %}

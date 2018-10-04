@@ -1,6 +1,7 @@
 from django.db import models
 from profiles.models import ProfileModel
 from django.conf import settings
+from django.urls import reverse, reverse_lazy
 import uuid
 # Create your models here.
 
@@ -8,11 +9,16 @@ import uuid
 class CategoryModel(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     name = models.CharField(max_length=150, blank=False, null=False)
+    parent = models.ForeignKey('self', null=True, blank=True, related_name='children', on_delete=models.CASCADE)
+    is_parent = models.BooleanField(verbose_name='is a parent category', default=False)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
     def __str__(self):
-        return self.name
+        if self.parent:
+            return self.parent.name + " - " + self.name
+        else:
+            return self.name
 
 class ServiceModel(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)

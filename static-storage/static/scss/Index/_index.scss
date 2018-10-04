@@ -1,7 +1,7 @@
 .landing-intro {
-  height: 500px;
+  height: 31.25rem;
   width: 100%;
-  background-color: gray;
+ // background-color: #fff;
   display: table;
   color: $primary-cl;
 
@@ -21,10 +21,75 @@
   }
 
   span {
-    border: 1px solid;
+    border: 0.0625rem solid;
     border-color: $primary-cl;
-    padding:10px 2.5em;
+    padding:0.625rem 2.5rem;
     font-weight: 600;
   }
 }
+
+.nav-img {
+  max-height: 1.875rem;
+  max-width: 2.5rem;
+  margin-bottom: 0.625rem;
+  //display:none;
+}
+.profile-pic {
+  max-height: 2.813rem;
+  max-width: 3.438rem;
+///  margin-bottom: 10px;
+  //display:none;
+}
+.bg-ulance-nav {
+  background-color: $primary-cl;
+}
+
+.logout-btn:hover {
+  cursor:pointer;
+}
+
+.subnav {
+  padding-top:5rem;
+  text-align:center;
+  font-size: 0.875rem;
+
+  .subnav-item {
+    border-bottom: 0px solid $primary-cl;
+  }
+}
+
+.dropdown-hover {
+    position: relative;
+    display: inline-block;
+    padding-left:1.25rem;
+}
+
+.dropdown-hover:hover {
+  cursor:pointer;
+}
+
+.dropdown-content {
+    display: none;
+    position: absolute;
+    background-color: #f1f1f1;
+    min-width: 12.5rem;
+    box-shadow: 0px 0.5rem 1rem 0px rgba(0,0,0,0.2);
+    z-index: 1;
+    font-size: 0.875rem;
+}
+
+/* Links inside the dropdown */
+.dropdown-content a {
+    color: black;
+    padding: 0.75rem 1rem;
+    text-decoration: none;
+    display: block;
+}
+
+/* Change color of dropdown links on hover */
+.dropdown-content a:hover {background-color: #ddd;}
+
+/* Show the dropdown menu on hover */
+.dropdown-hover:hover .dropdown-content {display: block;}
+
 
