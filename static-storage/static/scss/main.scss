@@ -58,5 +58,12 @@ a:hover {
   display: none;
 }
 
+i {
+  padding-left:0.25rem;
+}
 
+i:hover {
+  cursor: pointer;
+  opacity: 0.75;
+}
 

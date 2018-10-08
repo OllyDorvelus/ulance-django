@@ -37,7 +37,7 @@
               <div class="dropdown-menu text-center" aria-labelledby="navbarDropdownMenuLink">
                   <a class="dropdown-item" href="{{request.user.profile.get_absolute_url}}">View Profile</a>
                   <a class="dropdown-item" href="#">Account Settings</a>
-                  <span class="dropdown-item logout-btn">Logout</span>
+                  <span class="dropdown-item logout-btn" onclick="logout()">Logout</span>
               </div>
           </li>
       </ul>

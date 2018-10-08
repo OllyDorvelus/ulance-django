@@ -19,7 +19,10 @@ urlpatterns = [
     path('<user__username>/portfolio', views.PortfolioDetailAPIView.as_view(), name='portfolio-detail-api'),
     path('level/create/', views.LevelCreateAPIView.as_view(), name='level-create-api'),
     path('level/<pk>/', views.LevelDetailAPIView.as_view(), name='level-detail-api'),
-    path('<user__username>/levels/', views.UserLevelListAPIView.as_view(), name='user-level-list-api')
+    path('<user__username>/levels/', views.UserLevelListAPIView.as_view(), name='user-level-list-api'),
+    path('certification/<pk>/', views.CertificationDetailAPIView.as_view(), name='certification-detail-api'),
+    path('certification/create/', views.CertificationCreateAPIView.as_view(), name='certification-create-api'),
+
 
 
 ]

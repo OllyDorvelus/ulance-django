@@ -39,4 +39,4 @@ class UserDetailView(DetailView):
         if self.request.user == user:
             return 'profile_detail_edit.html'
         else:
-            return 'profile_detail.html'
+            return 'profile_detail_edit.html'

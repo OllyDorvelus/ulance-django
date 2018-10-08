@@ -1,5 +1,5 @@
 __author__ = '13477'
-from profiles.models import (ProfileModel, SkillModel, PortfolioModel, PictureModel, LinkModel, LevelModel)
+from profiles.models import (ProfileModel, SkillModel, PortfolioModel, PictureModel, LinkModel, LevelModel, CertificationModel)
 from rest_framework import serializers
 from services.api.serializers import ServiceSerializer
 from rest_framework.serializers import (
@@ -52,6 +52,12 @@ class LevelSerializer(serializers.ModelSerializer):
         model = LevelModel
         fields = '__all__'
         read_only_fields = ['user']
+
+class CertificationSerializer(serializers.ModelSerializer):
+    user = UserModelSerializer(read_only=True)
+    class Meta:
+        model = CertificationModel
+        fields = '__all__'
 
 
 

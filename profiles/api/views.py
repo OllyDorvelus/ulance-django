@@ -1,7 +1,7 @@
 from rest_framework import generics, permissions, mixins
 from rest_framework.parsers import FileUploadParser
-from .serializers import ( ProfileSerializer, SkillSerializer, LinkSerializer, PortfolioSerializer, LevelSerializer )
-from profiles.models import ProfileModel, SkillModel, LinkModel, PortfolioModel, LevelModel
+from .serializers import ( ProfileSerializer, SkillSerializer, LinkSerializer, PortfolioSerializer, LevelSerializer, CertificationSerializer )
+from profiles.models import ProfileModel, SkillModel, LinkModel, PortfolioModel, LevelModel, CertificationModel, EducationModel, MajorModel
 from ulance import pagination
 from ulance.custom_permissions import MyUserPermissions
 from django.contrib.auth import get_user_model
@@ -131,7 +131,6 @@ class LevelDetailAPIView(generics.RetrieveAPIView, mixins.DestroyModelMixin, mix
     def put(self, request, *args, **kwargs):
         return self.update(request, *args, **kwargs)
 
-
     def delete(self, request, *args, **kwargs):
         return self.destroy(self, request, *args, **kwargs)
 
@@ -146,6 +145,30 @@ class UserLevelListAPIView(generics.ListAPIView):
         user = User.objects.get(username=username)
         qs = LevelModel.objects.filter(user=user)
         return qs
+
+# CERTIFICATIONS
+
+class CertificationCreateAPIView(generics.CreateAPIView):
+    serializer_class = CertificationSerializer
+    queryset = CertificationModel.objects.all()
+    permissions_classes = [permissions.IsAuthenticated]
+
+    def perform_create(self, serializer, *args, **kwargs):
+        serializer.save(user=self.request.user)
+
+class CertificationDetailAPIView(generics.RetrieveAPIView, mixins.DestroyModelMixin, mixins.UpdateModelMixin):
+    serializer_class = CertificationSerializer
+    queryset = CertificationModel.objects.all()
+    permission_classes = [MyUserPermissions]
+
+    def put(self, request, *args, **kwargs):
+        return self.update(request, *args, **kwargs)
+
+    def delete(self, request, *args, **kwargs):
+        return self.destroy(self, request, *args, **kwargs)
+
+
+
 
 
 

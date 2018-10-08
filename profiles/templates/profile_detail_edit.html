@@ -1,7 +1,10 @@
 {% extends 'base.html' %}
 
 {% block content %}
-<div class="container">
+<div class="container" id="app">
+{% include 'forms/_add_link_form.html' %}
+{% include 'forms/_edit_link_form.html' %}
+
     <div class="text-center" style="padding-bottom:20px">
         <img src="{{ User.profile.profile_pic.url }}" class="rounded-circle" style="height:150px;width:200px"/>
     </div>
@@ -33,37 +36,46 @@
 
                     <div id="certifications" class="model-section">
                         <p class="card-header-section">Certifications</p>
-                        {% for certification in Certifications %}
-                           <p>{{ certification.issued_from }} - {{ certification.name}} | {{ certification.year_issued }}</p>
-                        {% endfor %}
-                        <button class="ulance-btn" role="button">Add New Certification</button>
+                        <div id="no-add-certification-form">
+                            {% for certification in Certifications %}
+                               <p>{{ certification.issued_from }} - {{ certification.name}} | {{ certification.year_issued }}</p><i class="far fa-edit add-edit-btn edit-certification-btn" data-id="{{link.id}}" onclick=editCertification('{{certification.id}}')></i><i class="far fa-trash-alt delete-btn"></i>
+                            {% endfor %}
+                            <button class="ulance-btn " role="button" onclick=addEdit('no-add-certification-form')>Add New Certification</button>
+                        </div>
+
+                        {% include 'forms/_add_certification_form.html' %}
+                        {% include 'forms/_edit_certification_form.html' %}
                     </div>
 
                 <div id="links" class="model-section">
                     <p class="card-header-section">Links</p>
-                    <div id="no-add-link">
-                        {% for link in Links %}
-                            <div class="link-list" id="{{ link.id }}">
-                            <p>{{ link.brief_description }}</p>
-                            <a href="{{ link.link }}" target="_blank" >{{ link.link }}</a>
+                    <div id="no-add-link-form">
+                        <section id="no-edit-link-form">
+                        <div id="link-section">
+                                <!--{% for link in Links %}-->
+                                        <!--<div class="link-list" id="{{ link.id }}" data-url="/api/profiles/link/{{link.id}}/">-->
+                                        <!--<p style="display:inline">{{ link.brief_description }}</p><i class="far fa-edit"></i>-->
+                                            <!--<i class="far fa-trash-alt delete-btn"></i>-->
+                                        <!--<a href="{{ link.link }}" target="_blank" style="display:block" >{{ link.link }}</a>-->
+
+                                        <!--</div>-->
+                                <!--{% endfor %}-->
+                            <div v-for="link in links">
+                                <div class="link-list">
+                                    <p style="display:inline">${link.brief_description}</p>
+                                    {% if request.user == User %}
+                                    <i class="far fa-edit" v-on:click="getLink(link.id)"></i><i class="fa fa-trash-alt" v-on:click="deleteLink(link.id)"></i>
+                                    {% endif %}
+                                    <a :href = link.link target="_blank" style="display:block">${link.link}</a>
+                                </div>
                             </div>
-                        {% endfor %}
-                    <button class="ulance-btn add-btn" role="button" show="no-add-link">Add New Link</button>
+                        </div>
+                    {% if request.user == User %}<button class="ulance-btn add-edit-btn" role="button" data-toggle="modal" data-target="#addLinkModal">Add New Link</button>{% endif %}
+                    </section>
+
+
                     </div>
-                        <form id="add-link">
-                            <div class="form-group">
-                                <span class="text-center text-danger" id="link"></span>
-                                <input type="url" name="link" class="form-control"  placeholder="Enter New Url Here">
-                            </div>
-                            <div class="form-group">
-                                <span class="text-center text-danger" id="brief_description"></span>
-                                <input type="text" name="brief_description" class="form-control"  placeholder="Enter Brief Description Here">
-                            </div>
-                            <div class="form-group row">
-                                <button type="submit" id="add-link-btn" class="ulance-btn col-6">Add Link</button>
-                                <button role="button" class="cancel-btn col-6" cancel="add-link">Cancel</button>
-                            </div>
-                        </form>
+
                 </div>
                 </div>
             </div>
@@ -72,9 +84,89 @@
             <div class="card text-center">
                 <div class="card-body">
                     <h4>Some Text</h4>
-                </div>
-            </div>
+                </div> </div>
         </div>
     </div>
 </div>
+
+<script>
+Vue.http.headers.common['X-CSRFToken'] = "{{ csrf_token }}";
+var demo = new Vue({
+  el: '#app',
+  delimiters: ['${','}'],
+  data: {
+    links: [],
+    loading: true,
+    currentLink: {},
+    newLink: {'link': null, 'brief_description': null}
+  },
+  mounted: function() {
+    this.getLinks();
+
+  },
+  methods: {
+      getLinks: function () {
+        let api_url = '/api/profiles/{{User.username}}/links/'
+        this.$http.get(api_url).then(function(response){
+            console.log(response.data)
+            this.links = response.data.results
+        }).catch(function(err){
+            console.log(err)
+        })
+
+      },
+
+      getLink: function(id) {
+          let api_url = `/api/profiles/link/${id}/`
+          this.$http.get(api_url).then(function(response){
+              console.log(response.data)
+              this.currentLink = response.data;
+              $("#editLinkModal").modal('show')
+          }).catch(function(err){
+            console.log(err)
+          })
+      },
+
+      addLink: function() {
+        let api_url = '/api/profiles/link/create/'
+        this.$http.post(api_url, this.newLink).then(function(response){
+            alert("new links!")
+            this.getLinks()
+        }).catch(function(err){
+            jsonerr = JSON.parse(err.bodyText)
+            attachFormErrors(jsonerr)
+        })
+      },
+
+      updateLink: function() {
+          let api_url = `/api/profiles/link/${this.currentLink.id}/`
+          this.$http.put(api_url, this.currentLink).then(function(response) {
+            alert("article updated!")
+            this.getLinks()
+          }).catch(function(err) {
+            //  console.log(err)
+             // console.log(err.body)
+              let jsonerrs = JSON.parse(err.bodyText)
+              console.log(jsonerrs)
+              attachFormErrors(jsonerrs, true)
+          })
+      },
+
+      deleteLink: function(id) {
+        let api_url = `/api/profiles/link/${id}/`
+        let answer = confirm("Are you sure?");
+        if(answer) {
+            this.$http.delete(api_url).then(function (response) {
+                alert("Item has been deleted")
+                this.getLinks()
+            }).catch(function (err) {
+                console.log(err)
+            })
+        }
+      }
+  }
+})
+
+
+</script>
 {% endblock content %}

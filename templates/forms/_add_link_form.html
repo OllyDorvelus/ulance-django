@@ -1,0 +1,78 @@
+<!--<form id="add-link-form">-->
+    <!--{% csrf_token %}-->
+    <!--<div class="form-group">-->
+        <!--<span class="text-center text-danger" id="link"></span>-->
+        <!--<input type="url" name="link" class="form-control"  placeholder="Enter New Url Here">-->
+    <!--</div>-->
+    <!--<div class="form-group">-->
+        <!--<span class="text-center text-danger" id="brief_description"></span>-->
+        <!--<input type="text" name="brief_description" class="form-control"  placeholder="Enter Brief Description Here">-->
+    <!--</div>-->
+    <!--<div class="form-group row">-->
+        <!--<button type="submit" id="add-link-btn" class="ulance-btn col-6">Add Link</button>-->
+        <!--<button role="button" type="button" class="cancel-btn col-6" onClick="cancelForm('add-link-form')">Cancel</button>-->
+    <!--</div>-->
+<!--</form>-->
+
+<!--<div class="modal fade" id="addLinkModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">-->
+<!--<div class="modal-dialog" role="document">-->
+  <!--<div class="modal-content">-->
+    <!--<div class="modal-header">-->
+      <!--<h5 class="modal-title" id="exampleModalLongTitle">ADD LINK</h5>-->
+      <!--<button type="button" class="close" data-dismiss="modal" aria-label="Close">-->
+        <!--<span aria-hidden="true">&times;</span>-->
+      <!--</button>-->
+    <!--</div>-->
+        <!--<form id="add-link-form">-->
+            <!--{% csrf_token %}-->
+            <!--<div class="form-group">-->
+                <!--<span class="text-center text-danger" id="link"></span>-->
+                <!--<input type="url" name="link" class="form-control"  placeholder="Enter New Url Here">-->
+            <!--</div>-->
+            <!--<div class="form-group">-->
+                <!--<span class="text-center text-danger" id="brief_description"></span>-->
+                <!--<input type="text" name="brief_description" class="form-control"  placeholder="Enter Brief Description Here">-->
+            <!--</div>-->
+            <!--<div class="form-group row">-->
+                <!--<button type="submit" id="add-link-btn" class="ulance-btn col-6">Add Link</button>-->
+                <!--<button role="button" type="button" class="cancel-btn col-6" onClick="cancelForm('add-link-form')">Cancel</button>-->
+            <!--</div>-->
+        <!--</form>-->
+  <!--</div>-->
+<!--</div>-->
+<!--&lt;!&ndash;<div class="loading" v-if="loading===true">Loading&#8230;</div>&ndash;&gt;-->
+<!--</div>-->
+
+<div class="modal fade" id="addLinkModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Add Link</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <form id="add-link-form" v-on:submit.prevent="addLink()">
+            <div class="form-group">
+                <span class="text-center text-danger" id="link"></span>
+                <input type="url" name="link" v-model="newLink.link" class="form-control"  placeholder="Enter New Url Here">
+            </div>
+            <div class="form-group">
+                <span class="text-center text-danger" id="brief_description"></span>
+                <input type="text" name="brief_description" v-model="newLink.brief_description" class="form-control"  placeholder="Enter Brief Description Here">
+            </div>
+            <div class="form-group row">
+                <!--<button type="submit" id="add-link-btn" class="ulance-btn col-6">Add Link</button>-->
+                <!--<button role="button" type="button" class="cancel-btn col-6" onClick="cancelForm('add-link-form')">Cancel</button>-->
+            </div>
+
+      <div class="modal-footer">
+        <button type="submit" class="btn ulance-btn">Add Link</button>
+        <button type="button" class="btn cancel-btn" data-dismiss="modal">Close</button>
+      </div>
+    </form>
+      </div>
+    </div>
+  </div>
+</div>
