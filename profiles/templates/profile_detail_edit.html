@@ -2,18 +2,26 @@
 
 {% block content %}
 <div class="container" id="app">
-{% include 'forms/_add_link_form.html' %}
-{% include 'forms/_edit_link_form.html' %}
+{% include 'forms/_link_forms.html' %}
+{% include 'forms/_certification_forms.html' %}
+{% include 'forms/_user_modals.html' %}
 
     <div class="text-center" style="padding-bottom:20px">
-        <img src="{{ User.profile.profile_pic.url }}" class="rounded-circle" style="height:150px;width:200px"/>
+        <img :src="user.profile_pic" class="rounded-circle" style="height:150px;width:200px"/>
+
+        <form id="formpic" v-on:submit.prevent="onUpload()" enctype="multipart/form-data">
+        <input type="file" @change="onFileSelected" name="profile_pic">
+        <button type="submit">Upload</button>
+            </form>
+            <!--<input type="file" @change="onFileSelected">-->
+        <!--<button @click="onUpload">Upload</button>-->
     </div>
     <div class="row" id="user-info-section">
         <div id="user-section" class="col-4">
             <div class="card text-center">
                 <div class="card-body">
-                    <p class="card-header-section">Description</p>
-                    <p id="description" class="description">{{ User.profile.description }}</p>
+                    <p class="card-header-section">Description{% if request.user == user %}<i class="far fa-edit" data-toggle="modal" data-target="#editDescriptionModal"></i>{% endif %}</p>
+                    <p id="description" class="description">${user.description}</p>
                 </div>
             </div>
         </div>
@@ -36,15 +44,15 @@
 
                     <div id="certifications" class="model-section">
                         <p class="card-header-section">Certifications</p>
-                        <div id="no-add-certification-form">
-                            {% for certification in Certifications %}
-                               <p>{{ certification.issued_from }} - {{ certification.name}} | {{ certification.year_issued }}</p><i class="far fa-edit add-edit-btn edit-certification-btn" data-id="{{link.id}}" onclick=editCertification('{{certification.id}}')></i><i class="far fa-trash-alt delete-btn"></i>
-                            {% endfor %}
-                            <button class="ulance-btn " role="button" onclick=addEdit('no-add-certification-form')>Add New Certification</button>
-                        </div>
+                        <div v-for="certification in certifications">
+                            <p>${certification.issued_from} - ${certification.name} | ${certification.year_issued}</p>
+                            {% if request.user == User %}
+                            <i class="far fa-edit" v-on:click="getCertification(certification.id)"></i><i class="far fa-trash-alt" v-on:click="deleteCertification(certification.id)"></i>
+                            {% endif %}
 
-                        {% include 'forms/_add_certification_form.html' %}
-                        {% include 'forms/_edit_certification_form.html' %}
+                        </div>
+                        {% if request.user == User %}<button class="ulance-btn" role="button" data-toggle="modal" data-target="#addCertificationModal">Add New Certification</button>{% endif %}
+
                     </div>
 
                 <div id="links" class="model-section">
@@ -98,17 +106,25 @@ var demo = new Vue({
     links: [],
     loading: true,
     currentLink: {},
-    newLink: {'link': null, 'brief_description': null}
+    newLink: {'link': null, 'brief_description': null},
+    certifications: [],
+    currentCertification: {},
+    newCertification: {'name': null, 'issued_form': null, 'year_issued': null},
+    user: {},
+    user_url: '/api/profiles/user/{{User.username}}/',
+    selectedFile: null
+
+
   },
   mounted: function() {
     this.getLinks();
-
+    this.getCertifications();
+    this.getUserPage();
   },
   methods: {
       getLinks: function () {
         let api_url = '/api/profiles/{{User.username}}/links/'
         this.$http.get(api_url).then(function(response){
-            console.log(response.data)
             this.links = response.data.results
         }).catch(function(err){
             console.log(err)
@@ -130,10 +146,10 @@ var demo = new Vue({
       addLink: function() {
         let api_url = '/api/profiles/link/create/'
         this.$http.post(api_url, this.newLink).then(function(response){
-            alert("new links!")
+            $('#addLinkModal').modal('toggle')
             this.getLinks()
         }).catch(function(err){
-            jsonerr = JSON.parse(err.bodyText)
+            let jsonerr = JSON.parse(err.bodyText)
             attachFormErrors(jsonerr)
         })
       },
@@ -141,8 +157,8 @@ var demo = new Vue({
       updateLink: function() {
           let api_url = `/api/profiles/link/${this.currentLink.id}/`
           this.$http.put(api_url, this.currentLink).then(function(response) {
-            alert("article updated!")
             this.getLinks()
+            $('#editLinkModal').modal('toggle')
           }).catch(function(err) {
             //  console.log(err)
              // console.log(err.body)
@@ -163,7 +179,108 @@ var demo = new Vue({
                 console.log(err)
             })
         }
+      },
+
+      getCertifications: function() {
+          let api_url = '/api/profiles/{{User.username}}/certifications/'
+          this.$http.get(api_url).then(function(response){
+              console.log(response.data)
+              this.certifications = response.data.results
+          }).catch(function(err){
+            console.log(err)
+          })
+      },
+
+      getCertification: function(id) {
+          let api_url = `/api/profiles/certification/${id}/`
+          this.$http.get(api_url).then(function(response){
+              this.currentCertification = response.data;
+              $('#editCertificationModal').modal('show');
+          }).catch(function(err){
+              console.log(err)
+          })
+      },
+
+      addCertification: function() {
+          let api_url = '/api/profiles/certification/create/'
+          this.$http.post(api_url, this.newCertification).then(function(response){
+              this.getCertifications()
+              $('#addCertificationModal').modal('toggle')
+          }).catch(function(err){
+              let jsonerr = JSON.parse(err.bodyText)
+              attachFormErrors(jsonerr)
+          })
+      },
+
+      updateCertification: function() {
+          let api_url = `/api/profiles/certification/${this.currentCertification.id}/`
+          this.$http.put(api_url, this.currentCertification).then(function(response){
+              this.getCertifications()
+              $('#editCertificationModal').modal('toggle')
+          }).catch(function(err){
+            let jsonerr = JSON.parse(err.bodyText)
+            attachFormErrors(jsonerr, true)
+          })
+      },
+
+      deleteCertification: function(id) {
+          let api_url = `/api/profiles/certification/${id}/`
+          answer = confirm("are you sure?")
+          if(answer) {
+              this.$http.delete(api_url).then(function (response) {
+                  this.getCertifications()
+              }).catch(function (err) {
+
+              })
+          }
+      },
+
+      getUserPage: function() {
+          this.$http.get(this.user_url).then(function(response){
+            this.user = response.data
+          })
+      },
+
+      updateDescription: function() {
+          this.$http.put(this.user_url, this.user).then(function(response){
+            $('#editDescriptionModal').modal('toggle');
+          }).catch(function(err){
+              let jsonerr = JSON.parse(err.bodyText)
+              console.log(err)
+              attachFormErrors(jsonerr, true)
+          })
+      },
+
+      updatePicture: function() {
+          this.$http.put(this.user_url + 'picture/', this.user).then(function(response){
+
+          }).catch(function(err){
+              let jsonerr = JSON.parse(err.bodyText)
+              attachFormErrors(jsonerr, true)
+          })
+      },
+
+      onFileSelected: function(event) {
+          console.log("event", event)
+          this.selectedFile = event.target.files[0]
+          console.log("file", this.selectedFile)
+          console.log("typeof", typeof(this.selectedFile))
+      },
+
+      onUpload: function() {
+//          var formData = $('#formpic').serialize()
+          const fd = new FormData();
+          fd.append('file', this.selectedFile)
+          console.log('fd', fd.values())
+//          const file_obj = new File(this.selectedFile)
+//          console.log("file object", file_obj)
+          this.$http.put(this.user_url + 'picture/', {'profile_pic': fd}).then(function(response){
+
+          }).catch(function(err){
+              console.log(err)
+          })
       }
+
   }
 })
 

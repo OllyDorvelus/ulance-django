@@ -1,4 +1,4 @@
-{% if request.user.is_authenticated %}
+{% if request.user.is_authenticated or request.get_full_path != '/' %}
 {% load static %}
 {% load staticfiles %}
 <!--<div class="subnav">-->
@@ -31,4 +31,5 @@
     {% endfor %}
     <hr>
 </div>
+
 {% endif %}

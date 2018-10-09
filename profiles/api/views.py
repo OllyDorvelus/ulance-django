@@ -1,6 +1,6 @@
 from rest_framework import generics, permissions, mixins
 from rest_framework.parsers import FileUploadParser
-from .serializers import ( ProfileSerializer, SkillSerializer, LinkSerializer, PortfolioSerializer, LevelSerializer, CertificationSerializer )
+from .serializers import ( ProfileSerializer, SkillSerializer, LinkSerializer, PortfolioSerializer, LevelSerializer, CertificationSerializer, ProfilePictureSerializer )
 from profiles.models import ProfileModel, SkillModel, LinkModel, PortfolioModel, LevelModel, CertificationModel, EducationModel, MajorModel
 from ulance import pagination
 from ulance.custom_permissions import MyUserPermissions
@@ -21,10 +21,23 @@ class ProfileUpdateAPIView(generics.UpdateAPIView):
 
 class ProfileDetailAPIView(generics.RetrieveAPIView, mixins.DestroyModelMixin, mixins.UpdateModelMixin):
     serializer_class = ProfileSerializer
+    parser_classes = (FileUploadParser,)
     queryset = ProfileModel.objects.all()
     lookup_field = 'user__username'
     permission_classes = [MyUserPermissions]
   #  parser_classes = [FileUploadParser]
+
+    def put(self, request, *args, **kwargs):
+        return self.update(request, *args, **kwargs)
+
+    def delete(self, request, *args, **kwargs):
+        return self.destroy(self, request, *args, **kwargs)
+
+class ProfilePictureDetailAPIView(generics.RetrieveAPIView, mixins.DestroyModelMixin, mixins.UpdateModelMixin):
+    serializer_class = ProfilePictureSerializer
+    queryset = ProfileModel.objects.all()
+    lookup_field = 'user__username'
+    permission_classes = [MyUserPermissions]
 
     def put(self, request, *args, **kwargs):
         return self.update(request, *args, **kwargs)
@@ -166,6 +179,15 @@ class CertificationDetailAPIView(generics.RetrieveAPIView, mixins.DestroyModelMi
 
     def delete(self, request, *args, **kwargs):
         return self.destroy(self, request, *args, **kwargs)
+
+class UserCertificationListAPIView(generics.ListAPIView):
+    serializer_class = CertificationSerializer
+    pagination_class = pagination.StandardResultsPagination
+    def get_queryset(self):
+        username = self.kwargs['user__username']
+        user = User.objects.get(username=username)
+        qs = CertificationModel.objects.filter(user=user)
+        return qs
 
 
 

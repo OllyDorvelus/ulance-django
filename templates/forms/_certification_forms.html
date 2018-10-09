@@ -1,0 +1,78 @@
+<div class="modal fade" id="addCertificationModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Add Certification</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <form id="add-certification-form" v-on:submit.prevent="addCertification()">
+            <div class="form-group">
+                <span class="text-center text-danger" id="name"></span>
+                <span class="text-center text-danger"></span>
+                <input type="text"  v-model="newCertification.name" class="form-control"  placeholder="Name of Certification">
+            </div>
+            <div class="form-group">
+                <span class="text-center text-danger" id="issued_from"></span>
+                <span class="text-center text-danger"></span>
+                <input type="text" v-model="newCertification.issued_from" class="form-control"  placeholder="Issued From?">
+            </div>
+            <div class="form-group">
+                <span class="text-center text-danger" id="year_issued"></span>
+                <span class="text-center text-danger"></span>
+                <input type="date" v-model="newCertification.year_issued" class="form-control"  placeholder="Issued From?">
+            </div>
+            <div class="form-group row">
+            </div>
+
+      <div class="modal-footer">
+        <button type="submit"  class="btn ulance-btn">Add Certification</button>
+        <button type="button" class="btn cancel-btn" data-dismiss="modal">Close</button>
+      </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade" id="editCertificationModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Edit Certification</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <form id="edit-certification-form" v-on:submit.prevent="updateCertification()">
+            <div class="form-group">
+                <span class="text-center text-danger" id="name_edit"></span>
+                <span class="text-center text-danger"></span>
+                <input type="text"  v-model="currentCertification.name" class="form-control"  placeholder="Name of Certification">
+            </div>
+            <div class="form-group">
+                <span class="text-center text-danger" id="issued_from_edit"></span>
+                <span class="text-center text-danger"></span>
+                <input type="text" v-model="currentCertification.issued_from" class="form-control"  placeholder="Issued From?">
+            </div>
+            <div class="form-group">
+                <span class="text-center text-danger" id="year_issued_edit"></span>
+                <span class="text-center text-danger"></span>
+                <input type="date" v-model="currentCertification.year_issued" class="form-control"  placeholder="Issued From?">
+            </div>
+            <div class="form-group row">
+            </div>
+
+      <div class="modal-footer">
+        <button type="submit"  class="btn ulance-btn">Update Certification</button>
+        <button type="button" class="btn cancel-btn" data-dismiss="modal">Close</button>
+      </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
