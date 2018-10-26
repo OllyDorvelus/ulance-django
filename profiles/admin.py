@@ -11,6 +11,15 @@ class LevelModelAdmin(admin.ModelAdmin):
 class LinkModelAdmin(admin.ModelAdmin):
     list_display = ['id', 'link', 'user']
 
+class CertificationModelAdmin(admin.ModelAdmin):
+    list_display = ['id', 'user']
+
+class EducationModelAdmin(admin.ModelAdmin):
+    list_display = ['id', 'user', 'major', 'school_name', 'status', 'degree_type']
+
+class MajorModelAdmin(admin.ModelAdmin):
+    list_display = ['id', 'user', 'major_name']
+
 admin.site.register(PictureModel)
 admin.site.register(SkillModel, SkillModelAdmin)
 admin.site.register(ProfileModel)

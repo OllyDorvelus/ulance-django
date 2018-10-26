@@ -91,8 +91,9 @@
         <div id="some-section" class="col-4">
             <div class="card text-center">
                 <div class="card-body">
-                    <h4>Some Text</h4>
-                </div> </div>
+                    <p class="card-header-section">Education</p>
+                </div>
+            </div>
         </div>
     </div>
 </div>
@@ -104,6 +105,7 @@ var demo = new Vue({
   delimiters: ['${','}'],
   data: {
     links: [],
+    educations: [],
     loading: true,
     currentLink: {},
     newLink: {'link': null, 'brief_description': null},
@@ -248,6 +250,12 @@ var demo = new Vue({
               let jsonerr = JSON.parse(err.bodyText)
               console.log(err)
               attachFormErrors(jsonerr, true)
+          })
+      },
+
+      getDescription: function() {
+          this.$http.get(this.user_url, this.user).then(function(response){
+              this.user.description = response.data.description
           })
       },
 

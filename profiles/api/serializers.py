@@ -1,5 +1,5 @@
 __author__ = '13477'
-from profiles.models import (ProfileModel, SkillModel, PortfolioModel, PictureModel, LinkModel, LevelModel, CertificationModel)
+from profiles.models import (ProfileModel, SkillModel, PortfolioModel, PictureModel, LinkModel, LevelModel, CertificationModel, EducationModel, MajorModel)
 from rest_framework import serializers
 from services.api.serializers import ServiceSerializer
 from rest_framework.serializers import (
@@ -122,6 +122,21 @@ class CertificationSerializer(serializers.ModelSerializer):
     class Meta:
         model = CertificationModel
         fields = '__all__'
+
+# EDUCATION
+
+class MajorSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = MajorModel
+        fields = '__all__'
+
+
+class EducationSerializer(serializers.ModelSerializer):
+    user = UserModelSerializer
+    class Meta:
+        model = EducationModel
+        fields = '__all__'
+        read_only_fields = ['user']
 
 
 
