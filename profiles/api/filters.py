@@ -1,4 +1,4 @@
-from profiles.models import MajorModel, SkillModel
+from profiles.models import MajorModel, SkillModel, SchoolModel
 from django_filters import FilterSet
 import django_filters
 
@@ -14,4 +14,11 @@ class SkillFilter(FilterSet):
 
     class Meta:
         model = SkillModel
-        fields = ['skill']
+        fields = ['skill',]
+
+class SchoolFilter(FilterSet):
+    school = django_filters.CharFilter(lookup_expr='icontains', field_name='school_name')
+
+    class Meta:
+        model = SchoolModel
+        fields = ['school',]

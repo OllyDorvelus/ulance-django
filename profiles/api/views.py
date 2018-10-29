@@ -1,7 +1,8 @@
 from rest_framework import generics, permissions, mixins
 from rest_framework.parsers import FileUploadParser
-from .serializers import ( ProfileSerializer, SkillSerializer, LinkSerializer, PortfolioSerializer, LevelSerializer, CertificationSerializer, ProfilePictureSerializer, EducationSerializer, MajorSerializer )
-from profiles.models import ProfileModel, SkillModel, LinkModel, PortfolioModel, LevelModel, CertificationModel, EducationModel, MajorModel
+from .serializers import ( ProfileSerializer, SkillSerializer, LinkSerializer, PortfolioSerializer, LevelSerializer, CertificationSerializer, ProfilePictureSerializer, EducationSerializer, MajorSerializer,
+SchoolSerializer)
+from profiles.models import ProfileModel, SkillModel, LinkModel, PortfolioModel, LevelModel, CertificationModel, EducationModel, MajorModel, SchoolModel
 from ulance import pagination
 from ulance.custom_permissions import MyUserPermissions
 from django.contrib.auth import get_user_model
@@ -9,7 +10,7 @@ from django.db.models import Q
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework.filters import SearchFilter, OrderingFilter
 from django_filters.rest_framework import DjangoFilterBackend
-from .filters import MajorFilter, SkillFilter
+from .filters import MajorFilter, SkillFilter, SchoolFilter
 
 User = get_user_model()
 
@@ -200,14 +201,6 @@ class UserCertificationListAPIView(generics.ListAPIView):
 
 # EDUCATION
 
-class EducationCreateAPIView(generics.CreateAPIView):
-    queryset = EducationModel.objects.all()
-    serializer_class = EducationSerializer
-    permission_classes = [permissions.IsAuthenticated]
-
-    def perform_create(self, serializer, *args, **kwargs):
-        serializer.save(user=self.request.user)
-
 class MajorCreateAPIView(generics.CreateAPIView):
     queryset = MajorModel.objects.all()
     serializer_class = MajorSerializer
@@ -231,9 +224,32 @@ class MajorListAPIView(generics.ListAPIView):
     #             Q(major_name__icontains=query)
     #         )
     #     return qs
+class SchoolCreateAPIView(generics.CreateAPIView):
+    serializer_class = SchoolSerializer
+    queryset = SchoolModel.objects.all()
 
 
-class UserEducationLisAPIView(generics.ListAPIView):
+class SchoolListAPIView(generics.ListAPIView):
+    serializer_class = SchoolSerializer
+    queryset =  SchoolModel.objects.all()
+    pagination_class = pagination.StandardResultsPagination
+    filter_backends = (DjangoFilterBackend,)
+    filterset_class = SchoolFilter
+
+class EducationCreateAPIView(generics.CreateAPIView):
+    queryset = EducationModel.objects.all()
+    serializer_class = EducationSerializer
+    permission_classes = [permissions.IsAuthenticated]
+
+    def perform_create(self, serializer, *args, **kwargs):
+        school_name = serializer.validated_data['school']
+        school = SchoolModel.objects.get(school_name__iexact=school_name)
+        major_name = serializer.validated_data['major']
+        major = MajorModel.objects.get(major_name__iexact=major_name)
+        serializer.save(user=self.request.user, school=school, major=major)
+
+
+class UserEducationListAPIView(generics.ListAPIView):
     serializer_class = EducationSerializer
     pagination_class = pagination.StandardResultsPagination
 
@@ -244,7 +260,8 @@ class UserEducationLisAPIView(generics.ListAPIView):
         return qs
 
 class EducationDetailAPIView(generics.RetrieveAPIView, mixins.DestroyModelMixin, mixins.UpdateModelMixin):
-    serializer_class = CertificationSerializer
+    serializer_class = EducationSerializer
+
     queryset = EducationModel.objects.all()
 
     permission_classes = [MyUserPermissions]
@@ -254,6 +271,14 @@ class EducationDetailAPIView(generics.RetrieveAPIView, mixins.DestroyModelMixin,
 
     def delete(self, request, *args, **kwargs):
         return self.destroy(self, request, *args, **kwargs)
+
+
+
+
+
+
+
+
 
 
 

@@ -1,0 +1,88 @@
+<div class="modal fade" id="addSkillModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Add Skill</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <form id="add-skill-form" v-on:submit.prevent="addSkill()">
+            <div class="form-group">
+                <span class="text-center text-danger" id="skill"></span>
+                <span class="text-center text-danger"></span>
+                <input type="text"  v-model="newSkill.skill" v-on:keyup="searchSkills('searchForSkills')" class="form-control" id="searchForSkills" list="skillSearches" placeholder="Choose a Skill">
+                <!--<div class="autocomplete-menu">-->
+                    <!--<div>-->
+                        <!--<div class="ac-item">${skill.name}</div>-->
+                    <!--</div>-->
+                <!--</div>-->
+            </div>
+            <div class="form-group">
+                <span class="text-center text-danger" id="skill_level"></span>
+                <span class="text-center text-danger"></span>
+                <select class="form-control" v-model="newSkill.skill_level">
+                    <!--<option value="" disabled selected hidden>Select skill level</option>-->
+                    <option value="BG">Beginner</option>
+                    <option value="IT">Intermediate</option>
+                    <option value="EX">Expert</option>
+                </select>
+            </div>
+
+            <datalist id="skillSearches">
+                <div v-for="skill in skillSearches">
+                    <option :value = skill.name ></option>
+                </div>
+            </datalist>
+
+            <datalist id="skillSearchesEdit">
+                <div v-for="skill in skillSearches">
+                    <option :value = skill.name ></option>
+                </div>
+            </datalist>
+
+      <div class="modal-footer">
+        <button type="submit" class="btn ulance-btn">Add Skill</button>
+        <button type="button" class="btn cancel-btn" data-dismiss="modal">Close</button>
+      </div>
+    </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade" id="editSkillModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Update Skill</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <form id="edit-link-form" v-on:submit.prevent="updateSkill()">
+            <div class="form-group">
+                <span class="text-center text-danger" id="skill_edit"></span>
+                <span class="text-center text-danger"></span>
+                <input type="text"  v-model="currentSkill.skill" v-on:keyup="searchSkills('searchForSkillsEdit')" id="searchForSkillsEdit" class="form-control" list="skillSearchesEdit"  placeholder="Choose a Skill">
+            </div>
+            <div class="form-group">
+                <span class="text-center text-danger" id="skill_level_edit"></span>
+                <span class="text-center text-danger"></span>
+                <select class="form-control" v-model="currentSkill.skill_level">
+                    <option value="BG">Beginner</option>
+                    <option value="IT">Intermediate</option>
+                    <option value="EX">Expert</option>
+                </select>
+            </div>
+      <div class="modal-footer">
+        <button type="submit" class="btn ulance-btn">Update Skill</button>
+        <button type="button" class="btn cancel-btn" data-dismiss="modal">Close</button>
+      </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>

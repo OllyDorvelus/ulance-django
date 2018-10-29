@@ -25,10 +25,13 @@ urlpatterns = [
     path('certification/<pk>/', views.CertificationDetailAPIView.as_view(), name='certification-detail-api'),
     path('<user__username>/certifications/', views.UserCertificationListAPIView.as_view(), name='user-certification-list-api'),
     path('education/create/', views.EducationCreateAPIView.as_view(), name='create-education-api'),
-    path('<user__username>/educations/', views.UserEducationLisAPIView.as_view(), name='user-education-list-api'),
+    path('<user__username>/educations/', views.UserEducationListAPIView.as_view(), name='user-education-list-api'),
     path('education/<pk>/', views.EducationDetailAPIView.as_view(), name ='education-detail-api'),
     path('major/create/', views.MajorCreateAPIView.as_view(), name='major-create-api'),
     path('majors/', views.MajorListAPIView.as_view(), name='major-list-api'),
+    path('school/create/', views.SchoolCreateAPIView.as_view(), name='school-create-api'),
+    path('schools/', views.SchoolListAPIView.as_view(), name='school-list-api'),
+
 
 
 

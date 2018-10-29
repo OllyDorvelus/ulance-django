@@ -5,6 +5,8 @@
 {% include 'forms/_link_forms.html' %}
 {% include 'forms/_certification_forms.html' %}
 {% include 'forms/_user_modals.html' %}
+{% include 'forms/_skill_forms.html' %}
+{% include 'forms/_education_forms.html' %}
 
     <div class="text-center" style="padding-bottom:20px">
         <img :src="user.profile_pic" class="rounded-circle" style="height:150px;width:200px"/>
@@ -25,22 +27,39 @@
                 </div>
             </div>
         </div>
-        <div id="talent-section" class="col-4">
+        <div class="talent-section col-4">
+            <div class="card text-center">
+                <div class="card-body">
+                    <p class="card-header-section">Education</p>
+                    <div v-for="education in educations">
+                        <p>${education.school}</p>
+                        <span>${education.major} - ${education.degree_type}</span>
+                        <p style="font-size:0.5rem">(${education.status})</p>
+                        {% if request.user == User %}
+                            <i class="far fa-edit" v-on:click="getEducation(education.id)"></i><i class="far fa-trash-alt" v-on:click="deleteEducation(education.id)"></i>
+                        {% endif %}
+                        <hr>
+                    </div>
+                    {% if request.user == User %}<button class="ulance-btn add-edit-btn" role="button" data-toggle="modal" data-target="#addEducationModal">Add New Education</button>{% endif %}
+
+                    <div id="skills" class="model-section">
+                        <p class="card-header-section">Skills</p>
+                            <div v-for="skill in skills">
+                                <span class="badge badge-pill badge-info">${skill.skill} - ${skill.skill_level}
+                                    {% if request.user == User %}
+                                        <i class="far fa-edit" v-on:click="getSkill(skill.id)"></i><i class="far fa-trash-alt" v-on:click="deleteSkill(skill.id)"></i>
+                                    {% endif %}
+                                </span>
+                            </div>
+                                {% if request.user == User %} <button class="ulance-btn" role="button" data-toggle="modal" data-target="#addSkillModal">Add New Skill</button> {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="talent-section col-4">
             <div class="card text-center">
 
                 <div class="card-body">
-                    <div id="skills" class="model-section">
-                        <p class="card-header-section">Skills</p>
-                            <!--{% for level in Levels %}-->
-                                <!--<a href="#"/><span class="badge badge-pill badge-info" data-id="{{level.id}}" id="{{level.id}}">{{ level.skill.name }} - {{ level.skill_level}}</span></a>-->
-                            <!--{% endfor %}-->
-                        <!--<button class="ulance-btn" role="button">Add New Skill</button>-->
-                        <form id="add-skill">
-                            <div class="form-group">
-
-                            </div>
-                        </form>
-                    </div>
 
                     <div id="certifications" class="model-section">
                         <p class="card-header-section">Certifications</p>
@@ -88,13 +107,7 @@
                 </div>
             </div>
         </div>
-        <div id="some-section" class="col-4">
-            <div class="card text-center">
-                <div class="card-body">
-                    <p class="card-header-section">Education</p>
-                </div>
-            </div>
-        </div>
+
     </div>
 </div>
 
@@ -106,6 +119,14 @@ var demo = new Vue({
   data: {
     links: [],
     educations: [],
+    currentEducation: {},
+    newEducation: {'school': null, 'major': null, 'status': null, 'degree_type': null},
+    schoolSearches: [],
+    majorSearches: [],
+    skills: [],
+    skillSearches: [],
+    currentSkill: {},
+    newSkill: {'skill': null, 'skill_level': null},
     loading: true,
     currentLink: {},
     newLink: {'link': null, 'brief_description': null},
@@ -122,6 +143,9 @@ var demo = new Vue({
     this.getLinks();
     this.getCertifications();
     this.getUserPage();
+    this.getSkills();
+    this.searchSkills();
+    this.getEducations();
   },
   methods: {
       getLinks: function () {
@@ -186,7 +210,6 @@ var demo = new Vue({
       getCertifications: function() {
           let api_url = '/api/profiles/{{User.username}}/certifications/'
           this.$http.get(api_url).then(function(response){
-              console.log(response.data)
               this.certifications = response.data.results
           }).catch(function(err){
             console.log(err)
@@ -237,6 +260,145 @@ var demo = new Vue({
           }
       },
 
+      getSkill: function(id) {
+          let api_url = `/api/profiles/level/${id}/`
+          this.$http.get(api_url).then(function(response){
+              this.currentSkill = response.data
+              $('#editSkillModal').modal('show')
+          }).catch(function(err){
+
+          })
+      },
+
+      getSkills: function() {
+        let api_url = '/api/profiles/{{User.username}}/levels/'
+        this.$http.get(api_url).then(function(response){
+            this.skills = response.data.results
+        }).catch(function(err){
+
+        })
+      },
+
+      addSkill: function() {
+          let api_url = '/api/profiles/level/create/'
+          this.$http.post(api_url, this.newSkill).then(function(resposne){
+              this.getSkills()
+              $('#addSkillModal').modal('toggle')
+          }).catch(function(err){
+              console.log(err)
+              let jsonerr = JSON.parse(err.bodyText)
+              attachFormErrors(jsonerr)
+          })
+      },
+
+      updateSkill: function() {
+        let api_url = `/api/profiles/level/${this.currentSkill.id}/`
+        this.$http.put(api_url, this.currentSkill).then(function(resposne){
+            this.getSkills()
+            $('#editSkillModal').modal('toggle')
+        }).catch(function(err){
+            let jsonerr = JSON.parse(err.bodyText)
+            attachFormErrors(jsonerr, true)
+        })
+      },
+
+      deleteSkill: function(id) {
+          let api_url = `/api/profiles/level/${id}/`
+          let answer = confirm("are you sure you want to delete?")
+          if(answer) {
+              this.$http.delete(api_url).then(function (response) {
+                  alert("item has been deleted")
+                  this.getSkills()
+              }).catch(function (err) {
+
+              })
+          }
+      },
+
+      getEducation: function(id) {
+        let api_url = `/api/profiles/education/${id}/`
+          this.$http.get(api_url).then(function(response){
+              this.currentEducation = response.data
+              $('#editEducationModal').modal('show')
+          }).catch(function(err){
+
+          })
+      },
+
+      getEducations: function() {
+          let api_url = '/api/profiles/{{User.username}}/educations/'
+          this.$http.get(api_url).then(function(response){
+              this.educations = response.data.results
+          }).catch(function(err){
+
+          })
+      },
+
+      addEducation: function() {
+        let api_url = '/api/profiles/education/create/'
+          this.$http.post(api_url, this.newEducation).then(function(){
+              this.getEducations()
+              $('#addEducationModal').modal('toggle')
+          }).catch(function(err){
+            let jsonerr = JSON.parse(err.bodyText)
+            attachFormErrors(jsonerr, true)
+          })
+      },
+
+      updateEducation: function() {
+        let api_url = `/api/profiles/education/${this.currentEducation.id}/`
+          this.$http.put(api_url, this.currentEducation).then(function(resposne){
+            this.getEducations()
+            $('#editEducationModal').modal('toggle')
+          }).catch(function(err){
+            let jsonerr = JSON.parse(err.bodyText)
+            attachFormErrors(jsonerr, true)
+          })
+      },
+
+      deleteEducation: function(id) {
+        let api_url = `/api/profiles/education/${id}/`
+          let answer = confirm("Are you sure you want to delete?")
+          if(answer) {
+              this.$http.delete(api_url).then(function (response) {
+                alert("Item has been deleted")
+                this.getEducations()
+              }).catch(function (err) {
+
+              })
+          }
+      },
+
+      searchSchools: function(ID) {
+          let api_url = '/api/profiles/educations/'
+          let htmlID = '#' + ID
+          let input = $(htmlID)
+          let search_term = input.val()
+          if(search_term) {
+              api_url = `/api/profiles/schools/?school=${search_term}`
+              this.$http.get(api_url).then(function(response){
+                this.schoolSearches = response.data.results
+              }).catch(function(err){
+
+              })
+          }
+      },
+
+      searchMajors: function(ID) {
+          let api_url = '/api/profiles/educations/'
+          let htmlID = '#' + ID
+          let input = $(htmlID)
+          let search_term = input.val()
+          if(search_term) {
+              api_url = `/api/profiles/majors/?major=${search_term}`
+              this.$http.get(api_url).then(function(response){
+                  this.majorSearches = response.data.results
+              }).catch(function(err){
+
+              })
+          }
+      },
+
       getUserPage: function() {
           this.$http.get(this.user_url).then(function(response){
             this.user = response.data
@@ -256,6 +418,21 @@ var demo = new Vue({
       getDescription: function() {
           this.$http.get(this.user_url, this.user).then(function(response){
               this.user.description = response.data.description
+          })
+      },
+
+      searchSkills: function(ID) {
+          let api_url = '/api/profiles/skills/'
+          let htmlID = '#' + ID
+          let input = $(htmlID)
+          let search_term = input.val()
+        if(search_term) {
+            api_url = `/api/profiles/skills/?skill=${search_term}`
+        }
+          this.$http.get(api_url).then(function(response){
+              this.skillSearches = response.data.results
+          }).catch(function(err){
+
           })
       },
 

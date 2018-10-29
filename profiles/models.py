@@ -93,11 +93,20 @@ class MajorModel(models.Model):
     def __str__(self):
         return self.major_name
 
+class SchoolModel(models.Model):
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    school_name = models.CharField(max_length=100, blank=False, null=False)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return self.school_name
+
 class EducationModel(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     user = models.ForeignKey(settings.AUTH_USER_MODEL, related_name='educations', on_delete=models.CASCADE, null=False)
-    major = models.OneToOneField(MajorModel, on_delete=models.SET_NULL, null=True, blank=False)
-    school_name = models.CharField(max_length=100, blank=False, null=False)
+    major = models.ForeignKey(MajorModel, on_delete=models.SET_NULL, null=True, blank=False)
+    school = models.ForeignKey(SchoolModel, on_delete=models.SET_NULL, null=True, blank=False)
     FRESHMAN = 'FR'
     SOPHMORE = 'SO'
     JUNIOR = 'JR'
@@ -126,7 +135,7 @@ class EducationModel(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
 
     def __str__(self):
-        return self.school_name + ' - ' + self.major.major_name
+        return self.school.school_name + ' - ' + self.major.major_name
 
 class CertificationModel(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)

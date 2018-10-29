@@ -1,0 +1,177 @@
+<div class="modal fade" id="addEducationModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Add Education</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <form id="add-education-form" v-on:submit.prevent="addEducation()">
+            <div class="form-group">
+                <span class="text-center text-danger" id="school"></span>
+                <span class="text-center text-danger"></span>
+                <input type="text"  v-model="newEducation.school" v-on:keyup="searchSchools('searchForSchools')" class="form-control" id="searchForSchools" list="schoolSearches" placeholder="Choose a School">
+
+            </div>
+            <div class="form-group">
+                <span class="text-center text-danger" id="major"></span>
+                <span class="text-center text-danger"></span>
+                <input type="text"  v-model="newEducation.major" v-on:keyup="searchMajors('searchForMajors')" class="form-control" id="searchForMajors" list="majorSearches" placeholder="Choose a Major">
+
+            </div>
+            <div class="form-group">
+                <span class="text-center text-danger" id="status"></span>
+                <span class="text-center text-danger"></span>
+                <select class="form-control" v-model="newEducation.status">
+                    <!--<option value="" disabled selected hidden>Select skill level</option>-->
+                    <option value="ONG">Ongoing</option>
+                    <option value="COM">Complete</option>
+                    <option value="INC">Incomplete</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <span class="text-center text-danger" id="degree_type"></span>
+                <span class="text-center text-danger"></span>
+                <select class="form-control" v-model="newEducation.degree_type">
+                    <!--<option value="" disabled selected hidden>Select skill level</option>-->
+                    <option value="BS">B.S</option>
+                    <option value="AS">A.S</option>
+                    <option value="MA">M.A</option>
+                </select>
+            </div>
+      <div class="modal-footer">
+        <button type="submit" class="btn ulance-btn">Add Education</button>
+        <button type="button" class="btn cancel-btn" data-dismiss="modal">Close</button>
+      </div>
+    </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade" id="editEducationModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Add Education</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <form id="edit-education-form" v-on:submit.prevent="updateEducation()">
+            <div class="form-group">
+                <span class="text-center text-danger" id="school_edit"></span>
+                <span class="text-center text-danger"></span>
+                <input type="text"  v-model="currentEducation.school" v-on:keyup="searchSchools('searchForSchoolsEdit')" class="form-control" id="searchForSchoolsEdit" list="schoolSearchesEdit" placeholder="Choose a School">
+
+            </div>
+            <div class="form-group">
+                <span class="text-center text-danger" id="major_edit"></span>
+                <span class="text-center text-danger"></span>
+                <input type="text"  v-model="currentEducation.major" v-on:keyup="searchMajors('searchForMajorsEdit')" class="form-control" id="searchForMajorsEdit" list="majorSearchesEdit" placeholder="Choose a Major">
+
+            </div>
+            <div class="form-group">
+                <span class="text-center text-danger" id="status_edit"></span>
+                <span class="text-center text-danger"></span>
+                <select class="form-control" v-model="currentEducation.status">
+                    <!--<option value="" disabled selected hidden>Select skill level</option>-->
+                    <option value="ONG">Ongoing</option>
+                    <option value="COM">Complete</option>
+                    <option value="INC">Incomplete</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <span class="text-center text-danger" id="degree_type_edit"></span>
+                <span class="text-center text-danger"></span>
+                <select class="form-control" v-model="currentEducation.degree_type">
+                    <!--<option value="" disabled selected hidden>Select skill level</option>-->
+                    <option value="BS">B.S</option>
+                    <option value="AS">A.S</option>
+                    <option value="MA">M.A</option>
+                </select>
+            </div>
+      <div class="modal-footer">
+        <button type="submit" class="btn ulance-btn">Edit Education</button>
+        <button type="button" class="btn cancel-btn" data-dismiss="modal">Close</button>
+      </div>
+    </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+      <!--<div class="modal-footer">-->
+        <!--<button type="submit" class="btn ulance-btn">Add Skill</button>-->
+        <!--<button type="button" class="btn cancel-btn" data-dismiss="modal">Close</button>-->
+      <!--</div>-->
+    <!--</form>-->
+      <!--</div>-->
+    <!--</div>-->
+  <!--</div>-->
+<!--</div>-->
+
+<!--<div class="modal fade" id="editSkillModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">-->
+  <!--<div class="modal-dialog" role="document">-->
+    <!--<div class="modal-content">-->
+      <!--<div class="modal-header">-->
+        <!--<h5 class="modal-title">Update Skill</h5>-->
+        <!--<button type="button" class="close" data-dismiss="modal" aria-label="Close">-->
+          <!--<span aria-hidden="true">&times;</span>-->
+        <!--</button>-->
+      <!--</div>-->
+      <!--<div class="modal-body">-->
+        <!--<form id="edit-link-form" v-on:submit.prevent="updateSkill()">-->
+            <!--<div class="form-group">-->
+                <!--<span class="text-center text-danger" id="skill_edit"></span>-->
+                <!--<span class="text-center text-danger"></span>-->
+                <!--<input type="text"  v-model="currentSkill.skill" v-on:keyup="searchSkills('searchForSkillsEdit')" id="searchForSkillsEdit" class="form-control" list="skillSearchesEdit"  placeholder="Choose a Skill">-->
+            <!--</div>-->
+            <!--<div class="form-group">-->
+                <!--<span class="text-center text-danger" id="skill_level_edit"></span>-->
+                <!--<span class="text-center text-danger"></span>-->
+                <!--<select class="form-control" v-model="currentSkill.skill_level">-->
+                    <!--<option value="BG">Beginner</option>-->
+                    <!--<option value="IT">Intermediate</option>-->
+                    <!--<option value="EX">Expert</option>-->
+                <!--</select>-->
+            <!--</div>-->
+      <!--<div class="modal-footer">-->
+        <!--<button type="submit" class="btn ulance-btn">Update Skill</button>-->
+        <!--<button type="button" class="btn cancel-btn" data-dismiss="modal">Close</button>-->
+      <!--</div>-->
+        <!--</form>-->
+      <!--</div>-->
+    <!--</div>-->
+  <!--</div>-->
+<!--</div>-->
+
+            <datalist id="schoolSearches">
+                <div v-for="school in schoolSearches">
+                    <option :value = school.school_name ></option>
+                </div>
+            </datalist>
+
+            <datalist id="schoolSearchesEdit">
+                <div v-for="school in schoolSearches">
+                    <option :value = school.school_name ></option>
+                </div>
+            </datalist>
+
+            <datalist id="majorSearches">
+                <div v-for="major in majorSearches">
+                    <option :value = major.major_name ></option>
+                </div>
+            </datalist>
+
+            <datalist id="majorSearchesEdit">
+                <div v-for="major in majorSearches">
+                    <option :value = major.major_name ></option>
+                </div>
+            </datalist>

@@ -1,5 +1,5 @@
 __author__ = '13477'
-from profiles.models import (ProfileModel, SkillModel, PortfolioModel, PictureModel, LinkModel, LevelModel, CertificationModel, EducationModel, MajorModel)
+from profiles.models import (ProfileModel, SkillModel, PortfolioModel, PictureModel, LinkModel, LevelModel, CertificationModel, EducationModel, MajorModel, SchoolModel)
 from rest_framework import serializers
 from services.api.serializers import ServiceSerializer
 from rest_framework.serializers import (
@@ -117,6 +117,14 @@ class LevelSerializer(serializers.ModelSerializer):
         fields = '__all__'
         read_only_fields = ['user']
 
+    def update(self, instance, validated_data):
+        skill_name = validated_data['skill']
+        skill = SkillModel.objects.get(name__iexact=skill_name)
+        instance.skill = skill
+        instance.skill_level = validated_data.get('skill_level', instance.skill_level)
+        instance.save()
+        return instance
+
 class CertificationSerializer(serializers.ModelSerializer):
     user = UserModelSerializer(read_only=True)
     class Meta:
@@ -124,6 +132,10 @@ class CertificationSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 # EDUCATION
+class SchoolSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = SchoolModel
+        fields = '__all__'
 
 class MajorSerializer(serializers.ModelSerializer):
     class Meta:
@@ -132,11 +144,31 @@ class MajorSerializer(serializers.ModelSerializer):
 
 
 class EducationSerializer(serializers.ModelSerializer):
-    user = UserModelSerializer
+    user = UserModelSerializer(read_only=True)
+    school = serializers.ChoiceField(choices=list(SchoolModel.objects.all().order_by('school_name').values_list('school_name', flat=True)))
+    major = serializers.ChoiceField(choices=list(MajorModel.objects.all().order_by('major_name').values_list('major_name', flat=True)))
+
     class Meta:
         model = EducationModel
         fields = '__all__'
         read_only_fields = ['user']
+
+    def update(self, instance, validated_data):
+        school_name = validated_data.get('school')
+        major_name = validated_data.get('major')
+        school = SchoolModel.objects.get(school_name__iexact=school_name)
+        major = MajorModel.objects.get(major_name__iexact=major_name)
+        instance.school = school
+        instance.major = major
+        instance.degree_type = validated_data.get('degree_type', instance.degree_type)
+        instance.status = validated_data.get('status', instance.status)
+        instance.save()
+        return instance
+
+
+
+
+
 
 
 
