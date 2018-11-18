@@ -1,6 +1,7 @@
 from django.db import models
 from django.conf import settings
 from django.urls import reverse, reverse_lazy
+from ulance.models import PictureModel
 import uuid
 # Create your models here.
 
@@ -10,16 +11,6 @@ class PortfolioModel(models.Model):
     description = models.TextField(max_length=500, blank=False, null=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
-
-
-class PictureModel(models.Model):
-    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-    photo = models.ImageField(upload_to='pictures')
-    description = models.TextField(max_length=250, blank=True, null=True)
-    portfolio = models.ForeignKey(PortfolioModel, related_name='pictures', on_delete=models.CASCADE, null=True)
-
-    def __str__(self):
-        return self.description
 
 class SkillModel(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)

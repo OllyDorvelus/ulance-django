@@ -23,7 +23,6 @@ class MajorModelAdmin(admin.ModelAdmin):
 class SchoolModelAdmin(admin.ModelAdmin):
     list_display = ['id', 'school_name']
 
-admin.site.register(PictureModel)
 admin.site.register(SkillModel, SkillModelAdmin)
 admin.site.register(ProfileModel)
 admin.site.register(PortfolioModel)

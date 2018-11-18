@@ -5,8 +5,11 @@ from django.urls import reverse, reverse_lazy
 from djmoney.models.fields import MoneyField
 from . import validators
 import uuid
+from ulance.models import PictureModel
 # Create your models here.
 from django.db.models import Count, Avg, Value, Sum
+
+
 
 class CategoryModel(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
@@ -44,6 +47,8 @@ class ServiceModel(models.Model):
     def get_absolute_url(self):
         return reverse('services:service-detail', kwargs={'pk': self.pk})
 
+class ServicePictureModel(PictureModel):
+    service = models.ForeignKey(ServiceModel, null=False, on_delete=models.CASCADE, blank=False, related_name='photos')
 
 class TransactionModel(models.Model):
     STATUS_CHOICES = (
