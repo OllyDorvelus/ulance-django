@@ -11,13 +11,20 @@ from profiles.models import ProfileModel
 
 User = get_user_model()
 
+class ProfileModelSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = ProfileModel
+        fields = '__all__'
+
 class UserModelSerializer(serializers.ModelSerializer):
+    profile = ProfileModelSerializer(read_only=True)
     class Meta:
         model = User
         fields = (
             'id',
             'username',
             'email',
+            'profile'
         )
 
 class UserCreateSerializer(serializers.ModelSerializer):

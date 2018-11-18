@@ -1,16 +1,24 @@
 from rest_framework import generics, permissions, mixins
-from .serializers import ( ServiceSerializer, CategorySerializer )
-from services.models import ServiceModel, CategoryModel
+from .serializers import ( ServiceSerializer, CategorySerializer, ReviewSerializer )
+from services.models import ServiceModel, CategoryModel, ReviewModel
 from ulance import pagination
 from ulance.custom_permissions import MyUserPermissions, MyAdminPermission
 from django.contrib.auth import get_user_model
+from django_filters.rest_framework import DjangoFilterBackend
+from .filters import ServiceFilter
+from rest_framework.filters import OrderingFilter
 
 User = get_user_model()
+
+# SERVICES
 
 class ServiceListAPIView(generics.ListAPIView):
     serializer_class = ServiceSerializer
     queryset = ServiceModel.objects.all()
     pagination_class = pagination.StandardResultsPagination
+    filter_backends = (DjangoFilterBackend, OrderingFilter)
+    ordering_fields = ("price", "avg_rate", "purchases")
+    filterset_class = ServiceFilter
 
 class ServiceCreateAPIView(generics.CreateAPIView):
     serializer_class = ServiceSerializer
@@ -40,6 +48,17 @@ class UserServiceListAPIView(generics.ListAPIView):
         qs = ServiceModel.objects.filter(user=user)
         return qs
 
+class ServiceReviewListAPIView(generics.ListAPIView):
+    serializer_class = ReviewSerializer
+    pagination_class = pagination.StandardResultsPagination
+
+    def get_queryset(self, *args, **kwargs):
+        pk = self.kwargs['pk']
+        service = ServiceModel.objects.get(pk=pk)
+        qs = ReviewModel.objects.filter(service=service)
+        return qs
+
+# CATEGORIES
 class CategoryListAPIView(generics.ListAPIView):
     serializer_class = CategorySerializer
     queryset = CategoryModel.objects.all()
@@ -53,6 +72,26 @@ class CategoryDetailAPIView(generics.RetrieveAPIView, mixins.DestroyModelMixin, 
     serializer_class = CategorySerializer
     queryset = CategoryModel.objects.all()
     permission_classes = [MyAdminPermission]
+
+    def put(self, request, *args, **kwargs):
+        return self.update(request, *args, **kwargs)
+
+    def delete(self, request, *args, **kwargs):
+        return self.destroy(self, request, *args, **kwargs)
+
+# REVIEWS
+
+class CreateReviewAPIView(generics.CreateAPIView):
+    serializer_class = ReviewSerializer
+    permissions_classes = [permissions.IsAuthenticated]
+
+    def perform_create(self, serializer, *args, **kwargs):
+        serializer.save(user=self.request.user)
+
+class ReviewDetailAPIView(generics.RetrieveAPIView, mixins.DestroyModelMixin, mixins.UpdateModelMixin):
+    serializer_class = ReviewSerializer
+    queryset = ReviewModel.objects.all()
+    permission_classes = [MyUserPermissions]
 
     def put(self, request, *args, **kwargs):
         return self.update(request, *args, **kwargs)

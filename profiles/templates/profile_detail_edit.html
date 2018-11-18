@@ -109,6 +109,8 @@
         </div>
 
     </div>
+
+    {% include 'service_list.html' %}
 </div>
 
 <script>
@@ -120,6 +122,7 @@ var demo = new Vue({
     links: [],
     educations: [],
     currentEducation: {},
+    services: [],
     newEducation: {'school': null, 'major': null, 'status': null, 'degree_type': null},
     schoolSearches: [],
     majorSearches: [],
@@ -146,8 +149,17 @@ var demo = new Vue({
     this.getSkills();
     this.searchSkills();
     this.getEducations();
+    this.getServices();
   },
   methods: {
+
+      getServices: function() {
+        let api_url = '/api/services/{{User.username}}/services/'
+        this.$http.get(api_url).then(function(response){
+            this.services = response.data.results
+        })
+      },
+
       getLinks: function () {
         let api_url = '/api/profiles/{{User.username}}/links/'
         this.$http.get(api_url).then(function(response){

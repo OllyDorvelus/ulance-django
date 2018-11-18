@@ -21,18 +21,18 @@ class UserDetailView(DetailView):
         user = get_object_or_404(User, username__iexact=self.kwargs.get("username"))
         return user
 
-    def get_context_data(self, *args, **kwargs):
-        context = super(UserDetailView, self).get_context_data(*args, **kwargs)
-        user = UserDetailView.get_object(self)
-        Levels = LevelModel.objects.filter(user=user)
-        Certifications = CertificationModel.objects.filter(user=user)
-        Educations = EducationModel.objects.filter(user=user)
-        Links = LinkModel.objects.filter(user=user)
-        context['Levels'] = Levels
-        context['Certifications'] = Certifications
-        context['Educations'] = Educations
-        context['Links'] = Links
-        return context
+    # def get_context_data(self, *args, **kwargs):
+    #     context = super(UserDetailView, self).get_context_data(*args, **kwargs)
+    #     user = UserDetailView.get_object(self)
+    #     Levels = LevelModel.objects.filter(user=user)
+    #     Certifications = CertificationModel.objects.filter(user=user)
+    #     Educations = EducationModel.objects.filter(user=user)
+    #     Links = LinkModel.objects.filter(user=user)
+    #     context['Levels'] = Levels
+    #     context['Certifications'] = Certifications
+    #     context['Educations'] = Educations
+    #     context['Links'] = Links
+    #     return context
 
     def get_template_names(self, *args, **kwargs):
         user = User.objects.get(username__iexact=UserDetailView.get_object(self).username)
