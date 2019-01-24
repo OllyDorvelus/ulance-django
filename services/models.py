@@ -32,7 +32,7 @@ class ServiceManager(models.Manager):
 
 class ServiceModel(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='owner')
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='creator')
     name = models.CharField(max_length=100, blank=False, null=False)
     price = MoneyField(max_digits=10, decimal_places=2, default_currency='USD')
     category = models.ManyToManyField(CategoryModel, related_name='categories', blank=True)
@@ -49,29 +49,6 @@ class ServiceModel(models.Model):
 
 class ServicePictureModel(PictureModel):
     service = models.ForeignKey(ServiceModel, null=False, on_delete=models.CASCADE, blank=False, related_name='photos')
-
-class TransactionModel(models.Model):
-    STATUS_CHOICES = (
-        ('ORD', 'Ordered'),
-        ('INP', 'In Progress'),
-        ('INC', 'Incomplete'),
-        ('REF', 'Refunded'),
-        ('COM', 'Complete'),
-    )
-
-    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-    buyer = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.SET_NULL, null=True, blank=False)
-    paid = MoneyField(max_digits=10, decimal_places=2, default_currency='USD')
-    status = models.CharField(max_length=3, choices=STATUS_CHOICES)
-    created_at = models.DateTimeField(auto_now_add=True)
-    updated_at = models.DateTimeField(auto_now=True)
-
-    class Meta:
-        abstract = True
-
-class ServiceTransactionModel(TransactionModel):
-    service = models.ForeignKey(ServiceModel, on_delete=models.SET_NULL, null=True, blank=False, related_name='buyers')
-
 
 class ReviewModel(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
