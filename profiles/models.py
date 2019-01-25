@@ -5,12 +5,14 @@ from ulance.models import PictureModel
 import uuid
 # Create your models here.
 
+
 class PortfolioModel(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     user = models.OneToOneField(settings.AUTH_USER_MODEL, blank=False, null=False, on_delete=models.CASCADE)
     description = models.TextField(max_length=500, blank=False, null=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
+
 
 class SkillModel(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
@@ -29,6 +31,7 @@ class SkillModel(models.Model):
 
     def __str__(self):
         return self.name
+
 
 class LevelModel(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
@@ -49,6 +52,7 @@ class LevelModel(models.Model):
     def __str__(self):
         return self.skill.name + '-' + self.skill_level + '-' + self.user.username
 
+
 class ProfileModel(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     user = models.OneToOneField(settings.AUTH_USER_MODEL, related_name='profile', on_delete=models.CASCADE)
@@ -67,6 +71,7 @@ class ProfileModel(models.Model):
     def get_absolute_url(self):
         return reverse('profiles:profile-detail', kwargs={'username': self.user.username})
 
+
 class LinkModel(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     link = models.URLField(blank=False, null=False, max_length=1000)
@@ -74,6 +79,7 @@ class LinkModel(models.Model):
     brief_description = models.CharField(max_length=75, blank=False, null=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
+
 
 class MajorModel(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
@@ -84,6 +90,7 @@ class MajorModel(models.Model):
     def __str__(self):
         return self.major_name
 
+
 class SchoolModel(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     school_name = models.CharField(max_length=100, blank=False, null=False)
@@ -92,6 +99,7 @@ class SchoolModel(models.Model):
 
     def __str__(self):
         return self.school_name
+
 
 class EducationModel(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
@@ -127,6 +135,7 @@ class EducationModel(models.Model):
 
     def __str__(self):
         return self.school.school_name + ' - ' + self.major.major_name
+
 
 class CertificationModel(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
