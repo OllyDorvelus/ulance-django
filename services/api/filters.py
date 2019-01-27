@@ -18,7 +18,7 @@ class ServiceFilter(FilterSet):
 #         fields = ['skill',]
 #
 # class SchoolFilter(FilterSet):
-#     school = django_filters.CharFilter(lookup_expr='icontains', field_name='school_name')
+#     school = django_filters.CharFilter(lookup_expr='icontains', field_name='name')
 #
 #     class Meta:
 #         model = SchoolModel

@@ -9,7 +9,7 @@ from rest_framework.views import APIView
 
 class UserModelListAPIView(generics.ListAPIView):
     serializer_class = UserModelSerializer
-    queryset = User.objects.all()
+    queryset = User.objects.all().order_by('username')
     pagination_class = pagination.StandardResultsPagination
 
 

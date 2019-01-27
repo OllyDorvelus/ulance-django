@@ -1,15 +1,10 @@
-__author__ = '13477'
 from profiles.models import (ProfileModel, SkillModel, PortfolioModel, PictureModel, LinkModel, LevelModel, CertificationModel, EducationModel, MajorModel, SchoolModel)
 from rest_framework import serializers
-from services.api.serializers import ServiceSerializer
-from rest_framework.serializers import (
-    EmailField,
-    CharField,
-    ValidationError
-)
 from django.contrib.auth import get_user_model
-User = get_user_model()
 from accounts.api.serializers import UserModelSerializer
+
+User = get_user_model()
+
 # from drf_extra_fields.fields import Base64ImageField
 #
 # class UploadedBase64ImageSerializer(serializers.Serializer):
@@ -75,6 +70,7 @@ class Base64ImageField(serializers.ImageField):
 #             'email',
 #         )
 
+
 class ProfileSerializer(serializers.ModelSerializer):
     user = UserModelSerializer(read_only=True)
     profile_pic = Base64ImageField(read_only=True)
@@ -90,10 +86,12 @@ class ProfilePictureSerializer(serializers.ModelSerializer):
         model = ProfileModel
         fields = '__all__'
 
+
 class SkillSerializer(serializers.ModelSerializer):
     class Meta:
         model = SkillModel
         fields = '__all__'
+
 
 class LinkSerializer(serializers.ModelSerializer):
     user = UserModelSerializer(read_only=True)
@@ -102,11 +100,13 @@ class LinkSerializer(serializers.ModelSerializer):
         fields = '__all__'
        # read_only_fields = ['user']
 
+
 class PortfolioSerializer(serializers.ModelSerializer):
     user = UserModelSerializer(read_only=True)
     class Meta:
         model = PortfolioModel
         fields = '__all__'
+
 
 class LevelSerializer(serializers.ModelSerializer):
     user = UserModelSerializer(read_only=True)
@@ -125,6 +125,7 @@ class LevelSerializer(serializers.ModelSerializer):
         instance.save()
         return instance
 
+
 class CertificationSerializer(serializers.ModelSerializer):
     user = UserModelSerializer(read_only=True)
     class Meta:
@@ -132,10 +133,13 @@ class CertificationSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 # EDUCATION
+
+
 class SchoolSerializer(serializers.ModelSerializer):
     class Meta:
         model = SchoolModel
         fields = '__all__'
+
 
 class MajorSerializer(serializers.ModelSerializer):
     class Meta:
@@ -145,8 +149,8 @@ class MajorSerializer(serializers.ModelSerializer):
 
 class EducationSerializer(serializers.ModelSerializer):
     user = UserModelSerializer(read_only=True)
-    school = serializers.ChoiceField(choices=list(SchoolModel.objects.all().order_by('school_name').values_list('school_name', flat=True)))
-    major = serializers.ChoiceField(choices=list(MajorModel.objects.all().order_by('major_name').values_list('major_name', flat=True)))
+    school = serializers.ChoiceField(choices=list(SchoolModel.objects.all().order_by('name').values_list('name', flat=True)))
+    major = serializers.ChoiceField(choices=list(MajorModel.objects.all().order_by('name').values_list('name', flat=True)))
 
     class Meta:
         model = EducationModel
@@ -156,8 +160,8 @@ class EducationSerializer(serializers.ModelSerializer):
     def update(self, instance, validated_data):
         school_name = validated_data.get('school')
         major_name = validated_data.get('major')
-        school = SchoolModel.objects.get(school_name__iexact=school_name)
-        major = MajorModel.objects.get(major_name__iexact=major_name)
+        school = SchoolModel.objects.get(name__iexact=school_name)
+        major = MajorModel.objects.get(name__iexact=major_name)
         instance.school = school
         instance.major = major
         instance.degree_type = validated_data.get('degree_type', instance.degree_type)

@@ -16,7 +16,7 @@ class PortfolioModel(models.Model):
 
 class SkillModel(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-    name = models.CharField(max_length=50, null=False, blank=False)
+    name = models.CharField(max_length=50, null=False, blank=False, unique=True)
     # BEGINNER = 'BG'
     # INTERMEDIATE = 'IT'
     # EXPERT = 'EX'
@@ -83,29 +83,29 @@ class LinkModel(models.Model):
 
 class MajorModel(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-    major_name = models.CharField(max_length=150, blank=False, null=False)
+    name = models.CharField(max_length=150, blank=False, null=False, unique=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
     def __str__(self):
-        return self.major_name
+        return self.name
 
 
 class SchoolModel(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-    school_name = models.CharField(max_length=100, blank=False, null=False)
+    name = models.CharField(max_length=100, blank=False, null=False, unique=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
     def __str__(self):
-        return self.school_name
+        return self.name
 
 
 class EducationModel(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     user = models.ForeignKey(settings.AUTH_USER_MODEL, related_name='educations', on_delete=models.CASCADE, null=False)
-    major = models.ForeignKey(MajorModel, on_delete=models.SET_NULL, null=True, blank=False)
-    school = models.ForeignKey(SchoolModel, on_delete=models.SET_NULL, null=True, blank=False)
+    major = models.ForeignKey(MajorModel, on_delete=models.SET_NULL, null=True, blank=False, related_name='major_name')
+    school = models.ForeignKey(SchoolModel, on_delete=models.SET_NULL, null=True, blank=False, related_name='school_name')
     FRESHMAN = 'FR'
     SOPHMORE = 'SO'
     JUNIOR = 'JR'
@@ -134,7 +134,7 @@ class EducationModel(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
 
     def __str__(self):
-        return self.school.school_name + ' - ' + self.major.major_name
+        return self.school.name + ' - ' + self.major.name
 
 
 class CertificationModel(models.Model):

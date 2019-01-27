@@ -2,7 +2,7 @@ from django.test import TestCase
 from django.urls import reverse, resolve
 from mixer.backend.django import mixer
 from django.contrib.auth.models import User
-import uuid
+
 
 class TestUrls(TestCase):
     @classmethod

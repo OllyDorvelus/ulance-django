@@ -1,8 +1,7 @@
-__author__ = '13477'
 from django.urls import path
 from . import views
 
-app_name = 'servicesapi'
+app_name = 'services_api'
 
 urlpatterns = [
     path('', views.ServiceListAPIView.as_view(), name='service-list-api'),
@@ -15,7 +14,4 @@ urlpatterns = [
     path('<pk>/reviews/', views.ServiceReviewListAPIView.as_view(), name='service-reviews-list-api'),
     path('review/create/', views.CreateReviewAPIView.as_view(), name='review-create-api'),
     path('review/<pk>/', views.ReviewDetailAPIView.as_view(), name='review-detail-api'),
-
-
-
 ]

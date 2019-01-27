@@ -18,10 +18,10 @@ class EducationModelAdmin(admin.ModelAdmin):
     list_display = ['id', 'user', 'major', 'school', 'status', 'degree_type']
 
 class MajorModelAdmin(admin.ModelAdmin):
-    list_display = ['id', 'major_name']
+    list_display = ['id', 'name']
 
 class SchoolModelAdmin(admin.ModelAdmin):
-    list_display = ['id', 'school_name']
+    list_display = ['id', 'name']
 
 admin.site.register(SkillModel, SkillModelAdmin)
 admin.site.register(ProfileModel)

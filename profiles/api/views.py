@@ -19,7 +19,7 @@ User = get_user_model()
 
 class ProfileListAPIView(generics.ListAPIView):
     serializer_class = ProfileSerializer
-    queryset = ProfileModel.objects.all()
+    queryset = ProfileModel.objects.all().order_by('user__username')
     pagination_class = pagination.StandardResultsPagination
 
 
@@ -222,20 +222,20 @@ class MajorCreateAPIView(generics.CreateAPIView):
 
 
 class MajorListAPIView(generics.ListAPIView):
-    queryset = MajorModel.objects.all().order_by('major_name')
+    queryset = MajorModel.objects.all().order_by('name')
     serializer_class = MajorSerializer
     pagination_class = pagination.StandardResultsPagination
     filter_backends = (DjangoFilterBackend,)
     filterset_class = MajorFilter
     #     filter_backends = (filters.SearchFilter,)
-    # search_fields = ('major_name',)
+    # search_fields = ('name',)
 
     # def get_queryset(self, *args, **kwargs):
-    #     qs = MajorModel.objects.all().order_by('major_name')
+    #     qs = MajorModel.objects.all().order_by('name')
     #     query = self.request.GET.get("major", None)
     #     if query is not None:
     #         qs = qs.filter(
-    #             Q(major_name__icontains=query)
+    #             Q(name__icontains=query)
     #         )
     #     return qs
 
@@ -259,10 +259,10 @@ class EducationCreateAPIView(generics.CreateAPIView):
     permission_classes = [permissions.IsAuthenticated]
 
     def perform_create(self, serializer, *args, **kwargs):
-        school_name = serializer.validated_data['school']
-        school = SchoolModel.objects.get(school_name__iexact=school_name)
-        major_name = serializer.validated_data['major']
-        major = MajorModel.objects.get(major_name__iexact=major_name)
+        name = serializer.validated_data['school']
+        school = SchoolModel.objects.get(name__iexact=name)
+        name = serializer.validated_data['major']
+        major = MajorModel.objects.get(name__iexact=name)
         serializer.save(user=self.request.user, school=school, major=major)
 
 
