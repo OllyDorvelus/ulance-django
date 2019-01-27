@@ -138,43 +138,7 @@ function editLink(ID) {
     })
 }
 
-//function putDataIntoForm(form_id) {
-//    var form = $('#' + form_id)
-//    for (var i=1; i<arguments.length; i++) {
-//        var form_input = form.find('input[name=' + ]')
-//    }
-//}
-function someFunction(stringObj) {
-    stringObj = JSON.parse(stringObj)
-    $.each(stringObj, function(key, value) {
-        console.log(key, '\n', value)
-    })
-}
-
-
-
 $(document).ready(function() {
-    //Login Form
-   // putDataIntoForm('something', 'okay', 'lol', 'okay')
-   // var stringObj = '{"nice":"okay", "booyah":"splatoon"}'
-   // var stringObj = {'nice':'okay', 'booyah': 'splatoon'}
-   // var name = "name"
-   // var value = "olivier"
-   // var description = "description"
-   // var descript_value = encodeURI("Im Haitian")
-   // decodeURI(encodeURI("Im Haitian"))
-   //
-   // var testString = '<div style="height:500px;background-color:red" onclick=someFunction(\'["' + 'okay"]\')></div>'
-   // var testString = "<div style='height:500px;background-color:red' onclick=someFunction('{\"test\":\"okay\"}')></div>"
-   // var testString = "<div style='height:500px;background-color:red' onclick=someFunction('{\"" + name + "\":\"" + value + "\",\"" + description + "\":\"" + descript_value + "\"}')></div>"
-   //
-   // $('body').append(testString)
-   // console.log(testString)
-    //stringObj = JSON.parse(stringObj)
-    //$.each(stringObj, function(key, value) {
-    //    console.log(key, '\n', value)
-    //})
-
     $('#loginform').submit(function(e) {
         e.preventDefault();
         var this_ = $(this)

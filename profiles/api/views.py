@@ -14,16 +14,20 @@ from .filters import MajorFilter, SkillFilter, SchoolFilter
 
 User = get_user_model()
 
-#PROFILES
+# PROFILES
+
+
 class ProfileListAPIView(generics.ListAPIView):
     serializer_class = ProfileSerializer
     queryset = ProfileModel.objects.all()
     pagination_class = pagination.StandardResultsPagination
 
+
 class ProfileUpdateAPIView(generics.UpdateAPIView):
     serializer_class = ProfileSerializer
     queryset = ProfileModel.objects.all()
     lookup_field = 'user__username'
+
 
 class ProfileDetailAPIView(generics.RetrieveAPIView, mixins.DestroyModelMixin, mixins.UpdateModelMixin):
     serializer_class = ProfileSerializer
@@ -31,13 +35,14 @@ class ProfileDetailAPIView(generics.RetrieveAPIView, mixins.DestroyModelMixin, m
     queryset = ProfileModel.objects.all()
     lookup_field = 'user__username'
     permission_classes = [MyUserPermissions]
-  #  parser_classes = [FileUploadParser]
+  # parser_classes = [FileUploadParser]
 
     def put(self, request, *args, **kwargs):
         return self.update(request, *args, **kwargs)
 
     def delete(self, request, *args, **kwargs):
         return self.destroy(self, request, *args, **kwargs)
+
 
 class ProfilePictureDetailAPIView(generics.RetrieveAPIView, mixins.DestroyModelMixin, mixins.UpdateModelMixin):
     serializer_class = ProfilePictureSerializer
@@ -51,7 +56,9 @@ class ProfilePictureDetailAPIView(generics.RetrieveAPIView, mixins.DestroyModelM
     def delete(self, request, *args, **kwargs):
         return self.destroy(self, request, *args, **kwargs)
 
-#SKILLS
+# SKILLS
+
+
 class SkillListAPIView(generics.ListAPIView):
     serializer_class = SkillSerializer
     queryset = SkillModel.objects.all().order_by('name')
@@ -59,15 +66,16 @@ class SkillListAPIView(generics.ListAPIView):
     filterset_class = SkillFilter
     pagination_class = pagination.StandardResultsPagination
 
+
 class SkillCreateAPIView(generics.CreateAPIView):
     serializer_class = SkillSerializer
     queryset = SkillModel.objects.all()
     permission_classes = [permissions.IsAdminUser]
 
+
 class SkillDetailAPIView(generics.RetrieveAPIView, mixins.DestroyModelMixin, mixins.UpdateModelMixin):
     serializer_class = SkillSerializer
     queryset = SkillModel.objects.all()
-    lookup_field = 'id'
 
     def put(self, request, *args, **kwargs):
         return self.update(request, *args, **kwargs)
@@ -75,10 +83,8 @@ class SkillDetailAPIView(generics.RetrieveAPIView, mixins.DestroyModelMixin, mix
     def delete(self, request, *args, **kwargs):
         return self.destroy(self, request, *args, **kwargs)
 
-#LINKS
-# class LinkListAPIView(generics.ListAPIView):
-#     serializer_class = LinkSerializer
-#     queryset = LinkModel.objects.all()
+# LINKS
+
 
 class LinkCreateAPIView(generics.CreateAPIView):
     serializer_class = LinkSerializer
@@ -87,6 +93,7 @@ class LinkCreateAPIView(generics.CreateAPIView):
 
     def perform_create(self, serializer, *args, **kwargs):
         serializer.save(user=self.request.user)
+
 
 class LinkDetailAPIView(generics.RetrieveAPIView, mixins.DestroyModelMixin, mixins.UpdateModelMixin):
     serializer_class = LinkSerializer
@@ -99,6 +106,7 @@ class LinkDetailAPIView(generics.RetrieveAPIView, mixins.DestroyModelMixin, mixi
     def delete(self, request, *args, **kwargs):
         return self.destroy(self, request, *args, **kwargs)
 
+
 class UserLinkListAPIView(generics.ListAPIView):
     serializer_class = LinkSerializer
     model = LinkModel.objects.all()
@@ -109,7 +117,8 @@ class UserLinkListAPIView(generics.ListAPIView):
         user = User.objects.get(username=username)
         qs = LinkModel.objects.filter(user=user)
         return qs
-#PORTFOLIOS
+# PORTFOLIOS
+
 
 class PortfolioCreateAPIView(generics.CreateAPIView):
     serializer_class = PortfolioSerializer
@@ -118,6 +127,7 @@ class PortfolioCreateAPIView(generics.CreateAPIView):
 
     def perform_create(self, serializer, *args, **kwargs):
         serializer.save(user=self.request.user)
+
 
 class PortfolioDetailAPIView(generics.RetrieveAPIView, mixins.DestroyModelMixin, mixins.UpdateModelMixin):
     serializer_class = PortfolioSerializer
@@ -128,11 +138,11 @@ class PortfolioDetailAPIView(generics.RetrieveAPIView, mixins.DestroyModelMixin,
     def put(self, request, *args, **kwargs):
         return self.update(request, *args, **kwargs)
 
-
     def delete(self, request, *args, **kwargs):
         return self.destroy(self, request, *args, **kwargs)
 
-#LEVELS
+
+# LEVELS
 
 class LevelCreateAPIView(generics.CreateAPIView):
     serializer_class = LevelSerializer
@@ -170,6 +180,7 @@ class UserLevelListAPIView(generics.ListAPIView):
 
 # CERTIFICATIONS
 
+
 class CertificationCreateAPIView(generics.CreateAPIView):
     serializer_class = CertificationSerializer
     queryset = CertificationModel.objects.all()
@@ -177,6 +188,7 @@ class CertificationCreateAPIView(generics.CreateAPIView):
 
     def perform_create(self, serializer, *args, **kwargs):
         serializer.save(user=self.request.user)
+
 
 class CertificationDetailAPIView(generics.RetrieveAPIView, mixins.DestroyModelMixin, mixins.UpdateModelMixin):
     serializer_class = CertificationSerializer
@@ -189,6 +201,7 @@ class CertificationDetailAPIView(generics.RetrieveAPIView, mixins.DestroyModelMi
     def delete(self, request, *args, **kwargs):
         return self.destroy(self, request, *args, **kwargs)
 
+
 class UserCertificationListAPIView(generics.ListAPIView):
     serializer_class = CertificationSerializer
     pagination_class = pagination.StandardResultsPagination
@@ -200,6 +213,7 @@ class UserCertificationListAPIView(generics.ListAPIView):
         return qs
 
 # EDUCATION
+
 
 class MajorCreateAPIView(generics.CreateAPIView):
     queryset = MajorModel.objects.all()
@@ -224,6 +238,8 @@ class MajorListAPIView(generics.ListAPIView):
     #             Q(major_name__icontains=query)
     #         )
     #     return qs
+
+
 class SchoolCreateAPIView(generics.CreateAPIView):
     serializer_class = SchoolSerializer
     queryset = SchoolModel.objects.all()
@@ -231,10 +247,11 @@ class SchoolCreateAPIView(generics.CreateAPIView):
 
 class SchoolListAPIView(generics.ListAPIView):
     serializer_class = SchoolSerializer
-    queryset =  SchoolModel.objects.all()
+    queryset = SchoolModel.objects.all()
     pagination_class = pagination.StandardResultsPagination
     filter_backends = (DjangoFilterBackend,)
     filterset_class = SchoolFilter
+
 
 class EducationCreateAPIView(generics.CreateAPIView):
     queryset = EducationModel.objects.all()
@@ -258,6 +275,7 @@ class UserEducationListAPIView(generics.ListAPIView):
         user = User.objects.get(username=username)
         qs = EducationModel.objects.filter(user=user)
         return qs
+
 
 class EducationDetailAPIView(generics.RetrieveAPIView, mixins.DestroyModelMixin, mixins.UpdateModelMixin):
     serializer_class = EducationSerializer
