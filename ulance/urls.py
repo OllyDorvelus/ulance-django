@@ -27,6 +27,7 @@ urlpatterns = [
     path('api/profiles/', include('profiles.api.urls')),
     path('', include('services.urls')),
     path('api/services/', include('services.api.urls')),
+    path('api/orders/', include('orders.api.urls')),
     path('admin/', admin.site.urls),
     path('', views.index, name='index'),
     path('api/auth/token', obtain_jwt_token),

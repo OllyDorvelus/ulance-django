@@ -4,7 +4,7 @@ from .models import CartModel, ServiceOrderModel, EntryModel
 
 
 class CartModelAdmin(admin.ModelAdmin):
-    list_display = ['id', 'user']
+    list_display = ['id', 'user', 'item_count', 'total']
 
 
 class ServiceOrderModelAdmin(admin.ModelAdmin):
