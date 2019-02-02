@@ -8,13 +8,16 @@ from rest_framework.serializers import (
     ValidationError
 )
 from profiles.models import ProfileModel
+from orders.models import CartModel
 
 User = get_user_model()
+
 
 class ProfileModelSerializer(serializers.ModelSerializer):
     class Meta:
         model = ProfileModel
         fields = '__all__'
+
 
 class UserModelSerializer(serializers.ModelSerializer):
     profile = ProfileModelSerializer(read_only=True)
@@ -27,9 +30,11 @@ class UserModelSerializer(serializers.ModelSerializer):
             'profile'
         )
 
+
 class UserCreateSerializer(serializers.ModelSerializer):
     email2 = EmailField()
     password2 = CharField(write_only=True)
+
     class Meta:
         model = User
         fields = (
@@ -96,7 +101,10 @@ class UserCreateSerializer(serializers.ModelSerializer):
         new_user.save()
         new_profile = ProfileModel(user=new_user)
         new_profile.save()
+        new_cart = CartModel(user=new_user)
+        new_cart.save()
         return validated_data
+
 
 class UserLoginSerializer(serializers.ModelSerializer):
     token = CharField(allow_blank=True, read_only=True)

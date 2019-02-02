@@ -2,14 +2,18 @@ from django.contrib import admin
 from services.models import ServiceModel, CategoryModel, ReviewModel, ServicePictureModel
 # Register your models here.
 
+
 class ServiceModelAdmin(admin.ModelAdmin):
     list_display = ['id', 'user', 'name', 'price']
+
 
 class CategoryModelAdmin(admin.ModelAdmin):
     list_display = ['id', 'name']
 
+
 class ReviewModelAdmin(admin.ModelAdmin):
     list_display = ['id', 'user', 'description', 'rate', 'service']
+
 
 class ServicePictureModelAdmin(admin.ModelAdmin):
     list_display = ['id', 'photo', 'description']
