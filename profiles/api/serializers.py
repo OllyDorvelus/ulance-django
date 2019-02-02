@@ -82,6 +82,7 @@ class ProfileSerializer(serializers.ModelSerializer):
 class ProfilePictureSerializer(serializers.ModelSerializer):
     user = UserModelSerializer(read_only=True)
     profile_pic = Base64ImageField()
+
     class Meta:
         model = ProfileModel
         fields = '__all__'
@@ -103,6 +104,7 @@ class LinkSerializer(serializers.ModelSerializer):
 
 class PortfolioSerializer(serializers.ModelSerializer):
     user = UserModelSerializer(read_only=True)
+
     class Meta:
         model = PortfolioModel
         fields = '__all__'
@@ -110,8 +112,8 @@ class PortfolioSerializer(serializers.ModelSerializer):
 
 class LevelSerializer(serializers.ModelSerializer):
     user = UserModelSerializer(read_only=True)
-  #  skill = SkillSerializer(read_only=True)
     skill = serializers.ChoiceField(choices=list(SkillModel.objects.all().values_list('name', flat=True)))
+
     class Meta:
         model = LevelModel
         fields = '__all__'
@@ -128,6 +130,7 @@ class LevelSerializer(serializers.ModelSerializer):
 
 class CertificationSerializer(serializers.ModelSerializer):
     user = UserModelSerializer(read_only=True)
+
     class Meta:
         model = CertificationModel
         fields = '__all__'

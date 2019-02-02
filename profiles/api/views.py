@@ -10,7 +10,7 @@ from django.db.models import Q
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework.filters import SearchFilter, OrderingFilter
 from django_filters.rest_framework import DjangoFilterBackend
-from .filters import MajorFilter, SkillFilter, SchoolFilter
+from .filters import MajorFilter, SkillFilter, SchoolFilter, ProfileFilter
 
 User = get_user_model()
 
@@ -19,8 +19,21 @@ User = get_user_model()
 
 class ProfileListAPIView(generics.ListAPIView):
     serializer_class = ProfileSerializer
-    queryset = ProfileModel.objects.all().order_by('user__username')
     pagination_class = pagination.StandardResultsPagination
+    filter_backends = (DjangoFilterBackend, OrderingFilter)
+    ordering_fields = ['user__username', 'services_completed', 'first_name', 'last_name']
+    # filterset_class = ProfileFilter
+
+    def get_queryset(self, *args, **kwargs):
+        qs = ProfileModel.objects.all().order_by('user__username')
+        query = self.request.GET.get("q", None)
+        if query is not None:
+            qs = qs.filter(
+                Q(user__username__icontains=query) |
+                Q(first_name__icontains=query) |
+                Q(last_name__icontains=query)
+            )
+        return qs
 
 
 class ProfileUpdateAPIView(generics.UpdateAPIView):

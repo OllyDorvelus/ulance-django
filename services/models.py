@@ -10,7 +10,6 @@ from ulance.models import PictureModel
 from django.db.models import Count, Avg, Value, Sum
 
 
-
 class CategoryModel(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     name = models.CharField(max_length=150, blank=False, null=False)
@@ -25,9 +24,14 @@ class CategoryModel(models.Model):
         else:
             return self.name
 
+    @property
+    def get_name(self):
+        return self.name
+
+
 class ServiceManager(models.Manager):
     def get_queryset(self):
-        return super(ServiceManager, self).get_queryset().annotate(avg_rate=Avg('reviews__rate'), purchases=Count('buyers'))
+        return super(ServiceManager, self).get_queryset().annotate(avg_rate_sort=Avg('reviews__rate'), purchases_sort=Count('buyers'))
 
 
 class ServiceModel(models.Model):
@@ -41,14 +45,32 @@ class ServiceModel(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
     objects = ServiceManager()
 
+    @property
+    def avg_rate(self):
+        if self.reviews.count():
+            total = 0
+            count = 0
+            for review in self.reviews.all():
+                total += review.rate
+                count += 1
+            avg = total / count
+            return round(avg, 2)
+        return 'No Reviews'
+
+    @property
+    def purchases(self):
+        return self.buyers.count()
+
     def __str__(self):
         return self.name
 
     def get_absolute_url(self):
         return reverse('services:service-detail', kwargs={'pk': self.pk})
 
+
 class ServicePictureModel(PictureModel):
     service = models.ForeignKey(ServiceModel, null=False, on_delete=models.CASCADE, blank=False, related_name='photos')
+
 
 class ReviewModel(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)

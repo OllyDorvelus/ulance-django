@@ -12,10 +12,19 @@ from django.db.models import Sum
 
 User = get_user_model()
 
+
+class CategorySerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = CategoryModel
+        fields = '__all__'
+
+
 class ServiceSerializer(serializers.ModelSerializer):
     user = UserModelSerializer(read_only=True)
     avg_rate = serializers.SerializerMethodField()
     purchases = serializers.SerializerMethodField()
+  #  category = CategorySerializer(many=True)
 
     class Meta:
         model = ServiceModel
@@ -27,16 +36,18 @@ class ServiceSerializer(serializers.ModelSerializer):
     def get_purchases(self, obj):
         return obj.purchases
 
-class CategorySerializer(serializers.ModelSerializer):
 
+class ServiceCreateSerializer(serializers.ModelSerializer):
     class Meta:
-        model = CategoryModel
+        model = ServiceModel
         fields = '__all__'
-
+        read_only_fields = ['user']
 
 
 class ReviewSerializer(serializers.ModelSerializer):
     user = UserModelSerializer(read_only=True)
+    service = ServiceSerializer(read_only=True)
+
     class Meta:
         model = ReviewModel
         fields = '__all__'

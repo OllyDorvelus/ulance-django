@@ -12,6 +12,6 @@ urlpatterns = [
     path('<pk>/', views.ServiceDetailAPIView.as_view(), name='service-detail-api'),
     path('<user__username>/services/', views.UserServiceListAPIView.as_view(), name='user-service-list-api'),
     path('<pk>/reviews/', views.ServiceReviewListAPIView.as_view(), name='service-reviews-list-api'),
-    path('review/create/', views.CreateReviewAPIView.as_view(), name='review-create-api'),
+    path('<pk>/review/create/', views.ReviewCreateAPIView.as_view(), name='review-create-api'),
     path('review/<pk>/', views.ReviewDetailAPIView.as_view(), name='review-detail-api'),
 ]
