@@ -6,6 +6,9 @@ from djmoney.models.fields import MoneyField
 from . import validators
 import uuid
 from ulance.models import PictureModel
+from django.db.models.signals import post_save, post_delete
+from django.dispatch import receiver
+from django.utils.datetime_safe import datetime
 # Create your models here.
 from django.db.models import Count, Avg, Value, Sum
 
@@ -29,9 +32,9 @@ class CategoryModel(models.Model):
         return self.name
 
 
-class ServiceManager(models.Manager):
-    def get_queryset(self):
-        return super(ServiceManager, self).get_queryset().annotate(avg_rate_sort=Avg('reviews__rate'), purchases_sort=Count('buyers'))
+# class ServiceManager(models.Manager):
+#     def get_queryset(self):
+#         return super(ServiceManager, self).get_queryset().annotate(avg_rate_sort=Avg('reviews__rate'), purchases_sort=Count('service_entries'))
 
 
 class ServiceModel(models.Model):
@@ -43,10 +46,11 @@ class ServiceModel(models.Model):
     description = models.TextField(blank=False, null=False, max_length=500)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
-    objects = ServiceManager()
+    purchases = models.PositiveIntegerField(default=0)
+    average_rating = models.DecimalField(null=True, blank=True, decimal_places=2, max_digits=4)
+    # objects = ServiceManager()
 
-    @property
-    def avg_rate(self):
+    def get_avg_rating(self):
         if self.reviews.count():
             total = 0
             count = 0
@@ -55,11 +59,13 @@ class ServiceModel(models.Model):
                 count += 1
             avg = total / count
             return round(avg, 2)
-        return 'No Reviews'
+        return 0
 
-    @property
-    def purchases(self):
-        return self.buyers.count()
+    def get_purchases(self):
+        total = 0
+        for entry in self.service_entries.filter(is_ordered=True):
+            total += entry.quantity
+        return total
 
     def __str__(self):
         return self.name
@@ -69,7 +75,7 @@ class ServiceModel(models.Model):
 
 
 class ServicePictureModel(PictureModel):
-    service = models.ForeignKey(ServiceModel, null=False, on_delete=models.CASCADE, blank=False, related_name='photos')
+    service = models.ForeignKey(ServiceModel, null=False, on_delete=models.CASCADE, blank=False, related_name='service_photos')
 
 
 class ReviewModel(models.Model):
@@ -81,6 +87,20 @@ class ReviewModel(models.Model):
 
     def __str__(self):
         return self.user.username + ' - ' + str(self.rate)
+
+
+@receiver(post_save, sender=ReviewModel)
+def update_avg_rating_add_or_update(sender, instance, **kwargs):
+    service = instance.service
+    service.average_rating = service.get_avg_rating()
+    service.save()
+
+
+@receiver(post_delete, sender=ReviewModel)
+def update_avg_rating_delete(sender, instance, **kwargs):
+    service = instance.service
+    service.average_rating = service.get_avg_rating()
+    service.save()
 
 
 

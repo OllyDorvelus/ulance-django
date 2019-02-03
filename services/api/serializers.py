@@ -22,19 +22,12 @@ class CategorySerializer(serializers.ModelSerializer):
 
 class ServiceSerializer(serializers.ModelSerializer):
     user = UserModelSerializer(read_only=True)
-    avg_rate = serializers.SerializerMethodField()
-    purchases = serializers.SerializerMethodField()
   #  category = CategorySerializer(many=True)
 
     class Meta:
         model = ServiceModel
         fields = '__all__'
 
-    def get_avg_rate(self, obj):
-        return obj.avg_rate
-
-    def get_purchases(self, obj):
-        return obj.purchases
 
 
 class ServiceCreateSerializer(serializers.ModelSerializer):

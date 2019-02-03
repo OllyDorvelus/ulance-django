@@ -4,7 +4,7 @@ from services.models import ServiceModel, CategoryModel, ReviewModel, ServicePic
 
 
 class ServiceModelAdmin(admin.ModelAdmin):
-    list_display = ['id', 'user', 'name', 'price']
+    list_display = ['id', 'user', 'name', 'price', 'average_rating', 'purchases']
 
 
 class CategoryModelAdmin(admin.ModelAdmin):

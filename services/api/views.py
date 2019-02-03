@@ -15,10 +15,10 @@ User = get_user_model()
 
 class ServiceListAPIView(generics.ListAPIView):
     serializer_class = ServiceSerializer
-    queryset = ServiceModel.objects.all()
+    queryset = ServiceModel.objects.all().order_by('name')
     pagination_class = pagination.StandardResultsPagination
     filter_backends = (DjangoFilterBackend, OrderingFilter)
-    ordering_fields = ("price", "avg_rate_sort", "purchases_sort")
+    ordering_fields = ("price", "average_rating", "purchases")
     filterset_class = ServiceFilter
 
 
@@ -60,7 +60,7 @@ class ServiceReviewListAPIView(generics.ListAPIView):
     def get_queryset(self, *args, **kwargs):
         pk = self.kwargs['pk']
         service = ServiceModel.objects.get(pk=pk)
-        qs = ReviewModel.objects.filter(service=service)
+        qs = ReviewModel.objects.filter(service=service).order_by('updated_at')
         return qs
 
 # CATEGORIES
