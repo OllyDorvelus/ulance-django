@@ -1,5 +1,4 @@
 from django.db import models
-from profiles.models import ProfileModel
 from django.conf import settings
 from django.urls import reverse, reverse_lazy
 from djmoney.models.fields import MoneyField
@@ -9,8 +8,8 @@ from ulance.models import PictureModel
 from django.db.models.signals import post_save, post_delete
 from django.dispatch import receiver
 from django.utils.datetime_safe import datetime
-# Create your models here.
 from django.db.models import Count, Avg, Value, Sum
+# Create your models here.
 
 
 class CategoryModel(models.Model):
@@ -31,6 +30,10 @@ class CategoryModel(models.Model):
     def get_name(self):
         return self.name
 
+    def get_all_sub_categories(self):
+        if self.parent:
+            return self.children.all()
+        return []
 
 # class ServiceManager(models.Manager):
 #     def get_queryset(self):
@@ -39,7 +42,7 @@ class CategoryModel(models.Model):
 
 class ServiceModel(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='creator')
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='services')
     name = models.CharField(max_length=100, blank=False, null=False)
     price = MoneyField(max_digits=10, decimal_places=2, default_currency='USD')
     category = models.ManyToManyField(CategoryModel, related_name='categories', blank=True)

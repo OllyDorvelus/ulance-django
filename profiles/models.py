@@ -2,6 +2,7 @@ from django.db import models
 from django.conf import settings
 from django.urls import reverse, reverse_lazy
 from ulance.models import PictureModel
+from orders.models import EntryModel
 import uuid
 # Create your models here.
 
@@ -70,6 +71,14 @@ class ProfileModel(models.Model):
 
     def get_absolute_url(self):
         return reverse('profiles:profile-detail', kwargs={'username': self.user.username})
+
+    def get_services_completed(self):
+        user = self.user
+        services = user.services
+        services_completed = 0
+        for service in services:
+            services_completed += EntryModel.objects.filter(service=service, is_ordered=True, status='COM').count()
+        return services_completed
 
 
 class LinkModel(models.Model):

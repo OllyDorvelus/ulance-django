@@ -33,33 +33,9 @@ class CartModel(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='owner')
     item_count = models.PositiveIntegerField(default=0)
-    # service = models.ManyToManyField(ServiceModel, related_name='services', blank=True)
     total = models.DecimalField(default=0.00, max_digits=10, decimal_places=2)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
-    # def is_cart_empty(self):
-    #     return self.item_count == 0
-    #
-    # def add_to_cart(self):
-    #     self.item_count += 1
-    #
-    # def reset_cart(self):
-    #     self.item_count = 0
-    #
-    # def remove_from_cart(self):
-    #     self.item_count -= 1
-    # @property
-    # def items(self):
-    #     return self.service.count()
-    #
-    # def clear(self):
-    #     self.service.clear()
-    #
-    # def remove(self, service):
-    #     if service in self.service.all():
-    #         self.service.remove(service)
-    #     else:
-    #         return "Cannot remove service"
 
     def __str__(self):
         return f'{self.user.username} - {self.item_count}'
@@ -79,7 +55,12 @@ class CartModel(models.Model):
 
     def remove_all_cart_entries(self):
         for entry in self.cart_entries.all():
-            self.cart_entries.remove(entry)
+            entry.delete()
+
+    def transfer_entries_to_cart(self, order_instance):
+        for entry in self.cart_entries.all():
+            order_instance.order_entries.add(entry)
+        self.cart.entries.clear()
 
 
 class EntryModel(models.Model):
@@ -88,6 +69,9 @@ class EntryModel(models.Model):
     order = models.ForeignKey(ServiceOrderModel, null=True, blank=True, on_delete=models.CASCADE, related_name='order_entries')
     cart = models.ForeignKey(CartModel, null=True, on_delete=models.CASCADE, related_name='cart_entries')
     quantity = models.PositiveIntegerField(default=1)
+    buyer_notes = models.TextField(null=True, blank=True, max_length=1000)
+    seller_notes = models.TextField(null=True, blank=True, max_length=1000)
+    days_remaining = models.PositiveIntegerField(null=True, blank=True)
     is_ordered = models.BooleanField(default=False)
 
 
