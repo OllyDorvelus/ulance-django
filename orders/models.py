@@ -31,7 +31,7 @@ def new_order(sender, instance, **kwargs):
 
 class CartModel(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-    user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='owner')
+    user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='cart')
     item_count = models.PositiveIntegerField(default=0)
     total = models.DecimalField(default=0.00, max_digits=10, decimal_places=2)
     created_at = models.DateTimeField(auto_now_add=True)
@@ -64,6 +64,14 @@ class CartModel(models.Model):
 
 
 class EntryModel(models.Model):
+    STATUS_CHOICES = (
+        ('ORD', 'Ordered'),
+        ('INP', 'In Progress'),
+        ('INC', 'Incomplete'),
+        ('REF', 'Refunded'),
+        ('COM', 'Complete'),
+    )
+    
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     service = models.ForeignKey(ServiceModel, null=True, on_delete=models.CASCADE, related_name='service_entries')
     order = models.ForeignKey(ServiceOrderModel, null=True, blank=True, on_delete=models.CASCADE, related_name='order_entries')
@@ -73,7 +81,7 @@ class EntryModel(models.Model):
     seller_notes = models.TextField(null=True, blank=True, max_length=1000)
     days_remaining = models.PositiveIntegerField(null=True, blank=True)
     is_ordered = models.BooleanField(default=False)
-
+    status = models.CharField(max_length=3, choices=STATUS_CHOICES, blank=True, null=True)
 
 @receiver(pre_save, sender=EntryModel)
 def remove_quantity(sender, instance, **kwargs):
