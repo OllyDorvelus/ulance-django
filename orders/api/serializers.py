@@ -13,20 +13,21 @@ class EntrySerializer(serializers.ModelSerializer):
     class Meta:
         model = EntryModel
         fields = '__all__'
-        read_only_fields = ['days_remaining', 'is_ordered', 'order', 'cart', 'service', 'seller_notes']
+        read_only_fields = ['days_remaining', 'is_ordered', 'order', 'cart', 'service', 'seller_notes', 'status']
 
 
 class ServiceOwnerEntrySerializer(serializers.ModelSerializer):
     class Meta:
         model = EntryModel
         fields = '__all__'
-        read_only_fields = ['order', 'cart', 'service', 'buyer_notes']
+        read_only_fields = ['order', 'cart', 'service', 'buyer_notes', 'is_delivered']
 
 
 class EntryCreateSerializer(serializers.ModelSerializer):
     class Meta:
         model = EntryModel
         fields = '__all__'
+        read_only_fields = ['seller_notes', 'days_remaining', 'is_ordered', 'status', 'service', 'order', 'cart', 'quantity', 'buyer_notes', 'is_delivered']
 
     def validate(self, data):
         return data

@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import CartModel, ServiceOrderModel, EntryModel
+from .models import CartModel, ServiceOrderModel, EntryModel, ComplaintModel
 # Register your models here.
 
 
@@ -15,6 +15,11 @@ class EntryModelAdmin(admin.ModelAdmin):
     list_display = ['id', 'cart', 'service', 'quantity']
 
 
+class ComplaintModelAdmin(admin.ModelAdmin):
+    list_display = ['id', 'entry', 'reason', 'is_valid_complaint']
+
+
 admin.site.register(CartModel, CartModelAdmin)
 admin.site.register(ServiceOrderModel, ServiceOrderModelAdmin)
 admin.site.register(EntryModel, EntryModelAdmin)
+admin.site.register(ComplaintModel, ComplaintModelAdmin)

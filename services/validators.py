@@ -11,3 +11,7 @@ def validate_rate(value):
 #     if (model.service_photos.count() > 1 and
 #             obj.pk != model.service_photos.get().pk):
 #         raise ValidationError("Can only create 1 %s instance" % model.__name__)
+
+def validate_complaint(self, data):
+    if data['status'] != 'COM':
+        raise ValidationError("Can only issue complaint if entry is marked as complete.")

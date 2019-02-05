@@ -43,13 +43,13 @@ class CartModel(models.Model):
     def get_total(self):
         print(self.cart_entries.count())
         cost = 0
-        for entry in self.cart_entries.all():
+        for entry in self.cart_entries.filter(is_ordered=False):
             cost = cost + (entry.quantity * entry.service.price.amount)
         return cost
 
     def get_count(self):
         count = 0
-        for entry in self.cart_entries.all():
+        for entry in self.cart_entries.filter(is_ordered=False):
             count += entry.quantity
         return count
 
@@ -71,7 +71,7 @@ class EntryModel(models.Model):
         ('REF', 'Refunded'),
         ('COM', 'Complete'),
     )
-    
+
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     service = models.ForeignKey(ServiceModel, null=True, on_delete=models.CASCADE, related_name='service_entries')
     order = models.ForeignKey(ServiceOrderModel, null=True, blank=True, on_delete=models.CASCADE, related_name='order_entries')
@@ -81,7 +81,9 @@ class EntryModel(models.Model):
     seller_notes = models.TextField(null=True, blank=True, max_length=1000)
     days_remaining = models.PositiveIntegerField(null=True, blank=True)
     is_ordered = models.BooleanField(default=False)
+    is_delivered = models.BooleanField(default=False)
     status = models.CharField(max_length=3, choices=STATUS_CHOICES, blank=True, null=True)
+
 
 @receiver(pre_save, sender=EntryModel)
 def remove_quantity(sender, instance, **kwargs):
@@ -107,6 +109,15 @@ def remove_from_cart(sender, instance, **kwargs):
     cart.item_count = cart.get_count()
     cart.updated_at = datetime.now()
     cart.save()
+
+
+class ComplaintModel(models.Model):
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    reason = models.TextField(null=False, blank=False, max_length=1000)
+    entry = models.OneToOneField(EntryModel, blank=False, null=False, on_delete=models.CASCADE)
+    is_valid_complaint = models.BooleanField(default=True)
+
+
 
 
 

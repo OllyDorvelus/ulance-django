@@ -4,6 +4,7 @@ from django.contrib.auth import get_user_model
 
 User = get_user_model()
 
+
 class MyUserPermissions(permissions.BasePermission):
     """
     Handles permissions for users.  The basic rules are
@@ -41,6 +42,8 @@ class EntryUserPermissions(permissions.BasePermission):
     def has_object_permission(self, request, view, obj):
         if request.user.is_superuser:
             return True
+        if obj.is_ordered:
+            return False
         return obj.cart.user == request.user
 
 
@@ -49,4 +52,6 @@ class EntryServiceUserPermissions(permissions.BasePermission):
     def has_object_permission(self, request, view, obj):
         if request.user.is_superuser:
             return True
-        return obj.service.user == request.user
+        if obj.is_ordered:
+            return obj.service.user == request.user
+        return False
