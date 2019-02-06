@@ -7,6 +7,7 @@ import uuid
 from ulance.models import PictureModel
 from django.db.models.signals import post_save, post_delete
 from django.dispatch import receiver
+from django.core.exceptions import ValidationError
 from django.utils.datetime_safe import datetime
 from django.db.models import Count, Avg, Value, Sum
 # Create your models here.
@@ -84,12 +85,16 @@ class ServicePictureModel(PictureModel):
 class ReviewModel(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='reviewer')
-    description = models.TextField(blank=True, max_length=300)
+    description = models.TextField(blank=False, null=False, max_length=300)
     rate = models.IntegerField(validators=[validators.validate_rate])
     service = models.ForeignKey(ServiceModel, on_delete=models.CASCADE, related_name='reviews')
 
     def __str__(self):
         return self.user.username + ' - ' + str(self.rate)
+
+    def clean(self, *args, **kwargs):
+        if self.service.reviews.filter(user=self.user):
+            raise ValidationError("You already wrote an review")
 
 
 @receiver(post_save, sender=ReviewModel)

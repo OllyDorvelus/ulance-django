@@ -6,6 +6,7 @@ import uuid
 from django.db.models.signals import post_save, post_delete, pre_save
 from django.dispatch import receiver
 from django.utils.datetime_safe import datetime
+from django.core.exceptions import ValidationError
 # Create your models here.
 from simple_history.models import HistoricalRecords
 
@@ -23,6 +24,15 @@ class ServiceOrderModel(OrderModel):
         self.status = status
         self.save()
 
+    def __str__(self):
+        return f'{self.buyer} - {self.paid}'
+
+
+# def new_order(sender, instance, created, **kwargs):
+#     if created:
+#         print("my_balls")
+
+# post_save.connect(new_order, sender=ServiceOrderModel)
 
 @receiver(post_save, sender=ServiceOrderModel)
 def new_order(sender, instance, **kwargs):
@@ -75,7 +85,7 @@ class EntryModel(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     service = models.ForeignKey(ServiceModel, null=True, on_delete=models.CASCADE, related_name='service_entries')
     order = models.ForeignKey(ServiceOrderModel, null=True, blank=True, on_delete=models.CASCADE, related_name='order_entries')
-    cart = models.ForeignKey(CartModel, null=True, on_delete=models.CASCADE, related_name='cart_entries')
+    cart = models.ForeignKey(CartModel, null=True, blank=True, on_delete=models.CASCADE, related_name='cart_entries')
     quantity = models.PositiveIntegerField(default=1)
     buyer_notes = models.TextField(null=True, blank=True, max_length=1000)
     seller_notes = models.TextField(null=True, blank=True, max_length=1000)
@@ -83,6 +93,15 @@ class EntryModel(models.Model):
     is_ordered = models.BooleanField(default=False)
     is_delivered = models.BooleanField(default=False)
     status = models.CharField(max_length=3, choices=STATUS_CHOICES, blank=True, null=True)
+
+    def __str__(self):
+        if self.order:
+            name = self.order.buyer.username
+        elif self.cart:
+            name = self.cart.user.username
+        else:
+            name = "no user"
+        return f'{self.service.user.username} | {self.service.name} requested by {name}'
 
 
 @receiver(pre_save, sender=EntryModel)
@@ -92,32 +111,39 @@ def remove_quantity(sender, instance, **kwargs):
 
 @receiver(post_save, sender=EntryModel)
 def update_cart(sender, instance, **kwargs):
-    cart = instance.cart
-    cart.total = cart.get_total()
-    cart.item_count = cart.get_count()
-    cart.updated_at = datetime.now()
-    cart.save()
-    if instance.quantity <= 0:
-       # cart.entries.delete(instance)
-       instance.delete()
+    if instance.cart:
+        cart = instance.cart
+        cart.total = cart.get_total()
+        cart.item_count = cart.get_count()
+        cart.updated_at = datetime.now()
+        cart.save()
+        if instance.quantity <= 0:
+           # cart.entries.delete(instance)
+           instance.delete()
 
 
 @receiver(post_delete, sender=EntryModel)
 def remove_from_cart(sender, instance, **kwargs):
-    cart = instance.cart
-    cart.total = cart.get_total()
-    cart.item_count = cart.get_count()
-    cart.updated_at = datetime.now()
-    cart.save()
+    if instance.cart:
+        cart = instance.cart
+        cart.total = cart.get_total()
+        cart.item_count = cart.get_count()
+        cart.updated_at = datetime.now()
+        cart.save()
 
 
 class ComplaintModel(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     reason = models.TextField(null=False, blank=False, max_length=1000)
-    entry = models.OneToOneField(EntryModel, blank=False, null=False, on_delete=models.CASCADE)
+    entry = models.OneToOneField(EntryModel, blank=False, null=False, on_delete=models.CASCADE, related_name='entry')
     is_valid_complaint = models.BooleanField(default=True)
 
+    def clean(self, *args, **kwargs):
+        if self.entry.status != 'COM':
+            raise ValidationError("Entry need to be marked as completed before filing a complaint.")
 
+    def __str__(self):
+        return f'{self.entry.order.buyer.username} - {self.reason}'
 
 
 

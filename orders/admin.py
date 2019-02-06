@@ -12,7 +12,7 @@ class ServiceOrderModelAdmin(admin.ModelAdmin):
 
 
 class EntryModelAdmin(admin.ModelAdmin):
-    list_display = ['id', 'cart', 'service', 'quantity']
+    list_display = ['id', 'cart', 'service', 'order', 'quantity']
 
 
 class ComplaintModelAdmin(admin.ModelAdmin):

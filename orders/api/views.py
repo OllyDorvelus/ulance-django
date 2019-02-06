@@ -3,11 +3,12 @@ from django.contrib.auth import get_user_model
 from rest_framework.filters import OrderingFilter
 from django_filters.rest_framework import DjangoFilterBackend
 from ulance import pagination
-from .serializers import ServiceOrderSerializer, CartSerializer, EntrySerializer, EntryCreateSerializer, ServiceOwnerEntrySerializer
-from orders.models import ServiceOrderModel, EntryModel, CartModel
+from .serializers import ( ServiceOrderSerializer, ServiceOrderCreateSerializer, CartSerializer,
+                           EntrySerializer, EntryCreateSerializer, ServiceOwnerEntrySerializer, ComplaintSerializer )
+from orders.models import ServiceOrderModel, EntryModel, CartModel, ComplaintModel
 from services.models import ServiceModel
 from django.shortcuts import get_object_or_404
-from ulance.custom_permissions import EntryUserPermissions, EntryServiceUserPermissions
+from ulance.custom_permissions import EntryUserPermissions, EntryServiceUserPermissions, ComplaintUserPermissions
 from rest_framework.response import Response
 from rest_framework import status
 
@@ -27,7 +28,33 @@ class OrderListAPIView(generics.ListAPIView):
 
 
 class OrderCreateAPIView(generics.CreateAPIView):
-    pass
+    serializer_class = ServiceOrderCreateSerializer
+    permission_classes = [permissions.IsAuthenticated]
+
+    def create(self, request, *args, **kwargs):
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        user = self.request.user
+        cart = user.cart
+        entries = cart.cart_entries.all()
+        serializer.validated_data['buyer'] = user
+        serializer.validated_data['paid'] = cart.total
+        if not entries:
+            return Response({'message': "Cart is empty, please add at least one service."})
+        new_order = self.perform_create(serializer)
+        for entry in entries:
+            entry.is_ordered = True
+            entry.cart = None
+            entry.order = new_order
+            entry.save()
+        cart.item_count = 0
+        cart.total = 0
+        cart.save()
+        headers = self.get_success_headers(serializer.data)
+        return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
+
+    def perform_create(self, serializer):
+        return serializer.save()
 
 
 class ServiceOrderListAPIView(generics.ListAPIView):
@@ -66,7 +93,8 @@ class EntryDetailAPIView(generics.RetrieveAPIView, mixins.DestroyModelMixin, mix
 
 class ServiceOwnerEntryDetailAPIView(generics.RetrieveAPIView, mixins.UpdateModelMixin):
     serializer_class = ServiceOwnerEntrySerializer
-    permission_classes = [permissions.IsAuthenticated]
+    permission_classes = [permissions.IsAuthenticated, EntryServiceUserPermissions]
+    queryset = EntryModel.objects.all()
 
     def put(self, request, *args, **kwargs):
         return self.update(request, *args, **kwargs)
@@ -81,6 +109,8 @@ class AddEntryToCartAPIView(generics.CreateAPIView):
     lookup_field = 'pk'
 
     def create(self, request, *args, **kwargs):
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
         user = self.request.user
         cart = CartModel.objects.get(user=user)
         service_id = self.kwargs['pk']
@@ -90,14 +120,51 @@ class AddEntryToCartAPIView(generics.CreateAPIView):
         for entry in cart.cart_entries.all():
             if entry.service == service:
                 return Response({"message": "Service already in cart"}, status=status.HTTP_400_BAD_REQUEST)
-        return super(AddEntryToCartAPIView, self).create(request, *args, **kwargs)
+        serializer.validated_data['cart'] = cart
+        serializer.validated_data['service'] = service
+        self.perform_create(serializer)
+        headers = self.get_success_headers(serializer.data)
+        return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
 
     def perform_create(self, serializer, *args, **kwargs):
+        serializer.save()
+
+
+class ComplaintDetailAPIView(generics.RetrieveAPIView, mixins.DestroyModelMixin, mixins.UpdateModelMixin):
+    serializer_class = ComplaintSerializer
+    queryset = ComplaintModel
+    permission_classes = [permissions.IsAuthenticated]
+
+    def put(self, request, *args, **kwargs):
+        return self.update(request, *args, **kwargs)
+
+    def delete(self, request, *args, **kwargs):
+        return self.destroy(self, request, *args, **kwargs)
+
+
+class ComplaintCreateAPIView(generics.CreateAPIView):
+    serializer_class = ComplaintSerializer
+    permission_classes = [permissions.IsAuthenticated, ComplaintUserPermissions]
+
+    def create(self, request, *args, **kwargs):
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
         user = self.request.user
-        cart = CartModel.objects.get(user=user)
-        service_id = self.kwargs['pk']
-        service = get_object_or_404(ServiceModel, pk=service_id)
-        serializer.save(cart=cart, service=service)
+        entry_id = self.kwargs['pk']
+        entry = get_object_or_404(EntryModel, pk=entry_id)
+        if entry.status != 'COM':
+            return Response({"message": "Entry need to be marked as completed before filing a complaint."},
+                            status=status.HTTP_400_BAD_REQUEST)
+        if entry.order.buyer != user:
+            return Response({"message": "You do not have permission to file a complaint on this entry"},
+                            status=status.HTTP_401_UNAUTHORIZED)
+        serializer.validated_data['entry'] = entry
+        self.perform_create(serializer)
+        headers = self.get_success_headers(serializer.data)
+        return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
+
+    def perform_create(self, serializer, *args, **kwargs):
+        serializer.save()
 
 
 

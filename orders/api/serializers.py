@@ -1,5 +1,6 @@
 from rest_framework import serializers
-from orders.models import ServiceOrderModel, CartModel, EntryModel
+from orders.models import ServiceOrderModel, CartModel, EntryModel, ComplaintModel
+from services.api.serializers import ServiceSerializer
 from accounts.api.serializers import UserModelSerializer
 from django.contrib.auth import get_user_model
 from rest_framework.serializers import (
@@ -13,17 +14,21 @@ class EntrySerializer(serializers.ModelSerializer):
     class Meta:
         model = EntryModel
         fields = '__all__'
-        read_only_fields = ['days_remaining', 'is_ordered', 'order', 'cart', 'service', 'seller_notes', 'status']
+        read_only_fields = ['days_remaining', 'is_ordered', 'order', 'cart', 'service', 'seller_notes', 'status', 'is_delivered']
 
 
 class ServiceOwnerEntrySerializer(serializers.ModelSerializer):
+    service = ServiceSerializer(read_only=True)
+
     class Meta:
         model = EntryModel
-        fields = '__all__'
-        read_only_fields = ['order', 'cart', 'service', 'buyer_notes', 'is_delivered']
+        exclude = ('cart',)
+        read_only_fields = ['order', 'cart', 'service', 'buyer_notes', 'is_delivered', 'quantity']
 
 
 class EntryCreateSerializer(serializers.ModelSerializer):
+    service = ServiceSerializer(read_only=True)
+
     class Meta:
         model = EntryModel
         fields = '__all__'
@@ -47,11 +52,18 @@ class EntryCreateSerializer(serializers.ModelSerializer):
 
 
 class ServiceOrderSerializer(serializers.ModelSerializer):
-    order_entries = EntrySerializer(many=True)
+    order_entries = EntrySerializer(many=True, read_only=True)
 
     class Meta:
         model = ServiceOrderModel
         fields = '__all__'
+
+
+class ServiceOrderCreateSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = ServiceOrderModel
+        fields = '__all__'
+        read_only_fields = ['buyer', 'paid', 'status']
 
 
 class CartSerializer(serializers.ModelSerializer):
@@ -60,3 +72,12 @@ class CartSerializer(serializers.ModelSerializer):
     class Meta:
         model = CartModel
         fields = '__all__'
+
+
+class ComplaintSerializer(serializers.ModelSerializer):
+  #  entry = EntrySerializer(read_only=True)
+
+    class Meta:
+        model = ComplaintModel
+        fields = '__all__'
+        read_only_fields = ['is_valid_complaint']

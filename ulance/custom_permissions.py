@@ -55,3 +55,16 @@ class EntryServiceUserPermissions(permissions.BasePermission):
         if obj.is_ordered:
             return obj.service.user == request.user
         return False
+
+
+class ComplaintUserPermissions(permissions.BasePermission):
+
+    def has_object_permission(self, request, view, obj):
+        if request.user.is_superuser:
+            return True
+        if request.method in permissions.SAFE_METHODS:
+            if obj.entry.service.user == request.user:
+                return True
+        if obj.entry.order.buyer == request.user:
+            return True
+        return False

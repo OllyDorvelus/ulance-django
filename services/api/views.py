@@ -7,7 +7,8 @@ from django.contrib.auth import get_user_model
 from django_filters.rest_framework import DjangoFilterBackend
 from .filters import ServiceFilter
 from rest_framework.filters import OrderingFilter
-
+from rest_framework.response import Response
+from rest_framework import status
 User = get_user_model()
 
 # SERVICES
@@ -95,10 +96,22 @@ class ReviewCreateAPIView(generics.CreateAPIView):
     serializer_class = ReviewSerializer
     permissions_classes = [permissions.IsAuthenticated]
 
-    def perform_create(self, serializer, *args, **kwargs):
+    def create(self, request, *args, **kwargs):
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        user = self.request.user
         service_id = self.kwargs['pk']
         service = ServiceModel.objects.get(pk=service_id)
-        serializer.save(service=service, user=self.request.user)
+        if service.reviews.filter(user=user):
+            return Response({"message": "You already wrote a review for this service"}, status=status.HTTP_400_BAD_REQUEST)
+        serializer.validated_data['service'] = service
+        serializer.validated_data['user'] = user
+        self.perform_create(serializer)
+        headers = self.get_success_headers(serializer.data)
+        return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
+
+    def perform_create(self, serializer, *args, **kwargs):
+        serializer.save()
 
 
 class ReviewDetailAPIView(generics.RetrieveAPIView, mixins.DestroyModelMixin, mixins.UpdateModelMixin):

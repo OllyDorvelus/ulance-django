@@ -29,7 +29,6 @@ class ServiceSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 
-
 class ServiceCreateSerializer(serializers.ModelSerializer):
     class Meta:
         model = ServiceModel
@@ -44,3 +43,8 @@ class ReviewSerializer(serializers.ModelSerializer):
     class Meta:
         model = ReviewModel
         fields = '__all__'
+
+
+
+
+
