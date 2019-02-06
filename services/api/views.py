@@ -4,11 +4,13 @@ from services.models import ServiceModel, CategoryModel, ReviewModel
 from ulance import pagination
 from ulance.custom_permissions import MyUserPermissions, MyAdminPermission
 from django.contrib.auth import get_user_model
+from django.shortcuts import get_object_or_404
 from django_filters.rest_framework import DjangoFilterBackend
 from .filters import ServiceFilter
 from rest_framework.filters import OrderingFilter
 from rest_framework.response import Response
 from rest_framework import status
+
 User = get_user_model()
 
 # SERVICES
@@ -64,13 +66,30 @@ class ServiceReviewListAPIView(generics.ListAPIView):
         qs = ReviewModel.objects.filter(service=service).order_by('updated_at')
         return qs
 
-# CATEGORIES
 
+# CATEGORIES
 
 class CategoryListAPIView(generics.ListAPIView):
     serializer_class = CategorySerializer
     queryset = CategoryModel.objects.all()
     pagination_class = pagination.StandardResultsPagination
+
+
+class MainCategoryListAPIView(generics.ListAPIView):
+    serializer_class = CategorySerializer
+    queryset = CategoryModel.objects.filter(is_parent=True)
+    pagination_class = pagination.StandardResultsPagination
+
+
+class SubCategoryListAPIView(generics.ListAPIView):
+    serializer_class = CategorySerializer
+    pagination_class = pagination.StandardResultsPagination
+
+    def get_queryset(self, *args, **kwargs):
+        category_parent_id = self.kwargs['pk']
+        category = get_object_or_404(CategoryModel, pk=category_parent_id)
+        sub_categories = category.children.all()
+        return sub_categories
 
 
 class CategoryCreateAPIView(generics.CreateAPIView):
