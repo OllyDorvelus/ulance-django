@@ -24,7 +24,7 @@ class CategoryModel(models.Model):
 
     def __str__(self):
         if self.parent:
-            return self.parent.name + " - " + self.name
+            return f'{self.parent.name} - {self.name}'
         else:
             return self.name
 
@@ -91,7 +91,7 @@ class ReviewModel(models.Model):
     service = models.ForeignKey(ServiceModel, on_delete=models.CASCADE, related_name='reviews')
 
     def __str__(self):
-        return self.user.username + ' - ' + str(self.rate)
+        return f'{self.user.username} - {self.rate}'
 
     def clean(self, *args, **kwargs):
         if self.service.reviews.filter(user=self.user):
