@@ -10,6 +10,7 @@ from django.dispatch import receiver
 from django.core.exceptions import ValidationError
 from django.utils.datetime_safe import datetime
 from django.db.models import Count, Avg, Value, Sum
+from decimal import DecimalException
 # Create your models here.
 
 
@@ -63,7 +64,7 @@ class ServiceModel(models.Model):
                 count += 1
             avg = total / count
             return round(avg, 2)
-        return 0
+        return 0.00
 
     def get_purchases(self):
         total = 0
@@ -99,9 +100,13 @@ class ReviewModel(models.Model):
 
 @receiver(post_save, sender=ReviewModel)
 def update_avg_rating_add_or_update(sender, instance, **kwargs):
-    service = instance.service
-    service.average_rating = service.get_avg_rating()
-    service.save()
+    if instance.service:
+        try:
+            service = instance.service
+            service.average_rating = service.get_avg_rating()
+            service.save()
+        except (ValueError, DecimalException):
+            pass
 
 
 @receiver(post_delete, sender=ReviewModel)

@@ -37,6 +37,15 @@ class TestUrls(TestCase):
         path = reverse(f'{self.api_url}:category-list-api')
         assert resolve(path).view_name == f'{self.api_url}:category-list-api'
 
+    def test_main_api_category_list_url(self):
+        path = reverse(f'{self.api_url}:main-category-list-api')
+        assert resolve(path).view_name == f'{self.api_url}:main-category-list-api'
+
+    def test_sub_api_category_detail_list_url(self):
+        path = reverse(f'{self.api_url}:sub-category-list-api', kwargs={'pk': self.category.pk})
+        assert resolve(path).view_name == f'{self.api_url}:sub-category-list-api'
+        assert resolve(path).kwargs == {'pk': str(self.category.pk)}
+
     def test_api_category_create_view(self):
         path = reverse(f'{self.api_url}:category-create-api')
         assert resolve(path).view_name == f'{self.api_url}:category-create-api'
@@ -52,15 +61,14 @@ class TestUrls(TestCase):
         assert resolve(path).kwargs == {'pk': str(self.service.pk)}
 
     def test_api_review_create_view(self):
-        path = reverse(f'{self.api_url}:review-create-api')
+        path = reverse(f'{self.api_url}:review-create-api', kwargs={'pk': self.service.pk})
         assert resolve(path).view_name == f'{self.api_url}:review-create-api'
+        assert resolve(path).kwargs == {'pk': str(self.service.pk)}
 
     def test_api_review_detail_view(self):
         path = reverse(f'{self.api_url}:review-detail-api', kwargs={'pk': self.review.pk})
         assert resolve(path).view_name == f'{self.api_url}:review-detail-api'
         assert resolve(path).kwargs == {'pk': str(self.review.pk)}
-
-
 
 
 

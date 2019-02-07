@@ -106,14 +106,14 @@ class ServiceOwnerEntryDetailAPIView(generics.RetrieveAPIView, mixins.UpdateMode
 class AddEntryToCartAPIView(generics.CreateAPIView):
     serializer_class = EntryCreateSerializer
     permission_classes = [permissions.IsAuthenticated]
-    lookup_field = 'pk'
+    lookup_field = 'service_id'
 
     def create(self, request, *args, **kwargs):
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         user = self.request.user
         cart = CartModel.objects.get(user=user)
-        service_id = self.kwargs['pk']
+        service_id = self.kwargs['service_id']
         service = get_object_or_404(ServiceModel, pk=service_id)
         if service.user == user:
             return Response({"message": "Can't add your own services to cart"}, status=status.HTTP_400_BAD_REQUEST)
@@ -145,12 +145,13 @@ class ComplaintDetailAPIView(generics.RetrieveAPIView, mixins.DestroyModelMixin,
 class ComplaintCreateAPIView(generics.CreateAPIView):
     serializer_class = ComplaintSerializer
     permission_classes = [permissions.IsAuthenticated, ComplaintUserPermissions]
+    lookup_field = 'entry_id'
 
     def create(self, request, *args, **kwargs):
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         user = self.request.user
-        entry_id = self.kwargs['pk']
+        entry_id = self.kwargs['entry_id']
         entry = get_object_or_404(EntryModel, pk=entry_id)
         if entry.status != 'COM':
             return Response({"message": "Entry need to be marked as completed before filing a complaint."},
