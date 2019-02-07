@@ -7,8 +7,8 @@ from django.db.models.signals import post_save, post_delete, pre_save
 from django.dispatch import receiver
 from django.utils.datetime_safe import datetime
 from django.core.exceptions import ValidationError
-# Create your models here.
 from simple_history.models import HistoricalRecords
+# Create your models here.
 
 
 class ServiceOrderModel(OrderModel):
@@ -28,12 +28,6 @@ class ServiceOrderModel(OrderModel):
         return f'{self.buyer} - {self.paid}'
 
 
-# def new_order(sender, instance, created, **kwargs):
-#     if created:
-#         print("my_balls")
-
-# post_save.connect(new_order, sender=ServiceOrderModel)
-
 @receiver(post_save, sender=ServiceOrderModel)
 def new_order(sender, instance, **kwargs):
     pass
@@ -51,7 +45,6 @@ class CartModel(models.Model):
         return f'{self.user.username} - {self.item_count}'
 
     def get_total(self):
-        print(self.cart_entries.count())
         cost = 0
         for entry in self.cart_entries.filter(is_ordered=False):
             cost = cost + (entry.quantity * entry.service.price.amount)
@@ -64,13 +57,14 @@ class CartModel(models.Model):
         return count
 
     def remove_all_cart_entries(self):
-        for entry in self.cart_entries.all():
-            entry.delete()
+        self.cart_entries.all().delete()
+        self.save()
 
-    def transfer_entries_to_cart(self, order_instance):
-        for entry in self.cart_entries.all():
-            order_instance.order_entries.add(entry)
-        self.cart.entries.clear()
+    def clear_cart(self):
+        self.cart_entries.clear()
+        self.item_count = self.get_count()
+        self.total = self.get_total()
+        self.save()
 
 
 class EntryModel(models.Model):
@@ -93,6 +87,17 @@ class EntryModel(models.Model):
     is_ordered = models.BooleanField(default=False)
     is_delivered = models.BooleanField(default=False)
     status = models.CharField(max_length=3, choices=STATUS_CHOICES, blank=True, null=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    def clean(self, *args, **kwargs):
+        if self.cart.cart_entries:
+            if self.cart.cart_entries.filter(service=self.service):
+                raise ValidationError("Service already in cart")
+        if self.order and self.cart:
+            raise ValidationError("Can't be part of an order and be in a cart")
+        if self.status and not self.is_ordered:
+            raise ValidationError("Can't have a status if it is not ordered")
 
     def __str__(self):
         if self.order:

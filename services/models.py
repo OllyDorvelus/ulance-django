@@ -33,7 +33,7 @@ class CategoryModel(models.Model):
         return self.name
 
     def get_all_sub_categories(self):
-        if self.parent:
+        if self.is_parent:
             return self.children.all()
         return []
 

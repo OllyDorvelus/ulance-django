@@ -18,15 +18,6 @@ class PortfolioModel(models.Model):
 class SkillModel(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     name = models.CharField(max_length=50, null=False, blank=False, unique=True)
-    # BEGINNER = 'BG'
-    # INTERMEDIATE = 'IT'
-    # EXPERT = 'EX'
-    # SKILL_LEVEL_CHOICES = (
-    #     (BEGINNER, 'Beginner'),
-    #     (INTERMEDIATE, 'Intermediate'),
-    #     (EXPERT, 'Expert'),
-    # )
-    # skill_level = models.CharField(max_length=2, choices=SKILL_LEVEL_CHOICES, default=BEGINNER)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
@@ -88,6 +79,9 @@ class LinkModel(models.Model):
     brief_description = models.CharField(max_length=75, blank=False, null=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return self.link
 
 
 class MajorModel(models.Model):

@@ -113,7 +113,7 @@ class CategoryDetailAPIView(generics.RetrieveAPIView, mixins.DestroyModelMixin, 
 
 class ReviewCreateAPIView(generics.CreateAPIView):
     serializer_class = ReviewSerializer
-    permissions_classes = [permissions.IsAuthenticated]
+    permission_classes = [permissions.IsAuthenticated]
 
     def create(self, request, *args, **kwargs):
         serializer = self.get_serializer(data=request.data)
@@ -121,7 +121,7 @@ class ReviewCreateAPIView(generics.CreateAPIView):
         user = self.request.user
         service_id = self.kwargs['pk']
         service = ServiceModel.objects.get(pk=service_id)
-        if service.reviews.filter(user=user):
+        if service.reviews.filter(user=user).exists():
             return Response({"message": "You already wrote a review for this service"}, status=status.HTTP_400_BAD_REQUEST)
         serializer.validated_data['service'] = service
         serializer.validated_data['user'] = user

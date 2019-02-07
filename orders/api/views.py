@@ -44,12 +44,9 @@ class OrderCreateAPIView(generics.CreateAPIView):
         new_order = self.perform_create(serializer)
         for entry in entries:
             entry.is_ordered = True
-            entry.cart = None
             entry.order = new_order
             entry.save()
-        cart.item_count = 0
-        cart.total = 0
-        cart.save()
+        cart.clear_cart()
         headers = self.get_success_headers(serializer.data)
         return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
 
@@ -115,11 +112,13 @@ class AddEntryToCartAPIView(generics.CreateAPIView):
         cart = CartModel.objects.get(user=user)
         service_id = self.kwargs['service_id']
         service = get_object_or_404(ServiceModel, pk=service_id)
+
         if service.user == user:
             return Response({"message": "Can't add your own services to cart"}, status=status.HTTP_400_BAD_REQUEST)
-        for entry in cart.cart_entries.all():
-            if entry.service == service:
+
+        if cart.cart_entries.filter(service=service).exists():
                 return Response({"message": "Service already in cart"}, status=status.HTTP_400_BAD_REQUEST)
+
         serializer.validated_data['cart'] = cart
         serializer.validated_data['service'] = service
         self.perform_create(serializer)

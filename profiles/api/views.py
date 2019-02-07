@@ -4,7 +4,7 @@ from .serializers import ( ProfileSerializer, SkillSerializer, LinkSerializer, P
 SchoolSerializer)
 from profiles.models import ProfileModel, SkillModel, LinkModel, PortfolioModel, LevelModel, CertificationModel, EducationModel, MajorModel, SchoolModel
 from ulance import pagination
-from ulance.custom_permissions import MyUserPermissions
+from ulance.custom_permissions import MyUserPermissions, MyAdminPermission
 from django.contrib.auth import get_user_model
 from django.db.models import Q
 from django_filters.rest_framework import DjangoFilterBackend
@@ -89,6 +89,7 @@ class SkillCreateAPIView(generics.CreateAPIView):
 class SkillDetailAPIView(generics.RetrieveAPIView, mixins.DestroyModelMixin, mixins.UpdateModelMixin):
     serializer_class = SkillSerializer
     queryset = SkillModel.objects.all()
+    permission_classes = [MyAdminPermission]
 
     def put(self, request, *args, **kwargs):
         return self.update(request, *args, **kwargs)
@@ -256,6 +257,7 @@ class MajorListAPIView(generics.ListAPIView):
 class SchoolCreateAPIView(generics.CreateAPIView):
     serializer_class = SchoolSerializer
     queryset = SchoolModel.objects.all()
+    permission_classes = [permissions.IsAdminUser]
 
 
 class SchoolListAPIView(generics.ListAPIView):
