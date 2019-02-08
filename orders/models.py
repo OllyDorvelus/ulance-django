@@ -25,7 +25,7 @@ class ServiceOrderModel(OrderModel):
         self.save()
 
     def __str__(self):
-        return f'{self.buyer} - {self.paid}'
+        return f'{self.buyer.username} - {self.paid}'
 
 
 @receiver(post_save, sender=ServiceOrderModel)
@@ -56,7 +56,7 @@ class CartModel(models.Model):
             count += entry.quantity
         return count
 
-    def remove_all_cart_entries(self):
+    def remove_all_entries(self):
         self.cart_entries.all().delete()
         self.save()
 

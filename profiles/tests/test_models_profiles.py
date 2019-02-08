@@ -4,6 +4,7 @@ from mixer.backend.django import mixer
 from django.contrib.auth.models import User
 from django.core.exceptions import ValidationError
 
+
 class TestModels(TestCase):
     @classmethod
     def setUpClass(cls):
