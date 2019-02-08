@@ -42,7 +42,7 @@ class LevelModel(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
 
     def __str__(self):
-        return self.skill.name + '-' + self.skill_level + '-' + self.user.username
+        return f'{self.skill.name} - {self.skill_level} - {self.user.username}'
 
 
 class ProfileModel(models.Model):
@@ -65,7 +65,7 @@ class ProfileModel(models.Model):
 
     def get_services_completed(self):
         user = self.user
-        services = user.services
+        services = user.services.all()
         services_completed = 0
         for service in services:
             services_completed += EntryModel.objects.filter(service=service, is_ordered=True, status='COM').count()
@@ -137,7 +137,7 @@ class EducationModel(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
 
     def __str__(self):
-        return self.school.name + ' - ' + self.major.name
+        return f'{self.school.name} - {self.major.name}'
 
 
 class CertificationModel(models.Model):
