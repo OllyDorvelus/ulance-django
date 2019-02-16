@@ -1,0 +1,7 @@
+<div class="container">
+<div v-for="category in subCategories" class="row">
+    <span class="badge badge-info badge-pill" style="display:inline;margin:.25rem">${category.name}
+        <i class="fa fa-plus-circle" v-on:click="addCategory(category.id)"></i></span>
+
+</div>
+</div>

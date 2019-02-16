@@ -47,7 +47,7 @@ class ServiceModel(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='services')
     name = models.CharField(max_length=100, blank=False, null=False)
     price = MoneyField(max_digits=10, decimal_places=2, default_currency='USD')
-    category = models.ManyToManyField(CategoryModel, related_name='categories', blank=True)
+    category = models.ManyToManyField(CategoryModel, related_name='service', blank=True)
     description = models.TextField(blank=False, null=False, max_length=500)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)

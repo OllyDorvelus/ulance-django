@@ -106,11 +106,11 @@
                             <div v-if="links.length != 0">
                                 <div v-for="link in links">
                                     <div class="link-list">
-                                        <p style="display:inline">${link.brief_description}</p>
+                                        <p style="display:inline" style="font-size:.7rem">${link.brief_description}</p>
                                         {% if request.user == User %}
                                         <i class="fa fa-edit" v-on:click="getLink(link.id)"></i><i class="fa fa-trash-alt" v-on:click="deleteLink(link.id)"></i>
                                         {% endif %}
-                                        <a :href = link.link target="_blank" style="display:block">${link.link}</a>
+                                        <a :href = link.link target="_blank" style="display:block;font-size:.7rem">${link.link}</a>
                                     </div>
                                 </div>
                             </div>
@@ -141,6 +141,11 @@ var demo = new Vue({
     links: [],
     educations: [],
     currentEducation: {},
+    selectedParentCategory: {},
+    parentCategories: [],
+    parentCategoryId: "",
+    subCategories: [],
+    serviceCategories: [],
     services: [],
     currentService: {},
     newEducation: {'school': null, 'major': null, 'status': null, 'degree_type': null},
@@ -170,10 +175,45 @@ var demo = new Vue({
     this.getSkills();
     this.searchSkills();
     this.getEducations();
+    this.getParentCategories();
     this.getServices();
   },
 
   methods: {
+      getParentCategories: function() {
+        let api_url = '/api/services/main-categories/'
+          this.$http.get(api_url).then(function(response){
+              this.parentCategories = response.data.results
+          })
+      },
+
+      getSubCategories: function() {
+        let api_url = `/api/services/sub-categories/${this.parentCategoryId}/`
+        this.$http.get(api_url).then(function(response){
+            this.subCategories = response.data.results
+        })
+      },
+
+      getServiceCategories: function() {
+        let api_url = `/api/services/${this.currentService.id}/categories/`
+        this.$http.get(api_url).then(function(response){
+            this.serviceCategories = response.body
+        })
+      },
+
+      removeCategory: function(categoryId) {
+          let api_url = `/api/services/${this.currentService.id}/remove/${categoryId}/`
+          this.$http.post(api_url).then(function(response){
+            this.getServiceCategories()
+          })
+      },
+
+      addCategory: function(categoryId) {
+          let api_url = `/api/services/${this.currentService.id}/add/${categoryId}/`
+          this.$http.post(api_url).then(function(response){
+              this.getServiceCategories()
+          })
+      },
 
       getServices: function() {
         let api_url = '/api/services/{{User.username}}/services/'
@@ -186,6 +226,7 @@ var demo = new Vue({
           let api_url = `/api/services/${id}/`
           this.$http.get(api_url).then(function(response){
               this.currentService = response.data;
+              this.getServiceCategories()
               $('#editServiceModal').modal('show')
           })
       },

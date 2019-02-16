@@ -85,7 +85,7 @@ class RemoveCategoryAPIView(APIView):
         if category in service.category.all():
             service.category.remove(category)
             service.save()
-            return Response({'category': category, 'service': service})
+            return Response({"message": "Category removed"}, status=201)
         return Response({'message': message}, status=400)
 
 
@@ -110,7 +110,7 @@ class AddCategoryAPIView(APIView):
                 return Response({'message': 'Can not exceed more than 3 main categories'}, status=400)
             service.category.add(category)
             service.save()
-            return Response({'category': category, 'service': service}, status=201)
+            return Response({"message": "Category added"}, status=201)
         return Response({'message': message}, status=400)
 
 
@@ -136,6 +136,16 @@ class SubCategoryListAPIView(generics.ListAPIView):
         category = get_object_or_404(CategoryModel, pk=category_parent_id)
         sub_categories = category.children.all()
         return sub_categories
+
+
+class ServiceCategoryListAPIView(generics.ListAPIView):
+    serializer_class = CategorySerializer
+
+    def get_queryset(self, *args, **kwargs):
+        service_id = self.kwargs['service_pk']
+        service = get_object_or_404(ServiceModel, pk=service_id)
+        service_categories = CategoryModel.objects.filter(service=service).order_by('name')
+        return service_categories
 
 
 class CategoryCreateAPIView(generics.CreateAPIView):

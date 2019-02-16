@@ -7,7 +7,7 @@
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
-      <div class="modal-body">
+      <div class="modal-body" style="position:static">
         <form id="edit-service-form" v-on:submit.prevent="updateService()">
             <div class="form-group">
                 <span class="text-center text-danger" id="name_edit_dup"></span>
@@ -24,11 +24,14 @@
                 <span class="text-center text-danger"></span>
                 <input type="text"  v-model="currentService.description" class="form-control" placeholder="Enter Description">
             </div>
+            {% include 'forms/_category_selection.html' %}
       <div class="modal-footer">
         <button type="submit" class="btn ulance-btn">Update Service</button>
         <button type="button" class="btn cancel-btn" data-dismiss="modal">Close</button>
       </div>
         </form>
+          {% include '_service_category_list.html' %}<hr>
+          {% include '_category_list.html' %}
       </div>
     </div>
   </div>

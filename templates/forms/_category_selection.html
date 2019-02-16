@@ -1,0 +1,6 @@
+<div class="form-group">
+    <label>Main Categories:</label>
+    <select  class="form-control" id="parent_category" @change="getSubCategories()" v-model="parentCategoryId">
+        <option v-for="category in parentCategories" :value="category.id">${category.name}</option>
+    </select>
+</div>
