@@ -14,6 +14,7 @@ User = get_user_model()
 
 
 class CategorySerializer(serializers.ModelSerializer):
+    id = serializers.ModelField(model_field=CategoryModel()._meta.get_field('id'))
 
     class Meta:
         model = CategoryModel
@@ -29,13 +30,14 @@ class ServicePhotoSerializer(serializers.ModelSerializer):
 
 class ServiceSerializer(serializers.ModelSerializer):
     user = UserModelSerializer(read_only=True)
-    photos = ServicePhotoSerializer(many=True)
+    photos = ServicePhotoSerializer(many=True, read_only=True)
     url = serializers.SerializerMethodField()
-  #  category = CategorySerializer(many=True)
+    category = CategorySerializer(many=True, read_only=True)
 
     class Meta:
         model = ServiceModel
         fields = '__all__'
+        read_only_fields = ['average_rating', 'purchases']
 
     def get_url(self, obj):
         return obj.get_absolute_url()

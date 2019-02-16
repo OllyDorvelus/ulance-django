@@ -2,7 +2,7 @@ from rest_framework import generics, permissions, mixins
 from .serializers import ( ServiceSerializer, CategorySerializer, ReviewSerializer, ServiceCreateSerializer )
 from services.models import ServiceModel, CategoryModel, ReviewModel
 from ulance import pagination
-from ulance.custom_permissions import MyUserPermissions, MyAdminPermission
+from ulance.custom_permissions import MyUserPermissions, MyAdminPermission, StrictUserPermissions
 from django.contrib.auth import get_user_model
 from django.shortcuts import get_object_or_404
 from django_filters.rest_framework import DjangoFilterBackend
@@ -10,6 +10,7 @@ from .filters import ServiceFilter
 from rest_framework.filters import OrderingFilter
 from rest_framework.response import Response
 from rest_framework import status
+from rest_framework.views import APIView
 
 User = get_user_model()
 
@@ -67,8 +68,53 @@ class ServiceReviewListAPIView(generics.ListAPIView):
         return qs
 
 
-# CATEGORIES
+class RemoveCategoryAPIView(APIView):
+    permission_classes = [permissions.IsAuthenticated]
 
+    def post(self, request, *args, **kwargs):
+        category_pk = self.kwargs['category_pk']
+        service_pk = self.kwargs['service_pk']
+
+        category = CategoryModel.objects.filter(pk=category_pk).first()#get_object_or_404(CategoryModel, category_pk)
+        service = ServiceModel.objects.filter(pk=service_pk).first()#get_object_or_404(ServiceModel, service_pk)
+        if category is None or service is None:
+            return Response({'message': 'Invalid category or service'}, status=404)
+        if request.user != service.user or not request.user.is_superuser:
+            return Response({'message': 'Not Authorized To Perform This Action'}, status=401)
+        message = "Category is not listed in service"
+        if category in service.category.all():
+            service.category.remove(category)
+            service.save()
+            return Response({'category': category, 'service': service})
+        return Response({'message': message}, status=400)
+
+
+class AddCategoryAPIView(APIView):
+    permission_classes = [permissions.IsAuthenticated]
+
+    def post(self, request, *args, **kwargs):
+        category_pk = self.kwargs['category_pk']
+        service_pk = self.kwargs['service_pk']
+
+        category = CategoryModel.objects.filter(pk=category_pk).first()
+        service = ServiceModel.objects.filter(pk=service_pk).first()
+        if category is None or service is None:
+            return Response({'message': 'Invalid category or service'}, status=404)
+        if request.user != service.user or not request.user.is_superuser:
+            return Response({'message': 'Not Authorized To Perform This Action'}, status=401)
+        message = "Service already has this category"
+        if category not in service.category.all():
+            if service.category.filter(is_parent=False).count() > 10:
+                return Response({'message': 'Can not exceed more than 10 sub categories'}, status=400)
+            if service.category.filter(is_parent=True).count() > 3:
+                return Response({'message': 'Can not exceed more than 3 main categories'}, status=400)
+            service.category.add(category)
+            service.save()
+            return Response({'category': category, 'service': service}, status=201)
+        return Response({'message': message}, status=400)
+
+
+# CATEGORIES
 class CategoryListAPIView(generics.ListAPIView):
     serializer_class = CategorySerializer
     queryset = CategoryModel.objects.all()

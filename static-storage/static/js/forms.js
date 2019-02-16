@@ -98,17 +98,18 @@ function logout() {
 //    }
 //}
 
-function attachFormErrors(errors, edit) {
+function attachFormErrors(errors, edit, dup) {
     var starthtml = "<ul id='errorslist'>"
     var endhtml = "</ul>"
     var htmlString
     $('.form-group > div > span').hide()
     $.each(errors, function(key, value) {
-        console.log("K", key)
-        console.log(value[0])
         var ID = '#' + key
         if(edit) {
             ID = ID + '_edit'
+        }
+        if(dup) {
+            ID = ID + '_dup'
         }
        $(ID).replaceWith("<span class='text-center text-danger' style='display:block' id=" + key + ">" + value + "</span>")
        // $('.form-group > div > p').show()

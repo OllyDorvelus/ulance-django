@@ -21,6 +21,12 @@ class MyUserPermissions(permissions.BasePermission):
         return request.user == obj.user
 
 
+class StrictUserPermissions(permissions.BasePermission):
+
+    def has_object_permission(self, request, view, obj):
+        return request.user == obj.user or request.user.is_superuser
+
+
 class MyAdminPermission(permissions.BasePermission):
     """
     Handles permissions for users.  The basic rules are
@@ -68,3 +74,5 @@ class ComplaintUserPermissions(permissions.BasePermission):
         if obj.entry.order.buyer == request.user:
             return True
         return False
+
+

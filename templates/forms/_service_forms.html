@@ -1,0 +1,35 @@
+<div class="modal fade" id="editServiceModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Update Service</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <form id="edit-service-form" v-on:submit.prevent="updateService()">
+            <div class="form-group">
+                <span class="text-center text-danger" id="name_edit_dup"></span>
+                <span class="text-center text-danger"></span>
+                <input type="text"  v-model="currentService.name" class="form-control" placeholder="Choose a Name">
+            </div>
+            <div class="form-group">
+                <span class="text-center text-danger" id="price_edit_dup"></span>
+                <span class="text-center text-danger"></span>
+                <input type="number" step="0.01"  v-model="currentService.price" class="form-control" placeholder="$">
+            </div>
+            <div class="form-group">
+                <span class="text-center text-danger" id="description_edit_dup"></span>
+                <span class="text-center text-danger"></span>
+                <input type="text"  v-model="currentService.description" class="form-control" placeholder="Enter Description">
+            </div>
+      <div class="modal-footer">
+        <button type="submit" class="btn ulance-btn">Update Service</button>
+        <button type="button" class="btn cancel-btn" data-dismiss="modal">Close</button>
+      </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>

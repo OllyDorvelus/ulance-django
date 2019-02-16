@@ -142,6 +142,7 @@ var demo = new Vue({
     educations: [],
     currentEducation: {},
     services: [],
+    currentService: {},
     newEducation: {'school': null, 'major': null, 'status': null, 'degree_type': null},
     schoolSearches: [],
     majorSearches: [],
@@ -189,6 +190,29 @@ var demo = new Vue({
           })
       },
 
+      deleteService: function(id) {
+        let api_url = `/api/services/${id}/`
+        let answer = confirm("Are you sure?")
+        if(answer) {
+            this.$http.delete(api_url).then(function (response) {
+                alert('service has been deleted')
+                this.getServices()
+            })
+        }
+      },
+
+      updateService: function() {
+        let api_url = `/api/services/${this.currentService.id}/`
+        this.$http.put(api_url, this.currentService).then(function(response){
+            $('#editServiceModal').modal('toggle')
+            this.getServices()
+        }).catch(function(err){
+            console.log(err)
+            let jsonerr = JSON.parse(err.bodyText)
+            attachFormErrors(jsonerr, true, true)
+        })
+      },
+
       getLinks: function() {
         let api_url = '/api/profiles/{{User.username}}/links/'
         this.$http.get(api_url).then(function(response){
@@ -230,7 +254,6 @@ var demo = new Vue({
             //  console.log(err)
              // console.log(err.body)
               let jsonerrs = JSON.parse(err.bodyText)
-              console.log(jsonerrs)
               attachFormErrors(jsonerrs, true)
           })
       },
