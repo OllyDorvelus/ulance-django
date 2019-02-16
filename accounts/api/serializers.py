@@ -14,13 +14,19 @@ User = get_user_model()
 
 
 class ProfileModelSerializer(serializers.ModelSerializer):
+    url = serializers.SerializerMethodField()
+
     class Meta:
         model = ProfileModel
         fields = '__all__'
 
+    def get_url(self, obj):
+        return obj.get_absolute_url()
+
 
 class UserModelSerializer(serializers.ModelSerializer):
     profile = ProfileModelSerializer(read_only=True)
+
     class Meta:
         model = User
         fields = (

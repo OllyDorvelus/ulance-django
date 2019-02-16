@@ -6,6 +6,7 @@ from django.core.exceptions import ValidationError
 
 
 class TestModels(TestCase):
+
     @classmethod
     def setUpClass(cls):
         super(TestModels, cls).setUpClass()

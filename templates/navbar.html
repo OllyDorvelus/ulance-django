@@ -31,7 +31,9 @@
       <ul class="navbar-nav ml-auto right-nav" style="margin-right:5em;">
           <!--<li class="nav-item"><a class="nav-link" href="#">Orders</a></li>-->
           <li class="nav-item dropdown">
-              <a class="nav-link" href="#" id="profilePicDropdown" data-toggle="dropdown"><img class="profile-pic img-fluid rounded-circle" src="{{request.user.profile.profile_pic.url}}"/>
+              <a class="" style="display:inline" href="#" id="profilePicDropdown" data-toggle="dropdown"><img class="profile-pic img-fluid rounded-circle" src="{{request.user.profile.profile_pic.url}}"/>
+              </a>
+              <a class="" style="display:inline" href="#"><i class="fa fa-shopping-cart"></i>
               </a>
               <div class="dropdown-menu text-center" aria-labelledby="navbarDropdownMenuLink">
                   <a class="dropdown-item" href="{{request.user.profile.get_absolute_url}}">View Profile</a>

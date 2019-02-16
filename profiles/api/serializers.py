@@ -74,9 +74,14 @@ class Base64ImageField(serializers.ImageField):
 class ProfileSerializer(serializers.ModelSerializer):
     user = UserModelSerializer(read_only=True)
     profile_pic = Base64ImageField(read_only=True)
+    url = serializers.SerializerMethodField()
+
     class Meta:
         model = ProfileModel
         fields = '__all__'
+
+    def get_url(self, obj):
+        return obj.get_absolute_url()
 
 
 class ProfilePictureSerializer(serializers.ModelSerializer):

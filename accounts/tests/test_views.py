@@ -4,8 +4,7 @@ from mixer.backend.django import mixer
 import pytest
 from django.test import TestCase
 from accounts.views import login, register
-from accounts.api.views import UserModelListAPIView, UserCreateAPIView, UserLoginSerializer
-import json
+from accounts.api.views import UserModelListAPIView, UserCreateAPIView
 
 
 @pytest.mark.django_db

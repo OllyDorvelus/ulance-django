@@ -4,7 +4,7 @@ from rest_framework.serializers import (
     ValidationError
 )
 from rest_framework import serializers
-from services.models import ServiceModel, CategoryModel, ReviewModel
+from services.models import ServiceModel, CategoryModel, ReviewModel, ServicePictureModel
 from django.contrib.auth import get_user_model
 from accounts.api.serializers import UserModelSerializer
 from django.db.models import Count, Avg, Value
@@ -20,13 +20,25 @@ class CategorySerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 
+class ServicePhotoSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = ServicePictureModel
+        fields = '__all__'
+
+
 class ServiceSerializer(serializers.ModelSerializer):
     user = UserModelSerializer(read_only=True)
+    photos = ServicePhotoSerializer(many=True)
+    url = serializers.SerializerMethodField()
   #  category = CategorySerializer(many=True)
 
     class Meta:
         model = ServiceModel
         fields = '__all__'
+
+    def get_url(self, obj):
+        return obj.get_absolute_url()
 
 
 class ServiceCreateSerializer(serializers.ModelSerializer):

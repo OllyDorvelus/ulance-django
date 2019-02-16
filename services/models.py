@@ -80,7 +80,7 @@ class ServiceModel(models.Model):
 
 
 class ServicePictureModel(PictureModel):
-    service = models.ForeignKey(ServiceModel, null=False, on_delete=models.CASCADE, blank=False, related_name='service_photos')
+    service = models.ForeignKey(ServiceModel, null=False, on_delete=models.CASCADE, blank=False, related_name='photos')
 
 
 class ReviewModel(models.Model):

@@ -19,85 +19,104 @@
         <!--<button @click="onUpload">Upload</button>-->
     </div>
     <div class="row" id="user-info-section">
-        <div id="user-section" class="col-4">
+        <div id="user-section" class="col-10 col-sm-10 col-md-4 col-lg-4 col-xl-4">
             <div class="card text-center">
                 <div class="card-body">
-                    <p class="card-header-section">Description{% if request.user == user %}<i class="far fa-edit" data-toggle="modal" data-target="#editDescriptionModal"></i>{% endif %}</p>
-                    <p id="description" class="description">${user.description}</p>
+                    <p class="card-header-section">Description{% if request.user == user %}<i class="fa fa-edit" data-toggle="modal" data-target="#editDescriptionModal"></i>{% endif %}</p>
+                    <p v-if="user.description" id="description" class="description">${user.description}</p>
+                    <p v-else id="description" class="description">No Description</p>
                 </div>
             </div>
         </div>
-        <div class="talent-section col-4">
+        <div class="talent-section col-10 col-sm-10 col-md-4 col-lg-4 col-xl-4">
             <div class="card text-center">
                 <div class="card-body">
-                    <p class="card-header-section">Education</p>
-                    <div v-for="education in educations">
-                        <p>${education.school}</p>
-                        <span>${education.major} - ${education.degree_type}</span>
-                        <p style="font-size:0.5rem">(${education.status})</p>
-                        {% if request.user == User %}
-                            <i class="far fa-edit" v-on:click="getEducation(education.id)"></i><i class="far fa-trash-alt" v-on:click="deleteEducation(education.id)"></i>
-                        {% endif %}
-                        <hr>
-                    </div>
-                    {% if request.user == User %}<button class="ulance-btn add-edit-btn" role="button" data-toggle="modal" data-target="#addEducationModal">Add New Education</button>{% endif %}
+
+                    <p class="card-header-section">Education
+                    {% if request.user == User %}<i class="fa fa-plus-circle" data-toggle="modal" data-target="#addEducationModal"></i>{% endif %}
+                    </p>
+                    <div v-if="educations.length != 0">
+                        <div v-for="education in educations">
+                            <p>${education.school}</p>
+                            <span>${education.major} - ${education.degree_type}</span>
+                            <p style="font-size:0.5rem">(${education.status})</p>
+                            {% if request.user == User %}
+                                <i class="fa fa-edit" v-on:click="getEducation(education.id)"></i><i class="fa fa-trash-alt" v-on:click="deleteEducation(education.id)"></i>
+                            {% endif %}
+                            <hr>
+                        </div>
+                        </div>
+
+                    <div v-else><p>No Education</p></div>
+
 
                     <div id="skills" class="model-section">
-                        <p class="card-header-section">Skills</p>
-                            <div v-for="skill in skills">
-                                <span class="badge badge-pill badge-info">${skill.skill} - ${skill.skill_level}
+                        <p class="card-header-section">Skills
+                        {% if request.user == User %} <i class="fa fa-plus-circle" aria-hidden="true" data-toggle="modal" data-target="#addSkillModal"></i> {% endif %}
+                        </p>
+                        <div v-if="skills.length != 0">
+                            <div v-for="skill in skills" style="display:inline">
+                                <span style="margin-left:.125rem;margin-right:.125rem" class="badge badge-pill badge-info">${skill.skill} - ${skill.skill_level}
                                     {% if request.user == User %}
-                                        <i class="far fa-edit" v-on:click="getSkill(skill.id)"></i><i class="far fa-trash-alt" v-on:click="deleteSkill(skill.id)"></i>
+                                        <i class="fa fa-edit" v-on:click="getSkill(skill.id)"></i><i class="fa fa-trash-alt" v-on:click="deleteSkill(skill.id)"></i>
                                     {% endif %}
                                 </span>
                             </div>
-                                {% if request.user == User %} <button class="ulance-btn" role="button" data-toggle="modal" data-target="#addSkillModal">Add New Skill</button> {% endif %}
+                        </div>
+
+                        <div v-else><p>No Skills</p></div>
+
+
                     </div>
                 </div>
             </div>
         </div>
-        <div class="talent-section col-4">
+        <div class="talent-section col-10 col-sm-10 col-md-4 col-lg-4 col-xl-4">
             <div class="card text-center">
 
                 <div class="card-body">
 
                     <div id="certifications" class="model-section">
-                        <p class="card-header-section">Certifications</p>
-                        <div v-for="certification in certifications">
-                            <p>${certification.issued_from} - ${certification.name} | ${certification.year_issued}</p>
-                            {% if request.user == User %}
-                            <i class="far fa-edit" v-on:click="getCertification(certification.id)"></i><i class="far fa-trash-alt" v-on:click="deleteCertification(certification.id)"></i>
-                            {% endif %}
 
+                        <p class="card-header-section">Certifications
+                        {% if request.user == User %}<i class="fa fa-plus-circle" data-toggle="modal" data-target="#addCertificationModal"></i>{% endif %}
+                        </p>
+
+                        <div v-if="certifications.length != 0">
+                            <div v-for="certification in certifications">
+                                <p>${certification.issued_from} - ${certification.name} | ${certification.year_issued}</p>
+                                {% if request.user == User %}
+                                <i class="fa fa-edit" v-on:click="getCertification(certification.id)"></i><i class="fa fa-trash-alt" v-on:click="deleteCertification(certification.id)"></i>
+                                {% endif %}
+                            </div>
                         </div>
-                        {% if request.user == User %}<button class="ulance-btn" role="button" data-toggle="modal" data-target="#addCertificationModal">Add New Certification</button>{% endif %}
+                        <div v-else><p>No Certifications</p></div>
+
 
                     </div>
 
                 <div id="links" class="model-section">
-                    <p class="card-header-section">Links</p>
+                    <p class="card-header-section">Links
+                    {% if request.user == User %}<i class="fa fa-plus-circle" data-toggle="modal" data-target="#addLinkModal"></i>{% endif %}
+                    </p>
                     <div id="no-add-link-form">
                         <section id="no-edit-link-form">
-                        <div id="link-section">
-                                <!--{% for link in Links %}-->
-                                        <!--<div class="link-list" id="{{ link.id }}" data-url="/api/profiles/link/{{link.id}}/">-->
-                                        <!--<p style="display:inline">{{ link.brief_description }}</p><i class="far fa-edit"></i>-->
-                                            <!--<i class="far fa-trash-alt delete-btn"></i>-->
-                                        <!--<a href="{{ link.link }}" target="_blank" style="display:block" >{{ link.link }}</a>-->
 
-                                        <!--</div>-->
-                                <!--{% endfor %}-->
-                            <div v-for="link in links">
-                                <div class="link-list">
-                                    <p style="display:inline">${link.brief_description}</p>
-                                    {% if request.user == User %}
-                                    <i class="far fa-edit" v-on:click="getLink(link.id)"></i><i class="fa fa-trash-alt" v-on:click="deleteLink(link.id)"></i>
-                                    {% endif %}
-                                    <a :href = link.link target="_blank" style="display:block">${link.link}</a>
+                        <div id="link-section">
+                            <div v-if="links.length != 0">
+                                <div v-for="link in links">
+                                    <div class="link-list">
+                                        <p style="display:inline">${link.brief_description}</p>
+                                        {% if request.user == User %}
+                                        <i class="fa fa-edit" v-on:click="getLink(link.id)"></i><i class="fa fa-trash-alt" v-on:click="deleteLink(link.id)"></i>
+                                        {% endif %}
+                                        <a :href = link.link target="_blank" style="display:block">${link.link}</a>
+                                    </div>
                                 </div>
                             </div>
+                            <div v-else><p>No Links</p></div>
                         </div>
-                    {% if request.user == User %}<button class="ulance-btn add-edit-btn" role="button" data-toggle="modal" data-target="#addLinkModal">Add New Link</button>{% endif %}
+
                     </section>
 
 
@@ -109,7 +128,7 @@
         </div>
 
     </div>
-
+    <div style="padding-bottom:2rem"></div>
     {% include '_service_list.html' %}
 </div>
 
@@ -162,7 +181,15 @@ var demo = new Vue({
         })
       },
 
-      getLinks: function () {
+      getService: function(id) {
+          let api_url = `/api/services/${id}/`
+          this.$http.get(api_url).then(function(response){
+              this.currentService = response.data;
+              $('#editServiceModal').modal('show')
+          })
+      },
+
+      getLinks: function() {
         let api_url = '/api/profiles/{{User.username}}/links/'
         this.$http.get(api_url).then(function(response){
             this.links = response.data.results

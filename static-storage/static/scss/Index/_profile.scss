@@ -18,6 +18,7 @@
   font-size: 0.8rem;
 }
 
+
 .badge-info {
   background-color: $primary-cl;
   font-size: 0.7rem;
@@ -47,18 +48,32 @@
   #certifications {
     padding-bottom: 0.5rem;
 
+    .fa {
+      color: $primary-cl;
+    }
+
   }
+
+.fa-plus-circle {
+  color: $primary-cl;
+}
+
+
 
   #links {
     div {
      // background-color:#f0e9df;
-      padding-top: 0.5rem;
-      padding-bottom: 0.5rem;
+      padding-top: 0.125rem;
+      padding-bottom: 0.125rem;
 
       p {
         font-weight:bold;
         text-transform: uppercase;
       }
+    }
+
+    .fa {
+      color: $primary-cl
     }
   }
 
