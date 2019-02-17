@@ -1,7 +1,7 @@
 {% extends 'base.html' %}
 
 {% block content %}
-<div class="container" id="app">
+<div class="container" id="profile-app">
 {% include 'forms/_link_forms.html' %}
 {% include 'forms/_certification_forms.html' %}
 {% include 'forms/_user_modals.html' %}
@@ -135,14 +135,14 @@
 <script>
 Vue.http.headers.common['X-CSRFToken'] = "{{ csrf_token }}";
 var demo = new Vue({
-  el: '#app',
+  el: '#profile-app',
   delimiters: ['${','}'],
   data: {
     links: [],
     educations: [],
     currentEducation: {},
     selectedParentCategory: {},
-    parentCategories: [],
+    parentCategories: [{'name': 'Choose Main Category', id: '0'}],
     parentCategoryId: "",
     subCategories: [],
     serviceCategories: [],
@@ -180,10 +180,18 @@ var demo = new Vue({
   },
 
   methods: {
+
+      addToCart: function(serviceId) {
+          let api_url = `/api/orders/entry/add/${serviceId}/`
+          this.$http.post(api_url).then(function(response){
+                console.log("Success")
+          })
+      },
+
       getParentCategories: function() {
         let api_url = '/api/services/main-categories/'
           this.$http.get(api_url).then(function(response){
-              this.parentCategories = response.data.results
+              this.parentCategories = response.data.results  //this.parentCategories.concat(response.data.results)//
           })
       },
 

@@ -1,10 +1,113 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
+{% extends 'base.html' %}
 
-</body>
-</html>
+{% block content %}
+<div id="service-create-app">
+    <div class="well tab-content" align="center">
+        <form id="create-service-form" v-on:submit.prevent="createService()" class="form-horizontal">
+            <fieldset>
+            <div class="form-group col-6">
+                <span class="text-center text-danger" id="name"></span>
+                <span class="text-center text-danger"></span>
+                <input type="text"  v-model="newService.name" class="form-control" placeholder="Service Name">
+            </div>
+            <div class="form-group col-6">
+                <span class="text-center text-danger" id="price"></span>
+                <span class="text-center text-danger"></span>
+                <input type="number" step="0.01"  v-model="newService.price" class="form-control" placeholder="Service Price $">
+            </div>
+            <div class="form-group col-6">
+                <span class="text-center" text-danger id="delivery_time"></span>
+                <span class="text-center"></span>
+                <select class="form-control" v-model="newService.delivery_time">
+                    <option value="" disabled selected>Choose estimated delivery time</option>
+                    <option value="early">1-3</option>
+                    <option value="normal">3-5</option>
+                    <option value="later">7+</option>
+                </select>
+            </div>
+            <div class="form-group col-6">
+                <span class="text-center text-danger" id="description_edit_dup"></span>
+                <span class="text-center text-danger"></span>
+                <textarea class="form-control" rows="5" v-model="newService.description" placeholder="Description for your service"></textarea>
+            </div>
+            <div class="col-6">
+            {% include 'forms/_category_selection.html' %}
+            </div>
+            {% include '_service_category_list.html' %}<hr>
+            {% include '_category_list.html' %}
+
+        <div class="form-actions" style="padding-top:2rem">
+            <button type="submit" class="btn ulance-btn">Create Service</button>
+        </div>
+        </fieldset>
+        </form>
+    </div>
+</div>
+<script>
+    Vue.http.headers.common['X-CSRFToken'] = "{{ csrf_token }}";
+
+    var service = new Vue({
+        el:'#service-create-app',
+        delimiters: ['${','}'],
+        data: {
+            parentCategories: [],
+            subCategories: [],
+            serviceCategories: [],
+            parentCategoryId: "",
+            newService: {name: "", description: "", price: "", delivery_time: "", category: []}
+
+        },
+
+        mounted: function() {
+            this.getParentCategories()
+        },
+
+        methods: {
+            createService: function() {
+                let api_url = '/api/services/create/'
+                this.$http.post(api_url, this.newService).then(function(response){
+                    serviceId = response.body.id
+                    window.location.replace(`/services/${serviceId}`)
+                }).catch(function(err){
+                    let jsonerr = JSON.parse(err.bodyText)
+                    attachFormErrors(jsonerr)
+                })
+            },
+
+            getParentCategories: function() {
+                let api_url = '/api/services/main-categories/'
+                this.$http.get(api_url).then(function(response) {
+                    this.parentCategories = response.data.results
+                })
+            },
+
+          getSubCategories: function() {
+            let api_url = `/api/services/sub-categories/${this.parentCategoryId}/`
+            this.$http.get(api_url).then(function(response){
+                this.subCategories = response.data.results
+            })
+          },
+
+          addCategory: function(categoryId) {
+                const category = this.subCategories.find(function(obj){
+                    return categoryId == obj.id
+                })
+                this.serviceCategories.push(category)
+                this.newService.category.push(category.id)
+          },
+
+         removeCategory: function(categoryId) {
+             const serviceCategories = this.serviceCategories.filter(function(obj){
+                 return categoryId != obj.id
+             })
+              const category = this.newService.category.filter(function(id){
+                 return categoryId != id
+             })
+             this.newService.category = category
+             this.serviceCategories = serviceCategories
+         },
+
+        }
+    })
+</script>
+{% endblock content %}

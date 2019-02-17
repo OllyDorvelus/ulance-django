@@ -82,7 +82,7 @@ class RemoveCategoryAPIView(APIView):
         if request.user != service.user or not request.user.is_superuser:
             return Response({'message': 'Not Authorized To Perform This Action'}, status=401)
         message = "Category is not listed in service"
-        if category in service.category.all():
+        if service.category.filter(pk=category.pk).exists():
             service.category.remove(category)
             service.save()
             return Response({"message": "Category removed"}, status=201)
@@ -103,7 +103,7 @@ class AddCategoryAPIView(APIView):
         if request.user != service.user or not request.user.is_superuser:
             return Response({'message': 'Not Authorized To Perform This Action'}, status=401)
         message = "Service already has this category"
-        if category not in service.category.all():
+        if not service.category.filter(pk=category.pk).exists():
             if service.category.filter(is_parent=False).count() > 10:
                 return Response({'message': 'Can not exceed more than 10 sub categories'}, status=400)
             if service.category.filter(is_parent=True).count() > 3:

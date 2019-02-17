@@ -20,9 +20,17 @@
                 <input type="number" step="0.01"  v-model="currentService.price" class="form-control" placeholder="$">
             </div>
             <div class="form-group">
+            <select class="form-control" v-model="currentService.delivery_time">
+                    <option value="" disabled selected>Choose estimated delivery time</option>
+                    <option value="early">1-3</option>
+                    <option value="normal">3-5</option>
+                    <option value="later">7+</option>
+            </select>
+            </div>
+            <div class="form-group">
                 <span class="text-center text-danger" id="description_edit_dup"></span>
                 <span class="text-center text-danger"></span>
-                <input type="text"  v-model="currentService.description" class="form-control" placeholder="Enter Description">
+                <textarea class="form-control" rows="5" v-model="currentService.description" placeholder="Description for your service"></textarea>
             </div>
             {% include 'forms/_category_selection.html' %}
       <div class="modal-footer">

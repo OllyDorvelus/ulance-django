@@ -1,46 +1,46 @@
 
 {% include 'forms/_service_forms.html' %}
 <div id="services" class="container">
-    <div v-for="service in services" class="row">
+    <div class="row">
+        <div v-for="service in services"  style="display:inline;margin-bottom:1.5rem">
 
-        <div class="col-xl-3 col-lg-4 col-md-6 col-sm-6 col-10" style="display:inline;margin-bottom:1.5rem">
-            <div class="card text-center" style="width: 15rem;">
-              <img class="card-img-top img-fluid" style="height:8rem;width:15rem" :src="service.photos[0].photo" alt="Card image cap">
+            <div class="col-xl-3 col-lg-4 col-md-6 col-sm-6 col-10">
+                <div class="card text-center" style="width: 15rem;">
+                  <img class="card-img-top img-fluid" style="height:8rem;width:15rem" :src="service.photos[0].photo" alt="Card image cap">
 
-              <div class="card-body" style="height:9.5rem">
-                <a :href="service.url"><span class="card-title">${service.name}</span></a>
-                <span class="small-font" v-if='service.description.length > 100'>${service.description.substring(0,100)}...</span>
-                <span class="small-font" style="display:block" v-else>${service.description}</span>
-                <strong><span style="display:block;font-size:.8rem" >$${service.price}</span></strong>
-                <span style="font-weight:bold" class="tiny-font" v-if="service.average_rating != 0.0"> ${service.average_rating}<i class="fa fa-star tiny-font"
-                                                                                                                                aria-hidden="true"></i></span>
-                <span v-else class="tiny-font">No Ratings</span>
+                  <div class="card-body" style="height:9.5rem">
+                    <a :href="service.url"><span class="card-title">${service.name}</span></a>
+                    <span class="small-font" v-if='service.description.length > 100'>${service.description.substring(0,100)}...</span>
+                    <span class="small-font" style="display:block" v-else>${service.description}</span>
+                    <strong><span style="display:block;font-size:.8rem" >$${service.price}</span></strong>
+                    <span style="font-weight:bold" class="tiny-font" v-if="service.average_rating"> ${service.average_rating}/10</span>
+                    <span v-else class="tiny-font">No Ratings</span>
 
-                <span class="tiny-font"><i class="fa fa-credit-card"></i> ${service.purchases}</span>
+                    <span class="tiny-font"><i class="fa fa-credit-card"></i> ${service.purchases}</span>
 
-                <div class="service-user-section">
-                    <a :href="service.user.profile.url"><img class="img-fluid rounded-circle" style="height:1.25rem;width:1.875rem" :src="service.user.profile.profile_pic"></a>
-                    <span>${service.user.username}</span>
-                    <span class="tiny-font"><i class="fa fa-check"></i> ${service.user.profile.services_completed}</span>
+                    <div class="service-user-section">
+                        <a :href="service.user.profile.url"><img class="img-fluid rounded-circle" style="height:1.25rem;width:1.875rem" :src="service.user.profile.profile_pic"></a>
+                        <span>${service.user.username}</span>
+                        <span class="tiny-font"><i class="fa fa-check"></i> ${service.user.profile.services_completed}</span>
 
-                    <div>
-                    {% if user %}
-                        <div v-if="service.user.id == {{user.pk}}">
-                            <i class="fa fa-trash-alt" v-on:click="deleteService(service.id)"></i><i class="fa fa-edit" v-on:click="getService(service.id)"></i>
-                        </div>
-                    {% endif %}
-                        <div v-if="service.user.id != {{user.pk}}">
-                            <i class="fa fa-plus-circle" v-on:click="addToCart(service.id)" style="font-size:1.25rem"></i>
+                        <div>
+                        {% if user %}
+                            <div v-if="service.user.id == {{user.pk}}">
+                                <i class="fa fa-trash-alt" v-on:click="deleteService(service.id)"></i><i class="fa fa-edit" v-on:click="getService(service.id)"></i>
+                            </div>
+                        {% endif %}
+                            <div v-if="service.user.id != {{user.pk}}">
+                                <i class="fa fa-plus-circle" v-on:click="addToCart(service.id)" style="font-size:1.25rem"></i>
+                            </div>
                         </div>
                     </div>
+                  </div>
+
                 </div>
-
-              </div>
-
             </div>
+
+
         </div>
-
-
     </div>
 
 </div>

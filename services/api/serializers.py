@@ -47,7 +47,7 @@ class ServiceCreateSerializer(serializers.ModelSerializer):
     class Meta:
         model = ServiceModel
         fields = '__all__'
-        read_only_fields = ['user']
+        read_only_fields = ['user', 'purchases', 'average_rating']
 
 
 class ReviewSerializer(serializers.ModelSerializer):

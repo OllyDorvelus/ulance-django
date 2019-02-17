@@ -7,12 +7,12 @@
   </button>
   <div class="collapse navbar-collapse" id="navbarNavDropdown">
     <ul class="navbar-nav">
-      <li class="nav-item">
-        <a class="nav-link" href="#">Features</a>
-      </li>
-      <li class="nav-item">
-        <a class="nav-link" href="#">Pricing</a>
-      </li>
+      <!--<li class="nav-item">-->
+        <!--<a class="nav-link" href="#">Features</a>-->
+      <!--</li>-->
+      <!--<li class="nav-item">-->
+        <!--<a class="nav-link" href="#">Pricing</a>-->
+      <!--</li>-->
       <!--<li class="nav-item dropdown">-->
         <!--<a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">-->
           <!--Dropdown link-->
@@ -37,7 +37,7 @@
               </a>
               <div class="dropdown-menu text-center" style="font-size:.9rem" aria-labelledby="navbarDropdownMenuLink">
                   <a class="dropdown-item" href="{{request.user.profile.get_absolute_url}}">View Profile
-                  <a class="dropdown-item" href="{{request.user.profile.get_absolute_url}}">Create Service</a>
+                  <a class="dropdown-item" href="{% url 'services:service-create' %}">Create Service</a>
                   <a class="dropdown-item" href="#">Account Settings</a>
                   <span class="dropdown-item logout-btn" onclick="logout()">Logout</span>
               </div>

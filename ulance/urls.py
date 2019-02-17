@@ -24,15 +24,15 @@ urlpatterns = [
     path('api/accounts/', include('accounts.api.urls')),
     path('', include('accounts.urls')),
     path('', include('profiles.urls')),
-    path('api/profiles/', include('profiles.api.urls')),
     path('', include('services.urls')),
+    path('', include('orders.urls')),
+    path('api/profiles/', include('profiles.api.urls')),
     path('api/services/', include('services.api.urls')),
     path('api/orders/', include('orders.api.urls')),
     path('admin/', admin.site.urls),
     path('', views.index, name='index'),
     path('api/auth/token', obtain_jwt_token),
     path('rest-auth/', include('rest_auth.urls')),
-
 ]
 
 

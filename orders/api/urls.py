@@ -12,5 +12,5 @@ urlpatterns = [
      path('complaint/<pk>', views.ComplaintDetailAPIView.as_view(), name='complaint-detail-api'),
      path('entry/<pk>/', views.EntryDetailAPIView.as_view(), name='entry-detail-api'),
      path('entry/service/<pk>/', views.ServiceOwnerEntryDetailAPIView.as_view(), name='entry-service-owner-detail-api'),
-     path('entry/add/<service_id>', views.AddEntryToCartAPIView.as_view(), name='add-entry-to-cart-api')
+     path('entry/add/<service_id>/', views.AddEntryToCartAPIView.as_view(), name='add-entry-to-cart-api')
 ]
