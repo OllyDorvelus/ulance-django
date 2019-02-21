@@ -92,8 +92,11 @@
                 const category = this.subCategories.find(function(obj){
                     return categoryId == obj.id
                 })
-                this.serviceCategories.push(category)
-                this.newService.category.push(category.id)
+                if ( !this.serviceCategories.includes(category) ){
+                    this.serviceCategories.push(category)
+                    this.newService.category.push(category.id)
+                }
+
           },
 
          removeCategory: function(categoryId) {

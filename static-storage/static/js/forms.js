@@ -98,7 +98,7 @@ function logout() {
 //    }
 //}
 
-function attachFormErrors(errors, edit, dup) {
+function attachFormErrors(errors, edit, model) {
     var starthtml = "<ul id='errorslist'>"
     var endhtml = "</ul>"
     var htmlString
@@ -108,8 +108,8 @@ function attachFormErrors(errors, edit, dup) {
         if(edit) {
             ID = ID + '_edit'
         }
-        if(dup) {
-            ID = ID + '_dup'
+        if(model) {
+            ID = ID + '_' + model
         }
        $(ID).replaceWith("<span class='text-center text-danger' style='display:block' id=" + key + ">" + value + "</span>")
        // $('.form-group > div > p').show()

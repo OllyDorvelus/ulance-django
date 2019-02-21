@@ -258,7 +258,7 @@ var demo = new Vue({
         }).catch(function(err){
             console.log(err)
             let jsonerr = JSON.parse(err.bodyText)
-            attachFormErrors(jsonerr, true, true)
+            attachFormErrors(jsonerr, true, 'service')
         })
       },
 

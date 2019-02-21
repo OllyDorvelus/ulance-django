@@ -1,4 +1,3 @@
-
 {% include 'forms/_service_forms.html' %}
 <div id="services" class="container">
     <div class="row">
@@ -8,15 +7,17 @@
                 <div class="card text-center" style="width: 15rem;">
                   <img class="card-img-top img-fluid" style="height:8rem;width:15rem" :src="service.photos[0].photo" alt="Card image cap">
 
-                  <div class="card-body" style="height:9.5rem">
+                  <div class="card-body" style="height:11rem">
                     <a :href="service.url"><span class="card-title">${service.name}</span></a>
-                    <span class="small-font" v-if='service.description.length > 100'>${service.description.substring(0,100)}...</span>
+                    <span class="small-font" style="display:block" v-if='service.description.length > 100'>${service.description.substring(0,100)}...</span>
                     <span class="small-font" style="display:block" v-else>${service.description}</span>
-                    <strong><span style="display:block;font-size:.8rem" >$${service.price}</span></strong>
-                    <span style="font-weight:bold" class="tiny-font" v-if="service.average_rating"> ${service.average_rating}/10</span>
-                    <span v-else class="tiny-font">No Ratings</span>
 
-                    <span class="tiny-font"><i class="fa fa-credit-card"></i> ${service.purchases}</span>
+                    <div style="display:inline">
+                        <strong><span style="font-size:.8rem" >$${service.price}</span></strong>
+                        <span style="font-weight:bold" class="tiny-font" v-if="service.average_rating"> ${service.average_rating}/10</span>
+                        <span v-else class="tiny-font">No Ratings</span>
+                        <span class="tiny-font"><i class="fa fa-credit-card"></i> ${service.purchases}</span>
+                    </div>
 
                     <div class="service-user-section">
                         <a :href="service.user.profile.url"><img class="img-fluid rounded-circle" style="height:1.25rem;width:1.875rem" :src="service.user.profile.profile_pic"></a>
