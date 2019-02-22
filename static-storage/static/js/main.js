@@ -26,3 +26,33 @@ function getCookie(name) {
     }
     return cookieValue;
 }
+
+function onDeletion(message, callback) {
+     vex.dialog.buttons.YES.text = 'Delete'
+     vex.dialog.buttons.YES.className = 'delete-confirm-btn'
+     vex.dialog.confirm({
+        message: message,
+        className: 'vex-theme-os',
+        callback: function(value) {
+            callback(value)
+        }
+    })
+}
+
+function onAlert(message) {
+    vex.dialog.buttons.YES.text = 'Ok'
+    vex.dialog.buttons.YES.className = 'alert-btn'
+    vex.dialog.alert({
+        message: message,
+        className: 'vex-theme-os',
+    })
+}
+
+function onWarning(message) {
+    vex.dialog.buttons.YES.text = 'Ok'
+    vex.dialog.buttons.YES.className = 'warning-btn'
+    vex.dialog.alert({
+        message: message,
+        className: 'vex-theme-top'
+    })
+}

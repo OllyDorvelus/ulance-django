@@ -28,7 +28,7 @@ body {
     padding: 0.625rem 2.5em;
     font-weight: 600;
     color: $primary-cl;
-    background-color: #262626;
+    background-color: $white;
   }
 
   .ulance-btn:hover {
@@ -98,5 +98,20 @@ datalist {
     font-size: 0.875rem;
   color: red !important;
 }
+}
+
+.delete-confirm-btn {
+  background-color: red;
+  color: white;
+}
+
+.alert-btn {
+  background-color: black;
+  color: $primary-cl;
+}
+
+.warning-btn {
+  background-color: $white;
+  color: $no-color;
 }
 

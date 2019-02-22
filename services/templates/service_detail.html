@@ -10,6 +10,7 @@
                     <div class="card">
                         <div class="card-header text-center">
                             <h4><strong>${currentService.name}</strong></h4>
+                            <div style="font-size:.7rem"><strong>(${currentService.delivery_time_display}) days</strong></div>
                             <span><i class="fa fa-edit" v-on:click="getServiceModal"></i></span>
                             <span><i class="fa fa-trash-alt" v-on:click="deleteService()"></i></span>
                         </div>
@@ -20,7 +21,8 @@
                         </div>
 
                         <div class="card-footer text-center">
-                            <span><strong>$${currentService.price}</strong></span>
+                            <div><strong>$${currentService.price}</strong></div>
+                            <div class="btn ulance-btn" style="font-size:.75rem;margin-top:.5rem;margin-bottom:.5rem">Add to cart</div>
                             <div><span style="font-size:.8rem"><strong>Purchases: ${currentService.purchases}</strong></span></div>
                             <div v-for="category in currentService.category">
                                 <span v-if="category.parent">
@@ -37,7 +39,7 @@
                         <div class="card">
 
                             <div class="card-header">
-                                <h4 class="text-center"><strong>About Service</strong></h4>
+                                <h5 class="text-center"><strong>About Service</strong></h5>
                             </div>
 
                             <div class="card-body">
@@ -51,16 +53,16 @@
                         <div class="card">
 
                             <div class="card-header">
-                                <h4><strong>Seller</strong></h4>
+                                <h5><strong>Seller</strong></h5>
                             </div>
 
                             <div class="card-body">
                                 <div><a :href="currentService.user.profile.url"><img :src="currentService.user.profile.profile_pic" class="img-fluid rounded-circle service-user-photo"></a></div>
-                                <div class="user-info" style="font-size:1.1rem"><strong>${currentService.user.username}</strong></div>
+                                <div class="user-info"><strong>${currentService.user.username}</strong></div>
                             </div>
 
                             <div class="card-footer">
-                                <div>Services Completed: ${currentService.user.profile.services_completed}</div>
+                                <div style="font-size:.8rem">Services Completed: ${currentService.user.profile.services_completed}</div>
                             </div>
 
                         </div>
@@ -110,15 +112,16 @@
             },
 
             deleteService: function() {
-                const answer = confirm("Are you sure you want to delete this service")
-                if(answer) {
-                    this.$http.delete(this.serviceUrl).then(function(response) {
-                        alert("Item has been deleted")
-                        window.location.replace(`/user/${this.service.user.username}`)
-                    }).catch(function(err){
+                const self = this
+                onDeletion('Are you sure you want to delete this service?', function(value){
+                    if(value) {
+                        self.$http.delete(self.serviceUrl).then(function(response) {
+                            onAlert(`Service: ${self.currentService.name} has been deleted`)
+                        }).catch(function(err){
 
-                    })
-                }
+                        })
+                    }
+                })
             },
 
             updateService: function() {
@@ -199,6 +202,9 @@
               let api_url = `/api/services/${this.currentService.id}/remove/${categoryId}/`
               this.$http.post(api_url).then(function(response){
                 this.getServiceCategories()
+              }).catch(function(err){
+                  const message = err.body.message
+                  onWarning(message)
               })
           },
 
@@ -206,6 +212,9 @@
               let api_url = `/api/services/${this.currentService.id}/add/${categoryId}/`
               this.$http.post(api_url).then(function(response){
                   this.getServiceCategories()
+              }).catch(function(err){
+                  const message = err.body.message
+                  onWarning(message)
               })
           },
         }

@@ -44,9 +44,9 @@ class CategoryModel(models.Model):
 
 class ServiceModel(models.Model):
     DELIVERY_CHOICES = (
-        ('early', '1-3'),
-        ('normal', '3-5'),
-        ('later', '7+')
+        ('Early', '1-3'),
+        ('Normal', '3-5'),
+        ('Later', '7+')
     )
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='services')
@@ -54,7 +54,7 @@ class ServiceModel(models.Model):
     price = MoneyField(max_digits=10, decimal_places=2, default_currency='USD')
     category = models.ManyToManyField(CategoryModel, related_name='service', blank=True)
     description = models.TextField(blank=False, null=False, max_length=500)
-    delivery_time = models.CharField(max_length=8, choices=DELIVERY_CHOICES, blank=False, null=False, default='normal')
+    delivery_time = models.CharField(max_length=20, choices=DELIVERY_CHOICES, blank=False, null=False, default='Normal')
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     purchases = models.PositiveIntegerField(default=0)

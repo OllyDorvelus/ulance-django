@@ -213,14 +213,20 @@ var demo = new Vue({
           let api_url = `/api/services/${this.currentService.id}/remove/${categoryId}/`
           this.$http.post(api_url).then(function(response){
             this.getServiceCategories()
-          })
+          }).catch(function(err){
+                  const message = err.body.message
+                  onWarning(message)
+              })
       },
 
       addCategory: function(categoryId) {
           let api_url = `/api/services/${this.currentService.id}/add/${categoryId}/`
           this.$http.post(api_url).then(function(response){
               this.getServiceCategories()
-          })
+          }).catch(function(err){
+                  const message = err.body.message
+                  onWarning(message)
+              })
       },
 
       getServices: function() {
@@ -241,13 +247,18 @@ var demo = new Vue({
 
       deleteService: function(id) {
         let api_url = `/api/services/${id}/`
-        let answer = confirm("Are you sure?")
-        if(answer) {
-            this.$http.delete(api_url).then(function (response) {
-                alert('service has been deleted')
-                this.getServices()
-            })
-        }
+        const self = this
+        onDeletion("Are you sure you want to delete this service?", function(value){
+            if(value) {
+                self.$http.delete(api_url).then(function (response) {
+                    const service = response.data
+                    onAlert('The service has been deleted')
+                    self.getServices()
+                })
+            }
+        })
+
+
       },
 
       updateService: function() {
@@ -309,15 +320,20 @@ var demo = new Vue({
 
       deleteLink: function(id) {
         let api_url = `/api/profiles/link/${id}/`
-        let answer = confirm("Are you sure?");
-        if(answer) {
-            this.$http.delete(api_url).then(function (response) {
-                alert("Item has been deleted")
-                this.getLinks()
-            }).catch(function (err) {
-                console.log(err)
-            })
-        }
+        const self = this
+        onDeletion('Are you sure you want to delete this link?', function(value){
+            if(value) {
+                 self.$http.delete(api_url).then(function(response) {
+                    onAlert('The link has been deleted.')
+                    self.getLinks()
+                }).catch(function (err) {
+                    console.log(err)
+
+                })
+            }
+
+        })
+
       },
 
       getCertifications: function() {
@@ -363,14 +379,17 @@ var demo = new Vue({
 
       deleteCertification: function(id) {
           let api_url = `/api/profiles/certification/${id}/`
-          answer = confirm("are you sure?")
-          if(answer) {
-              this.$http.delete(api_url).then(function (response) {
-                  this.getCertifications()
-              }).catch(function (err) {
+          const self = this
+          onDeletion("Are you sure you want to delete this certification?", function(value){
+              if(value) {
+                  self.$http.delete(api_url).then(function (response) {
+                    onAlert('Certification has been deleted.')
+                    self.getCertifications()
+                  }).catch(function (err) {
 
-              })
-          }
+                  })
+              }
+          })
       },
 
       getSkill: function(id) {
@@ -417,15 +436,17 @@ var demo = new Vue({
 
       deleteSkill: function(id) {
           let api_url = `/api/profiles/level/${id}/`
-          let answer = confirm("are you sure you want to delete?")
-          if(answer) {
-              this.$http.delete(api_url).then(function (response) {
-                  alert("item has been deleted")
-                  this.getSkills()
-              }).catch(function (err) {
+          const self = this
+          onDeletion("Are you sure you want to delete this skill?", function(value){
+              if(value){
+                  self.$http.delete(api_url).then(function (response) {
+                      onWarning('Skill has been deleted.')
+                      self.getSkills()
+                  }).catch(function (err) {
 
-              })
-          }
+                  })
+              }
+          })
       },
 
       getEducation: function(id) {
@@ -471,15 +492,19 @@ var demo = new Vue({
 
       deleteEducation: function(id) {
         let api_url = `/api/profiles/education/${id}/`
-          let answer = confirm("Are you sure you want to delete?")
-          if(answer) {
-              this.$http.delete(api_url).then(function (response) {
-                alert("Item has been deleted")
-                this.getEducations()
+        const self = this
+        onDeletion("Are you sure you want to delete this education?", function(value){
+            if(value) {
+               self.$http.delete(api_url).then(function (response) {
+                onWarning("Education has been deleted")
+                self.getEducations()
               }).catch(function (err) {
 
               })
-          }
+            }
+        })
+
+
       },
 
       searchSchools: function(ID) {

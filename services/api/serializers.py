@@ -33,6 +33,7 @@ class ServiceSerializer(serializers.ModelSerializer):
     photos = ServicePhotoSerializer(many=True, read_only=True)
     url = serializers.SerializerMethodField()
     category = CategorySerializer(many=True, read_only=True)
+    delivery_time_display = serializers.SerializerMethodField()
 
     class Meta:
         model = ServiceModel
@@ -41,6 +42,14 @@ class ServiceSerializer(serializers.ModelSerializer):
 
     def get_url(self, obj):
         return obj.get_absolute_url()
+
+    def get_delivery_time_display(self, obj):
+        if obj.delivery_time == 'Normal':
+            return "3-5"
+        if obj.delivery_time == 'Later':
+            return '7+'
+        if obj.delivery_time == 'Early':
+            return '1-3'
 
 
 class ServiceCreateSerializer(serializers.ModelSerializer):
