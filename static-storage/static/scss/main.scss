@@ -115,3 +115,12 @@ datalist {
   color: $no-color;
 }
 
+.shopping-cart {
+  color: $primary-cl;
+  font-size:1.1rem;
+  margin-top:.2rem;
+}
+
+.shopping-cart:hover {
+  color: $primary-cl;
+}

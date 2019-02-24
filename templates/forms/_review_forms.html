@@ -1,24 +1,8 @@
-<!--<div class="modal fade" id="addReviewModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">-->
-  <!--<div class="modal-dialog" role="document">-->
-    <!--<div class="modal-content">-->
-      <!--<div class="modal-header">-->
-        <!--<h5 class="modal-title">Add Link</h5>-->
-        <!--<button type="button" class="close" data-dismiss="modal" aria-label="Close">-->
-          <!--<span aria-hidden="true">&times;</span>-->
-        <!--</button>-->
-      <!--</div>-->
-      <!--<div class="modal-body">-->
-
-      <!--</div>-->
-    <!--</div>-->
-  <!--</div>-->
-<!--</div>-->
-
 <div class="modal fade" id="editReviewModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">
   <div class="modal-dialog" role="document">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title">Add Link</h5>
+        <h5 class="modal-title">Edit Review</h5>
         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
@@ -28,7 +12,7 @@
             <div class="form-group">
                 <span class="text-center text-danger" id="description_edit_review"></span>
                 <span class="text-center text-danger"></span>
-                <textarea cols="5" v-model="currentReview.description" class="form-control" placeholder="Describe your experience here."></textarea>
+                <textarea rows="5" v-model="currentReview.description" class="form-control" placeholder="Describe your experience here."></textarea>
             </div>
             <div class="form-group">
                 <span class="text-center text-danger" id="rate_edit_review"></span>

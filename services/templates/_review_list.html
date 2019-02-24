@@ -2,14 +2,22 @@
     <div v-for="review in reviews">
         <div class="row">
             <div class="col-xl-10 col-lg-10 col-md-12 col-sm-12 col-12">
-                <span>${review.description}</span>
-                <span v-if="currentService.user.id == {{user.pk}}">
-                    <span style="float:right">
-                        <i class="fa fa-edit" v-on:click="getReview(review.id)"></i>
-                        <i class="fa fa-trash-alt" v-on:click="deleteReview(review.id)"></i>
+                <div style="padding-bottom:.5rem">
+                    <a :href="review.user.profile.url"><img :src="review.user.profile.profile_pic" class="img-fluid rounded-circle" style="width:2.3rem"></a>
+                    <span>${review.user.username}</span>
+                    <span style="padding-left:.3rem">${review.rate}<i class="fa fa-star" style="font-size:.7rem"></i></span>
+                    <span v-if="currentService.user.id == {{user.pk}}">
+                        <span style="float:right">
+                            <i class="fa fa-edit" v-on:click="getReview(review.id)"></i>
+                            <i class="fa fa-trash-alt" v-on:click="deleteReview(review.id)"></i>
                     </span>
-                </span>
-                ${review.rate}
+                    </span>
+                </div>
+
+                <span>${review.description}</span>
+                <div>
+
+                </div>
                 <hr>
             </div>
         </div>

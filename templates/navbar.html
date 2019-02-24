@@ -30,18 +30,19 @@
     </form>
       <ul class="navbar-nav ml-auto right-nav" style="margin-right:5em;">
           <!--<li class="nav-item"><a class="nav-link" href="#">Orders</a></li>-->
-          <li class="nav-item dropdown">
+          <li class="nav-item dropdown" style="padding-right:.9rem">
               <a class="" style="display:inline" href="#" id="profilePicDropdown" data-toggle="dropdown"><img class="profile-pic img-fluid rounded-circle" src="{{request.user.profile.profile_pic.url}}"/>
               </a>
-              <a class="" style="display:inline" href="#"><i class="fa fa-shopping-cart"></i>
+
               </a>
               <div class="dropdown-menu text-center" style="font-size:.9rem" aria-labelledby="navbarDropdownMenuLink">
-                  <a class="dropdown-item" href="{{request.user.profile.get_absolute_url}}">View Profile
+                  <a class="dropdown-item" href="{{request.user.profile.get_absolute_url}}">View Profile</a>
                   <a class="dropdown-item" href="{% url 'services:service-create' %}">Create Service</a>
                   <a class="dropdown-item" href="#">Account Settings</a>
                   <span class="dropdown-item logout-btn" onclick="logout()">Logout</span>
               </div>
           </li>
+          <a class="shopping-cart" style="display:inline" href="{% url 'orders:cart-detail-view' %}"><i class="fa fa-shopping-cart"></i></a>
       </ul>
   </div>
 </nav>

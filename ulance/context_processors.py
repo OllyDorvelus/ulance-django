@@ -1,5 +1,6 @@
 from services.models import CategoryModel
 from django.contrib.auth import get_user_model
+from orders.models import CartModel
 
 User = get_user_model()
 
@@ -17,6 +18,13 @@ def user(request):
     else:
         return {}
 
+
+def cart(request):
+    if request.user.is_authenticated:
+        cart = CartModel.objects.get(user__pk=request.user.pk)
+        return {'cart': cart}
+    else:
+        return {}
 
 
 

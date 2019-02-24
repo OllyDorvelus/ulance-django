@@ -182,9 +182,16 @@ var demo = new Vue({
   methods: {
 
       addToCart: function(serviceId) {
-          let api_url = `/api/orders/entry/add/${serviceId}/`
+          let api_url = `/api/orders/entries/add/${serviceId}/`
           this.$http.post(api_url).then(function(response){
-                console.log("Success")
+                onAlert("Service added to cart.")
+          }).catch(function(err){
+              if(err.status === 401) {
+                  onWarning("Please login to add to cart.")
+              }
+              if(err.body.message) {
+                  onWarning(err.body.message)
+              }
           })
       },
 

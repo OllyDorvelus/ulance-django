@@ -9,7 +9,7 @@ from django.shortcuts import render, redirect, get_object_or_404
 from profiles.models import ProfileModel, SkillModel, LevelModel, CertificationModel, EducationModel, LinkModel
 from services.models import ServiceModel
 User = get_user_model()
-
+from django.contrib.auth.mixins import LoginRequiredMixin
 # Create your views here.
 
 
@@ -23,6 +23,6 @@ class ServiceDetailView(DetailView):
         return service
 
 
-class ServiceCreateView(TemplateView):
+class ServiceCreateView(LoginRequiredMixin, TemplateView):
     template_name = 'create_service.html'
-
+    login_url = '/login/'
