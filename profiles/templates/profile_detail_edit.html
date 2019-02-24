@@ -284,7 +284,7 @@ var demo = new Vue({
       },
 
       getLink: function(id) {
-          let api_url = `/api/profiles/link/${id}/`
+          let api_url = `/api/profiles/links/${id}/`
           this.$http.get(api_url).then(function(response){
               console.log(response.data)
               this.currentLink = response.data;
@@ -295,7 +295,7 @@ var demo = new Vue({
       },
 
       addLink: function() {
-        let api_url = '/api/profiles/link/create/'
+        let api_url = '/api/profiles/links/create/'
         this.$http.post(api_url, this.newLink).then(function(response){
             $('#addLinkModal').modal('toggle')
             this.getLinks()
@@ -306,7 +306,7 @@ var demo = new Vue({
       },
 
       updateLink: function() {
-          let api_url = `/api/profiles/link/${this.currentLink.id}/`
+          let api_url = `/api/profiles/links/${this.currentLink.id}/`
           this.$http.put(api_url, this.currentLink).then(function(response) {
             this.getLinks()
             $('#editLinkModal').modal('toggle')
@@ -319,7 +319,7 @@ var demo = new Vue({
       },
 
       deleteLink: function(id) {
-        let api_url = `/api/profiles/link/${id}/`
+        let api_url = `/api/profiles/links/${id}/`
         const self = this
         onDeletion('Are you sure you want to delete this link?', function(value){
             if(value) {
@@ -346,7 +346,7 @@ var demo = new Vue({
       },
 
       getCertification: function(id) {
-          let api_url = `/api/profiles/certification/${id}/`
+          let api_url = `/api/profiles/certifications/${id}/`
           this.$http.get(api_url).then(function(response){
               this.currentCertification = response.data;
               $('#editCertificationModal').modal('show');
@@ -356,7 +356,7 @@ var demo = new Vue({
       },
 
       addCertification: function() {
-          let api_url = '/api/profiles/certification/create/'
+          let api_url = '/api/profiles/certifications/create/'
           this.$http.post(api_url, this.newCertification).then(function(response){
               this.getCertifications()
               $('#addCertificationModal').modal('toggle')
@@ -367,7 +367,7 @@ var demo = new Vue({
       },
 
       updateCertification: function() {
-          let api_url = `/api/profiles/certification/${this.currentCertification.id}/`
+          let api_url = `/api/profiles/certifications/${this.currentCertification.id}/`
           this.$http.put(api_url, this.currentCertification).then(function(response){
               this.getCertifications()
               $('#editCertificationModal').modal('toggle')
@@ -378,7 +378,7 @@ var demo = new Vue({
       },
 
       deleteCertification: function(id) {
-          let api_url = `/api/profiles/certification/${id}/`
+          let api_url = `/api/profiles/certifications/${id}/`
           const self = this
           onDeletion("Are you sure you want to delete this certification?", function(value){
               if(value) {
@@ -393,7 +393,7 @@ var demo = new Vue({
       },
 
       getSkill: function(id) {
-          let api_url = `/api/profiles/level/${id}/`
+          let api_url = `/api/profiles/levels/${id}/`
           this.$http.get(api_url).then(function(response){
               this.currentSkill = response.data
               $('#editSkillModal').modal('show')
@@ -412,7 +412,7 @@ var demo = new Vue({
       },
 
       addSkill: function() {
-          let api_url = '/api/profiles/level/create/'
+          let api_url = '/api/profiles/levels/create/'
           this.$http.post(api_url, this.newSkill).then(function(resposne){
               this.getSkills()
               $('#addSkillModal').modal('toggle')
@@ -424,7 +424,7 @@ var demo = new Vue({
       },
 
       updateSkill: function() {
-        let api_url = `/api/profiles/level/${this.currentSkill.id}/`
+        let api_url = `/api/profiles/levels/${this.currentSkill.id}/`
         this.$http.put(api_url, this.currentSkill).then(function(resposne){
             this.getSkills()
             $('#editSkillModal').modal('toggle')
@@ -435,7 +435,7 @@ var demo = new Vue({
       },
 
       deleteSkill: function(id) {
-          let api_url = `/api/profiles/level/${id}/`
+          let api_url = `/api/profiles/levels/${id}/`
           const self = this
           onDeletion("Are you sure you want to delete this skill?", function(value){
               if(value){
@@ -450,7 +450,7 @@ var demo = new Vue({
       },
 
       getEducation: function(id) {
-        let api_url = `/api/profiles/education/${id}/`
+        let api_url = `/api/profiles/educations/${id}/`
           this.$http.get(api_url).then(function(response){
               this.currentEducation = response.data
               $('#editEducationModal').modal('show')
@@ -469,7 +469,7 @@ var demo = new Vue({
       },
 
       addEducation: function() {
-        let api_url = '/api/profiles/education/create/'
+        let api_url = '/api/profiles/educations/create/'
           this.$http.post(api_url, this.newEducation).then(function(){
               this.getEducations()
               $('#addEducationModal').modal('toggle')
@@ -480,7 +480,7 @@ var demo = new Vue({
       },
 
       updateEducation: function() {
-        let api_url = `/api/profiles/education/${this.currentEducation.id}/`
+        let api_url = `/api/profiles/educations/${this.currentEducation.id}/`
           this.$http.put(api_url, this.currentEducation).then(function(resposne){
             this.getEducations()
             $('#editEducationModal').modal('toggle')
@@ -491,7 +491,7 @@ var demo = new Vue({
       },
 
       deleteEducation: function(id) {
-        let api_url = `/api/profiles/education/${id}/`
+        let api_url = `/api/profiles/educations/${id}/`
         const self = this
         onDeletion("Are you sure you want to delete this education?", function(value){
             if(value) {

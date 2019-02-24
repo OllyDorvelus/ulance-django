@@ -1,10 +1,17 @@
-<!DOCTYPE html>
-<html>
-<head lang="en">
-    <meta charset="UTF-8">
-    <title></title>
-</head>
-<body>
-
-</body>
-</html>
+<div style="padding-top:2.5rem;margin-left:1rem" id="reviews-section">
+    <div v-for="review in reviews">
+        <div class="row">
+            <div class="col-xl-10 col-lg-10 col-md-12 col-sm-12 col-12">
+                <span>${review.description}</span>
+                <span v-if="currentService.user.id == {{user.pk}}">
+                    <span style="float:right">
+                        <i class="fa fa-edit" v-on:click="getReview(review.id)"></i>
+                        <i class="fa fa-trash-alt" v-on:click="deleteReview(review.id)"></i>
+                    </span>
+                </span>
+                ${review.rate}
+                <hr>
+            </div>
+        </div>
+    </div>
+</div>
