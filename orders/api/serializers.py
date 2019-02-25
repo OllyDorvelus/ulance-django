@@ -3,6 +3,7 @@ from orders.models import ServiceOrderModel, CartModel, EntryModel, ComplaintMod
 from services.api.serializers import ServiceSerializer
 from accounts.api.serializers import UserModelSerializer
 from django.contrib.auth import get_user_model
+from services.api.serializers import ServiceSerializer
 from rest_framework.serializers import (
     ValidationError
 )
@@ -11,6 +12,8 @@ User = get_user_model()
 
 
 class EntrySerializer(serializers.ModelSerializer):
+    service = ServiceSerializer(read_only=True)
+
     class Meta:
         model = EntryModel
         fields = '__all__'

@@ -25,3 +25,31 @@
   }
 
 }
+
+#entries {
+    .fa {
+      color: $primary-cl;
+    }
+
+  .tiny-font {
+    font-size: .75rem;
+  }
+
+  .small-font {
+    font-size: .8rem;
+  }
+
+  .card-title {
+    font-weight: bold;
+    color:$primary-cl;
+    font-size: .9rem;
+  }
+
+  .service-user-section {
+    span {
+      padding-left: .125rem;
+      padding-right: .125rem;
+    }
+  }
+
+}

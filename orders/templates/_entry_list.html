@@ -1,5 +1,46 @@
-<div>
+<div id="entries">
     <div v-for="entry in entries">
+        <div class="row">
+            <div style="margin-right:auto;margin-left:auto">
+                <div class="card text-center" style="width: 12rem;">
+                  <img class="card-img-top img-fluid" style="height:6rem;width:12rem" :src="entry.service.photos[0].photo" alt="Card image cap">
+
+                  <div class="card-body" style="height:8rem">
+                    <a :href="entry.service.url"><span class="card-title">${entry.service.name}</span></a>
+                    <span class="small-font" style="display:block" v-if='entry.service.description.length > 100'>${entry.service.description.substring(0,50)}...</span>
+                    <span class="small-font" style="display:block" v-else>${entry.service.description}</span>
+
+                    <div style="display:inline">
+                        <!--<strong><span style="font-size:.8rem" >$${entry.service.price}</span></strong>-->
+                        <!--<span style="font-weight:bold" class="tiny-font" v-if="entry.service.average_rating"> ${entry.service.average_rating}/10</span>-->
+                        <!--<span v-else class="tiny-font">No Ratings</span>-->
+                        <!--<span class="tiny-font"><i class="fa fa-credit-card"></i> ${entry.service.purchases}</span>-->
+                        <span class="small-font" style="font-size:.6rem"><strong>$${entry.service.price}</strong></span>
+                    </div>
+
+                    <div class="service-user-section">
+                        <a :href="entry.service.user.profile.url"><img class="img-fluid rounded-circle" style="height:.75rem;width:1rem" :src="entry.service.user.profile.profile_pic"></a>
+                        <span>${entry.service.user.username}</span>
+                        <!--<span class="tiny-font"><i class="fa fa-check"></i> ${entry.service.user.profile.services_completed}</span>-->
+
+
+                    </div>
+                  </div>
+
+                </div>
+
+
+
+        </div>
+                <div style="display:inline">
+                    <span class="ulance-btn" style="font-size: .6rem" v-on:click="incrementEntry(entry.id)">+</span>
+                    <span class="ulance-btn" style="font-size:.6rem" v-on:click="decrementEntry(entry.id)">-</span>
+                    <span class="cancel-btn" style="font-size:.6rem" v-on:click="removeEntry(entry.id)">X</span>
+                    <br><br>
+                    <div><strong>${entry.quantity}</strong></div>
+                </div>
+        </div>
+<hr>
+        </div>
 
     </div>
-</div>

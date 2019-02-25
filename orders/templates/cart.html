@@ -1,11 +1,118 @@
 {% extends 'base.html' %}
 
 {% block content %}
-    <div id="cart-app">
+    <div id="cart-app" style="padding-top:2.5rem">
+        <div class="container">
+            <div class="row">
+                <div class="col-xl-7 col-lg-7 col-md-10 col-sm-12 col-12">
+                    {% include '_entry_list.html' %}
+                </div>
+
+                <div class="col-xl-5 col-lg-5 col-md-10 col-sm-12 col-12">
+                    <div class="card">
+                        <div class="card-header text-center"><h4>Order Detail</h4></div>
+                        <div class="card-body">
+                            <div v-for="entry in entries">
+                                <div style="padding-bottom:1rem">
+                                ${entry.service.name} - $${entry.service.price} <small>x${entry.quantity}</small><br>
+                                <small><strong>seller: ${entry.service.user.username}</strong></small>
+                                </div>
+                            </div>
+                            <hr>
+                            <h5>Total: <strong>$${cart.total}</strong></h5>
+                        </div>
+                        <div class="card-footer"><div align="center"><h4 class="ulance-btn text-center" style="width:75%">Order Now</h4></div></div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
 
     </div>
 
 <script>
+    Vue.http.headers.common['X-CSRFToken'] = "{{ csrf_token }}";
+    var cart = new Vue({
+        el: '#cart-app',
+        delimiters: ['${','}'],
 
+        data: {
+            api_url: '/api/orders/cart/',
+            cart: {},
+            entries: [],
+            currentEntry: {},
+        },
+
+        mounted: function() {
+            this.getCart()
+        },
+
+        methods: {
+            getCart: function() {
+                this.$http.get(this.api_url).then(function(response){
+                    this.cart = response.data
+                    this.entries = response.data.cart_entries
+                }).catch(function(err){
+
+                })
+            },
+
+            removeEntry: function(entryId) {
+                let api_url = `/api/orders/entries/${entryId}/`
+                let self = this
+                onDeletion('Are you sure you want to remove this entry from your cart?', function(value){
+                    if(value) {
+                        self.$http.delete(api_url).then(function(response){
+                            self.getCart()
+                        }).catch(function(err){
+                            if(err.body.message) {
+                                onWarning(err.body.message)
+                            }
+                        })
+                    }
+                })
+            },
+
+            incrementEntry: function(entryId) {
+                let api_url = `/api/orders/entries/${entryId}/`
+                this.$http.get(api_url).then(function(response){
+                    this.currentEntry = response.data
+                    this.currentEntry.quantity += 1
+                    this.$http.put(api_url, this.currentEntry).then(function(response){
+                        this.getCart()
+                    })
+                }).catch(function(err){
+
+                })
+            },
+
+            decrementEntry: function(entryId) {
+                let api_url = `/api/orders/entries/${entryId}/`
+                this.$http.get(api_url).then(function(response){
+                    this.currentEntry = response.data
+                    this.currentEntry.quantity -= 1
+                    if(this.currentEntry.quantity === 0) {
+                        this.removeEntry(this.currentEntry.id)
+                        return
+                    }
+
+                    this.$http.put(api_url, this.currentEntry).then(async function(response){
+                        await this.getCart()
+                    })
+                }).catch(function(err){
+
+                })
+            },
+
+            // incrementEntry: async function(entryId) {
+            //     await this.getEntry(entryId)
+            //     let api_url = `/api/orders/entries/${this.currentEntry.id}/`
+            //     this.currentEntry.quanity += 1
+            //     this.$http.put(api_url, this.currentEntry).then(function(){
+            //         this.getCart()
+            //     })
+            // }
+        }
+    })
 </script>
 {% endblock content %}
