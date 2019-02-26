@@ -23,7 +23,7 @@
 
                         <div class="card-footer text-center">
                             <div><strong>$${currentService.price}</strong></div>
-                            <div class="btn ulance-btn" style="font-size:.75rem;margin-top:.5rem;margin-bottom:.5rem">Add to cart</div>
+                            <div class="btn ulance-btn" style="font-size:.75rem;margin-top:.5rem;margin-bottom:.5rem" v-on:click="addToCart">Add to cart</div>
                             <div><span style="font-size:.8rem"><strong>Purchases: ${currentService.purchases}</strong></span></div>
                             <div v-for="category in currentService.category">
                                 <span v-if="category.parent">
@@ -119,6 +119,20 @@
         },
 
         methods:  {
+
+            addToCart: function() {
+              let api_url = `/api/orders/entries/add/${this.currentService.id}/`
+              this.$http.post(api_url).then(function(response){
+                    onAlert("Service added to cart.")
+              }).catch(function(err){
+                  if(err.status === 401) {
+                      onWarning("Please login to add to cart.")
+                  }
+                  if(err.body.message) {
+                      onWarning(err.body.message)
+                  }
+              })
+          },
             getService: function() {
                this.$http.get(this.serviceUrl).then(function(response){
                    this.currentService = response.data

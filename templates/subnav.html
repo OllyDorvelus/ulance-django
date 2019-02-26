@@ -24,7 +24,7 @@
             <div class="subnav-item">{{ parent_category.name }}</div>
             <div class="dropdown-content">
                 {% for sub_category in parent_category.children.all %}
-                    <a href="#">{{sub_category.name}}</a>
+                    <a href="{% url 'services:service-category-list' sub_category.name %}">{{sub_category.name}}</a>
                 {% endfor %}
             </div>
         </div>

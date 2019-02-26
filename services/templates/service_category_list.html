@@ -1,0 +1,28 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<div id="services-category-app">
+    <h1>{{category.name}}</h1>
+</div>
+
+<script>
+Vue.http.headers.common['X-CSRFToken'] = "{{ csrf_token }}";
+const servicesCategory = new Vue({
+    el: '#services-category-app',
+    delimiters: ['${','}'],
+    data: {
+        api_url: "",
+
+    },
+
+    mounted: function() {
+
+    },
+
+    methods: {
+
+    }
+})
+</script>
+{% endblock content %}
