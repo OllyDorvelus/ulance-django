@@ -56,3 +56,94 @@ function onWarning(message) {
         className: 'vex-theme-top'
     })
 }
+
+// ORDER FUNCTIONS
+
+function addToCart(serviceId, _this) {
+    let api_url = `/api/orders/entries/add/${serviceId}/`
+    _this.$http.post(api_url).then(function(response){
+        onAlert("Service added to cart.")
+    }).catch(function(err){
+      if(err.status === 401) {
+          onWarning("Please login to add to cart.")
+      }
+      if(err.body.message) {
+          onWarning(err.body.message)
+      }
+    })
+}
+
+// SERVICES
+function getServices(_this) {
+    _this.$http.get(_this.api_url).then(function(response){
+        _this.services = response.data.results
+    })
+}
+
+function getService(serviceId, _this) {
+    let api_url = `/api/services/${serviceId}/`
+    _this.$http.get(api_url).then(function(response){
+      _this.currentService = response.data;
+      _this.getServiceCategories()
+      $('#editServiceModal').modal('show')
+    })
+}
+
+
+
+function deleteService(serviceId, _this) {
+        let api_url = `/api/services/${serviceId}/`
+        const self = _this
+        onDeletion("Are you sure you want to delete this service?", function(value){
+            if(value) {
+                _this.$http.delete(api_url).then(function (response) {
+                    const service = response.data
+                    onAlert('The service has been deleted')
+                    _this.getServices()
+                })
+            }
+        })
+}
+
+// EDITING CATEGORIES ON SERVICE
+
+function getParentCategories(_this) {
+    let api_url = '/api/services/main-categories/'
+      _this.$http.get(api_url).then(function(response){
+          _this.parentCategories = response.data.results  //this.parentCategories.concat(response.data.results)//
+      })
+}
+
+function getSubCategories(_this) {
+    let api_url = `/api/services/sub-categories/${_this.parentCategoryId}/`
+    _this.$http.get(api_url).then(function(response){
+        _this.subCategories = response.data.results
+    })
+}
+
+function getServiceCategories(_this) {
+    let api_url = `/api/services/${_this.currentService.id}/categories/`
+    _this.$http.get(api_url).then(function(response){
+        _this.serviceCategories = response.body
+    })
+}
+
+function addCategory(categoryId, _this) {
+    let api_url = `/api/services/${_this.currentService.id}/add/${categoryId}/`
+    _this.$http.post(api_url).then(function(response){
+      _this.getServiceCategories()
+    }).catch(function(err){
+          const message = err.body.message
+          onWarning(message)
+      })
+}
+
+function removeCategory(categoryId, _this) {
+    let api_url = `/api/services/${_this.currentService.id}/remove/${categoryId}/`
+    _this.$http.post(api_url).then(function(response){
+    _this.getServiceCategories()
+    }).catch(function(err){
+          const message = err.body.message
+          onWarning(message)
+      })
+}

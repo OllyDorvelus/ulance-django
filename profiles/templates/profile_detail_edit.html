@@ -7,7 +7,6 @@
 {% include 'forms/_user_modals.html' %}
 {% include 'forms/_skill_forms.html' %}
 {% include 'forms/_education_forms.html' %}
-
     <div class="text-center" style="padding-bottom:20px">
         <img :src="user.profile_pic" class="rounded-circle" style="height:150px;width:200px"/>
 
@@ -182,58 +181,27 @@ var demo = new Vue({
   methods: {
 
       addToCart: function(serviceId) {
-          let api_url = `/api/orders/entries/add/${serviceId}/`
-          this.$http.post(api_url).then(function(response){
-                onAlert("Service added to cart.")
-          }).catch(function(err){
-              if(err.status === 401) {
-                  onWarning("Please login to add to cart.")
-              }
-              if(err.body.message) {
-                  onWarning(err.body.message)
-              }
-          })
+          addToCart(serviceId, this)
       },
 
       getParentCategories: function() {
-        let api_url = '/api/services/main-categories/'
-          this.$http.get(api_url).then(function(response){
-              this.parentCategories = response.data.results  //this.parentCategories.concat(response.data.results)//
-          })
+        getParentCategories(this)
       },
 
       getSubCategories: function() {
-        let api_url = `/api/services/sub-categories/${this.parentCategoryId}/`
-        this.$http.get(api_url).then(function(response){
-            this.subCategories = response.data.results
-        })
+        getSubCategories(this)
       },
 
       getServiceCategories: function() {
-        let api_url = `/api/services/${this.currentService.id}/categories/`
-        this.$http.get(api_url).then(function(response){
-            this.serviceCategories = response.body
-        })
+        getServiceCategories(this)
       },
 
       removeCategory: function(categoryId) {
-          let api_url = `/api/services/${this.currentService.id}/remove/${categoryId}/`
-          this.$http.post(api_url).then(function(response){
-            this.getServiceCategories()
-          }).catch(function(err){
-                  const message = err.body.message
-                  onWarning(message)
-              })
+          removeCategory(categoryId, this)
       },
 
       addCategory: function(categoryId) {
-          let api_url = `/api/services/${this.currentService.id}/add/${categoryId}/`
-          this.$http.post(api_url).then(function(response){
-              this.getServiceCategories()
-          }).catch(function(err){
-                  const message = err.body.message
-                  onWarning(message)
-              })
+          addCategory(categoryId, this)
       },
 
       getServices: function() {
@@ -243,29 +211,12 @@ var demo = new Vue({
         })
       },
 
-      getService: function(id) {
-          let api_url = `/api/services/${id}/`
-          this.$http.get(api_url).then(function(response){
-              this.currentService = response.data;
-              this.getServiceCategories()
-              $('#editServiceModal').modal('show')
-          })
+      getService: function(serviceId) {
+          getService(serviceId, this)
       },
 
-      deleteService: function(id) {
-        let api_url = `/api/services/${id}/`
-        const self = this
-        onDeletion("Are you sure you want to delete this service?", function(value){
-            if(value) {
-                self.$http.delete(api_url).then(function (response) {
-                    const service = response.data
-                    onAlert('The service has been deleted')
-                    self.getServices()
-                })
-            }
-        })
-
-
+      deleteService: function(serviceId) {
+        deleteService(serviceId, this)
       },
 
       updateService: function() {

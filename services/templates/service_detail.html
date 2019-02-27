@@ -121,18 +121,9 @@
         methods:  {
 
             addToCart: function() {
-              let api_url = `/api/orders/entries/add/${this.currentService.id}/`
-              this.$http.post(api_url).then(function(response){
-                    onAlert("Service added to cart.")
-              }).catch(function(err){
-                  if(err.status === 401) {
-                      onWarning("Please login to add to cart.")
-                  }
-                  if(err.body.message) {
-                      onWarning(err.body.message)
-                  }
-              })
-          },
+                addToCart(this.currentService.id, this)
+            },
+
             getService: function() {
                this.$http.get(this.serviceUrl).then(function(response){
                    this.currentService = response.data
@@ -150,7 +141,8 @@
                 onDeletion('Are you sure you want to delete this service?', function(value){
                     if(value) {
                         self.$http.delete(self.serviceUrl).then(function(response) {
-                            onAlert(`Service: ${self.currentService.name} has been deleted`)
+                            onAlert(`Service has been deleted.`)
+                            window.location.replace('/user/{{request.user.username}}')
                         }).catch(function(err){
 
                         })
@@ -228,44 +220,23 @@
             },
 
           getParentCategories: function() {
-            let api_url = '/api/services/main-categories/'
-              this.$http.get(api_url).then(function(response){
-                  this.parentCategories = response.data.results  //this.parentCategories.concat(response.data.results)//
-              })
+            getParentCategories(this)
           },
 
           getSubCategories: function() {
-            let api_url = `/api/services/sub-categories/${this.parentCategoryId}/`
-            this.$http.get(api_url).then(function(response){
-                this.subCategories = response.data.results
-            })
+            getSubCategories(this)
           },
 
           getServiceCategories: function() {
-            let api_url = `/api/services/${this.currentService.id}/categories/`
-            this.$http.get(api_url).then(function(response){
-                this.serviceCategories = response.body
-            })
+            getServiceCategories(this)
           },
 
           removeCategory: function(categoryId) {
-              let api_url = `/api/services/${this.currentService.id}/remove/${categoryId}/`
-              this.$http.post(api_url).then(function(response){
-                this.getServiceCategories()
-              }).catch(function(err){
-                  const message = err.body.message
-                  onWarning(message)
-              })
+              removeCategory(categoryId, this)
           },
 
           addCategory: function(categoryId) {
-              let api_url = `/api/services/${this.currentService.id}/add/${categoryId}/`
-              this.$http.post(api_url).then(function(response){
-                  this.getServiceCategories()
-              }).catch(function(err){
-                  const message = err.body.message
-                  onWarning(message)
-              })
+              addCategory(categoryId, this)
           },
         }
     })

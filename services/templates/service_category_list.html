@@ -2,8 +2,8 @@
 
 {% block content %}
 
-<div id="services-category-app">
-    <h1>{{category.name}}</h1>
+<div id="services-category-app" style="padding-top:3rem">
+    {% include '_service_list.html' %}
 </div>
 
 <script>
@@ -12,15 +12,70 @@ const servicesCategory = new Vue({
     el: '#services-category-app',
     delimiters: ['${','}'],
     data: {
-        api_url: "",
+        api_url: "/api/services/categories/{{category.name}}/services/",
+        services: [],
+        parentCategories: [],
+        parentCategoryId: "",
+        subCategories: [],
+        serviceCategories: [],
+        currentService: {},
+
 
     },
 
     mounted: function() {
-
+        this.getServices()
+        this.getParentCategories()
     },
 
     methods: {
+        getServices: function() {
+            getServices(this)
+        },
+
+      getService: function(serviceId) {
+        getService(serviceId, this)
+      },
+
+      updateService: function() {
+          let api_url = `/api/services/${this.currentService.id}/`
+          this.$http.put(api_url, this.currentService).then(function (response) {
+              $('#editServiceModal').modal('toggle')
+              this.getServices()
+          }).catch(function (err) {
+              console.log(err)
+              let jsonerr = JSON.parse(err.bodyText)
+              attachFormErrors(jsonerr, true, 'service')
+          })
+      },
+
+       deleteService: function(serviceId) {
+            deleteService(serviceId, this)
+        },
+
+      addToCart: function(serviceId) {
+            addToCart(serviceId, this)
+      },
+
+      getParentCategories: function() {
+        getParentCategories(this)
+      },
+
+      getSubCategories: function() {
+        getSubCategories(this)
+      },
+
+      getServiceCategories: function() {
+        getServiceCategories(this)
+      },
+
+      removeCategory: function(categoryId) {
+        removeCategory(categoryId, this)
+      },
+
+      addCategory: function(categoryId) {
+        addCategory(categoryId, this)
+      },
 
     }
 })

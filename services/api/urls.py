@@ -9,6 +9,7 @@ urlpatterns = [
     path('categories/', views.CategoryListAPIView.as_view(), name='category-list-api'),
     path('categories/create/', views.CategoryCreateAPIView.as_view(), name='category-create-api'),
     path('categories/<pk>/', views.CategoryDetailAPIView.as_view(), name='category-detail-api'),
+    path('categories/<category_name>/services/', views.CategoryServiceListAPIView.as_view(), name='category-service-list-api'),
     path('main-categories/', views.MainCategoryListAPIView.as_view(), name='main-category-list-api'),
     path('sub-categories/<pk>/', views.SubCategoryListAPIView.as_view(), name='sub-category-list-api'),
     path('<service_pk>/categories/', views.ServiceCategoryListAPIView.as_view(), name='service-category-list-api'),

@@ -57,6 +57,17 @@ class UserServiceListAPIView(generics.ListAPIView):
         return qs
 
 
+class CategoryServiceListAPIView(generics.ListAPIView):
+    serializer_class = ServiceSerializer
+    pagination_class = pagination.StandardResultsPagination
+
+    def get_queryset(self, *args, **kwargs):
+        category_name = self.kwargs['category_name']
+        category = get_object_or_404(CategoryModel, name__iexact=category_name)
+        qs = ServiceModel.objects.filter(category=category).order_by('name')
+        return qs
+
+
 class ServiceReviewListAPIView(generics.ListAPIView):
     serializer_class = ReviewSerializer
     pagination_class = pagination.StandardResultsPagination
@@ -117,7 +128,7 @@ class AddCategoryAPIView(APIView):
 # CATEGORIES
 class CategoryListAPIView(generics.ListAPIView):
     serializer_class = CategorySerializer
-    queryset = CategoryModel.objects.all()
+    queryset = CategoryModel.objects.all().order_by('name')
     pagination_class = pagination.StandardResultsPagination
 
 
@@ -134,7 +145,7 @@ class SubCategoryListAPIView(generics.ListAPIView):
     def get_queryset(self, *args, **kwargs):
         category_parent_id = self.kwargs['pk']
         category = get_object_or_404(CategoryModel, pk=category_parent_id)
-        sub_categories = category.children.all()
+        sub_categories = category.children.all().order_by('name')
         return sub_categories
 
 
