@@ -1,0 +1,5 @@
+<div class="form-group">
+    <select class="form-control" id="parent_category" @change="onOrderChange()" v-model="currentOrder">
+        <option v-for="order in orderingList" :value="order.value">${order.label}</option>
+    </select>
+</div>

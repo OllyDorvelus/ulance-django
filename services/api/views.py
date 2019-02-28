@@ -60,6 +60,9 @@ class UserServiceListAPIView(generics.ListAPIView):
 class CategoryServiceListAPIView(generics.ListAPIView):
     serializer_class = ServiceSerializer
     pagination_class = pagination.StandardResultsPagination
+    filter_backends = (DjangoFilterBackend, OrderingFilter)
+    ordering_fields = ("price", "average_rating", "purchases")
+    filterset_class = ServiceFilter
 
     def get_queryset(self, *args, **kwargs):
         category_name = self.kwargs['category_name']

@@ -3,7 +3,14 @@
 {% block content %}
 
 <div id="services-category-app" style="padding-top:3rem">
-    {% include '_service_list.html' %}
+    <div class="container">
+        <div class="row">
+            <div class="col-xl-3 col-lg-3 col-md-5 col-sm-10 col-10" style="margin-left:1rem">
+                {% include '_order_select.html' %}
+            </div>
+        </div>
+        {% include '_service_list.html' %}
+    </div>
 </div>
 
 <script>
@@ -13,12 +20,25 @@ const servicesCategory = new Vue({
     delimiters: ['${','}'],
     data: {
         api_url: "/api/services/categories/{{category.name}}/services/",
+        servicesUrl : "/api/services/categories/{{category.name}}/services/",
+        currentOrder: "",
         services: [],
         parentCategories: [],
         parentCategoryId: "",
         subCategories: [],
         serviceCategories: [],
+        pages: [],
+        currentPage: 1,
+        count: 0,
         currentService: {},
+        orderingList: [{label: 'Sort', value: ""},
+            {label: 'Price (Lowest)', value: 'price'},
+            {label: 'Price (Highest)', value: '-price'},
+            {label: 'Purchases (Lowest)', value: 'purchases'},
+            {label: 'Purchases (Highest)', value: '-purchases'},
+            {label: 'Rating (Lowest)', value: 'average_rating'},
+            {label: 'Rating (Highest)', value:'-average_rating'},
+            ]
 
 
     },
@@ -26,11 +46,13 @@ const servicesCategory = new Vue({
     mounted: function() {
         this.getServices()
         this.getParentCategories()
+       // this.parentCategoryId = this.parentCategories[0].id
+        console.log(this.parentCategories)
     },
 
     methods: {
         getServices: function() {
-            getServices(this)
+            getServices(this, this.servicesUrl)
         },
 
       getService: function(serviceId) {
@@ -47,6 +69,20 @@ const servicesCategory = new Vue({
               let jsonerr = JSON.parse(err.bodyText)
               attachFormErrors(jsonerr, true, 'service')
           })
+      },
+
+     getPages: function() {
+        const totalResults = this.count
+        this.pages = Math.floor(totalResults / ) + 1
+     },
+
+      onOrderChange: function() {
+        if(this.currentOrder.value === "") {
+            this.servicesUrl = this.api_url
+        } else {
+            this.servicesUrl = `/api/services/categories/{{category.name}}/services/?ordering=${this.currentOrder}`
+        }
+        this.getServices()
       },
 
        deleteService: function(serviceId) {

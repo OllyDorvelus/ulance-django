@@ -74,10 +74,19 @@ function addToCart(serviceId, _this) {
 }
 
 // SERVICES
-function getServices(_this) {
-    _this.$http.get(_this.api_url).then(function(response){
+function getServices(_this, api_url) {
+    if (api_url) {
+    _this.$http.get(api_url).then(function(response){
         _this.services = response.data.results
+        _this.count = response.data.count
     })
+    } else {
+
+        _this.$http.get(_this.api_url).then(function (response) {
+            _this.services = response.data.results
+            _this.count = response.data.count
+        })
+    }
 }
 
 function getService(serviceId, _this) {
@@ -111,6 +120,10 @@ function getParentCategories(_this) {
     let api_url = '/api/services/main-categories/'
       _this.$http.get(api_url).then(function(response){
           _this.parentCategories = response.data.results  //this.parentCategories.concat(response.data.results)//
+          if(_this.parentCategories[0]) {
+              _this.parentCategoryId = _this.parentCategories[0].id
+              getSubCategories(_this)
+          }
       })
 }
 
