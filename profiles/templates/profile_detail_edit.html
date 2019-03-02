@@ -127,8 +127,10 @@
         </div>
 
     </div>
+    <div class="loading" v-if="loading===true">Loading&#8230;</div>
     <div style="padding-bottom:2rem"></div>
     {% include '_service_list.html' %}
+    <div v-if="nextUrl" class="ulance-btn" v-on:click="loadMore">Load More</div>
 </div>
 
 <script>
@@ -162,8 +164,9 @@ var demo = new Vue({
     newCertification: {'name': null, 'issued_form': null, 'year_issued': null},
     user: {},
     user_url: '/api/profiles/user/{{User.username}}/',
-    selectedFile: null
-
+    selectedFile: null,
+    loading: true,
+    nextUrl: null,
 
   },
 
@@ -204,10 +207,19 @@ var demo = new Vue({
           addCategory(categoryId, this)
       },
 
-      getServices: function() {
-        let api_url = '/api/services/{{User.username}}/services/'
+      loadMore: function() {
+        this.getServices(this.nextUrl)
+      },
+
+      getServices: function(next_url) {
+        this.loading = true
+        const api_url = next_url ? next_url : '/api/services/{{User.username}}/services/'
         this.$http.get(api_url).then(function(response){
-            this.services = response.data.results
+            this.services = this.services.concat(response.data.results)
+        //    this.nextUrl = response.data.next
+            this.loading = false
+        }).catch(function(err){
+
         })
       },
 
@@ -220,34 +232,41 @@ var demo = new Vue({
       },
 
       updateService: function() {
+        this.loading = true
         let api_url = `/api/services/${this.currentService.id}/`
         this.$http.put(api_url, this.currentService).then(function(response){
             $('#editServiceModal').modal('toggle')
             this.getServices()
         }).catch(function(err){
-            console.log(err)
+            this.loading = false
             let jsonerr = JSON.parse(err.bodyText)
             attachFormErrors(jsonerr, true, 'service')
         })
       },
 
       getLinks: function() {
+        this.loading = true
         let api_url = '/api/profiles/{{User.username}}/links/'
         this.$http.get(api_url).then(function(response){
             this.links = response.data.results
+            this.loading = false
         }).catch(function(err){
+            this.loading = false
             console.log(err)
         })
 
       },
 
       getLink: function(id) {
+          this.loading = true
           let api_url = `/api/profiles/links/${id}/`
           this.$http.get(api_url).then(function(response){
               console.log(response.data)
               this.currentLink = response.data;
+              this.loading = false
               $("#editLinkModal").modal('show')
           }).catch(function(err){
+            this.loading = false
             console.log(err)
           })
       },
@@ -257,6 +276,7 @@ var demo = new Vue({
         this.$http.post(api_url, this.newLink).then(function(response){
             $('#addLinkModal').modal('toggle')
             this.getLinks()
+            this.newLink = {}
         }).catch(function(err){
             let jsonerr = JSON.parse(err.bodyText)
             attachFormErrors(jsonerr)
@@ -264,13 +284,13 @@ var demo = new Vue({
       },
 
       updateLink: function() {
+          this.loading = true
           let api_url = `/api/profiles/links/${this.currentLink.id}/`
           this.$http.put(api_url, this.currentLink).then(function(response) {
             this.getLinks()
             $('#editLinkModal').modal('toggle')
           }).catch(function(err) {
-            //  console.log(err)
-             // console.log(err.body)
+              this.loading = false
               let jsonerrs = JSON.parse(err.bodyText)
               attachFormErrors(jsonerrs, true)
           })
@@ -285,7 +305,7 @@ var demo = new Vue({
                     onAlert('The link has been deleted.')
                     self.getLinks()
                 }).catch(function (err) {
-                    console.log(err)
+
 
                 })
             }
@@ -295,20 +315,25 @@ var demo = new Vue({
       },
 
       getCertifications: function() {
+          this.loading = true
           let api_url = '/api/profiles/{{User.username}}/certifications/'
           this.$http.get(api_url).then(function(response){
               this.certifications = response.data.results
+              this.loading = false
           }).catch(function(err){
-            console.log(err)
+            this.loading = false
           })
       },
 
       getCertification: function(id) {
+          this.loading = true
           let api_url = `/api/profiles/certifications/${id}/`
           this.$http.get(api_url).then(function(response){
               this.currentCertification = response.data;
+              this.loading = false
               $('#editCertificationModal').modal('show');
           }).catch(function(err){
+              this.loading = false
               console.log(err)
           })
       },
@@ -318,6 +343,7 @@ var demo = new Vue({
           this.$http.post(api_url, this.newCertification).then(function(response){
               this.getCertifications()
               $('#addCertificationModal').modal('toggle')
+              this.newCertification = {}
           }).catch(function(err){
               let jsonerr = JSON.parse(err.bodyText)
               attachFormErrors(jsonerr)
@@ -325,11 +351,13 @@ var demo = new Vue({
       },
 
       updateCertification: function() {
+          this.loading = true
           let api_url = `/api/profiles/certifications/${this.currentCertification.id}/`
           this.$http.put(api_url, this.currentCertification).then(function(response){
               this.getCertifications()
               $('#editCertificationModal').modal('toggle')
           }).catch(function(err){
+            this.loading = false
             let jsonerr = JSON.parse(err.bodyText)
             attachFormErrors(jsonerr, true)
           })
@@ -351,21 +379,25 @@ var demo = new Vue({
       },
 
       getSkill: function(id) {
+          this.loading = true
           let api_url = `/api/profiles/levels/${id}/`
           this.$http.get(api_url).then(function(response){
               this.currentSkill = response.data
+              this.loading = false
               $('#editSkillModal').modal('show')
           }).catch(function(err){
-
+              this.loading = false
           })
       },
 
       getSkills: function() {
+        this.loading = true
         let api_url = '/api/profiles/{{User.username}}/levels/'
         this.$http.get(api_url).then(function(response){
             this.skills = response.data.results
+            this.loading = false
         }).catch(function(err){
-
+            this.loading = false
         })
       },
 
@@ -374,6 +406,7 @@ var demo = new Vue({
           this.$http.post(api_url, this.newSkill).then(function(resposne){
               this.getSkills()
               $('#addSkillModal').modal('toggle')
+              this.newSkill = {}
           }).catch(function(err){
               console.log(err)
               let jsonerr = JSON.parse(err.bodyText)
@@ -382,11 +415,13 @@ var demo = new Vue({
       },
 
       updateSkill: function() {
+        this.loading = true
         let api_url = `/api/profiles/levels/${this.currentSkill.id}/`
         this.$http.put(api_url, this.currentSkill).then(function(resposne){
             this.getSkills()
             $('#editSkillModal').modal('toggle')
         }).catch(function(err){
+            this.loading = false
             let jsonerr = JSON.parse(err.bodyText)
             attachFormErrors(jsonerr, true)
         })
@@ -408,21 +443,25 @@ var demo = new Vue({
       },
 
       getEducation: function(id) {
+        this.loading = true
         let api_url = `/api/profiles/educations/${id}/`
           this.$http.get(api_url).then(function(response){
               this.currentEducation = response.data
+              this.loading = false
               $('#editEducationModal').modal('show')
           }).catch(function(err){
-
+               this.loading = false
           })
       },
 
       getEducations: function() {
+          this.loading = true
           let api_url = '/api/profiles/{{User.username}}/educations/'
           this.$http.get(api_url).then(function(response){
               this.educations = response.data.results
+              this.loading = false
           }).catch(function(err){
-
+            this.loading = false
           })
       },
 
@@ -431,6 +470,7 @@ var demo = new Vue({
           this.$http.post(api_url, this.newEducation).then(function(){
               this.getEducations()
               $('#addEducationModal').modal('toggle')
+              this.newEducation = {}
           }).catch(function(err){
             let jsonerr = JSON.parse(err.bodyText)
             attachFormErrors(jsonerr, true)
@@ -438,6 +478,7 @@ var demo = new Vue({
       },
 
       updateEducation: function() {
+        this.loading = true
         let api_url = `/api/profiles/educations/${this.currentEducation.id}/`
           this.$http.put(api_url, this.currentEducation).then(function(resposne){
             this.getEducations()

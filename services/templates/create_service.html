@@ -75,17 +75,11 @@
             },
 
             getParentCategories: function() {
-                let api_url = '/api/services/main-categories/'
-                this.$http.get(api_url).then(function(response) {
-                    this.parentCategories = response.data.results
-                })
+                getParentCategories(this)
             },
 
           getSubCategories: function() {
-            let api_url = `/api/services/sub-categories/${this.parentCategoryId}/`
-            this.$http.get(api_url).then(function(response){
-                this.subCategories = response.data.results
-            })
+              getSubCategories(this)
           },
 
           addCategory: function(categoryId) {
@@ -95,7 +89,7 @@
                 if ( !this.serviceCategories.includes(category) ){
                     this.serviceCategories.push(category)
                     this.newService.category.push(category.id)
-                }
+                } else onWarning('Category already added!')
 
           },
 

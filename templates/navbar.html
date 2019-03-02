@@ -38,6 +38,8 @@
               <div class="dropdown-menu text-center" style="font-size:.9rem" aria-labelledby="navbarDropdownMenuLink">
                   <a class="dropdown-item" href="{{request.user.profile.get_absolute_url}}">View Profile</a>
                   <a class="dropdown-item" href="{% url 'services:service-create' %}">Create Service</a>
+                  <a class="dropdown-item" href="#">Manage Orders</a>
+                  <a class="dropdown-item" href="#">Order History</a>
                   <a class="dropdown-item" href="#">Account Settings</a>
                   <span class="dropdown-item logout-btn" onclick="logout()">Logout</span>
               </div>

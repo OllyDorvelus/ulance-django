@@ -26,6 +26,7 @@
                 </div>
 
             </div>
+            <div class="loading" v-if="loading===true">Loading&#8230;</div>
         </div>
 
     </div>
@@ -41,6 +42,7 @@
             cart: {},
             entries: [],
             currentEntry: {},
+            loading: true,
         },
 
         mounted: function() {
@@ -52,6 +54,7 @@
                 this.$http.get(this.api_url).then(function(response){
                     this.cart = response.data
                     this.entries = response.data.cart_entries
+                    this.loading = false
                 }).catch(function(err){
 
                 })
@@ -69,24 +72,27 @@
                                 onWarning(err.body.message)
                             }
                         })
-                    }
+                    } else self.loading = false
                 })
             },
 
             incrementEntry: function(entryId) {
+                this.loading = true
                 let api_url = `/api/orders/entries/${entryId}/`
                 this.$http.get(api_url).then(function(response){
                     this.currentEntry = response.data
                     this.currentEntry.quantity += 1
                     this.$http.put(api_url, this.currentEntry).then(function(response){
                         this.getCart()
+                        this.loading = false
                     })
                 }).catch(function(err){
-
+                        this.loading = false
                 })
             },
 
             decrementEntry: function(entryId) {
+                this.loading = true
                 let api_url = `/api/orders/entries/${entryId}/`
                 this.$http.get(api_url).then(function(response){
                     this.currentEntry = response.data
@@ -96,8 +102,8 @@
                         return
                     }
 
-                    this.$http.put(api_url, this.currentEntry).then(async function(response){
-                        await this.getCart()
+                    this.$http.put(api_url, this.currentEntry).then(function(response){
+                        this.getCart()
                     })
                 }).catch(function(err){
 

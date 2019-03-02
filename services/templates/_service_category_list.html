@@ -2,3 +2,4 @@
     <span class="badge badge-info badge-pill" style="font-size:.8rem">${category.name}
         <i class="fa fa-times" v-on:click="removeCategory(category.id)"></i></span>
 </div>
+<div class="loading" v-if="loading===true">Loading&#8230;</div>

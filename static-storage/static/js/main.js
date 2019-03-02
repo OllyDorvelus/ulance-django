@@ -81,7 +81,6 @@ function getServices(_this, api_url) {
         _this.count = response.data.count
     })
     } else {
-
         _this.$http.get(_this.api_url).then(function (response) {
             _this.services = response.data.results
             _this.count = response.data.count
@@ -90,10 +89,12 @@ function getServices(_this, api_url) {
 }
 
 function getService(serviceId, _this) {
+    _this.loading = true
     let api_url = `/api/services/${serviceId}/`
     _this.$http.get(api_url).then(function(response){
       _this.currentService = response.data;
       _this.getServiceCategories()
+      _this.loading = false
       $('#editServiceModal').modal('show')
     })
 }
@@ -128,16 +129,24 @@ function getParentCategories(_this) {
 }
 
 function getSubCategories(_this) {
+    _this.loading = true
     let api_url = `/api/services/sub-categories/${_this.parentCategoryId}/`
     _this.$http.get(api_url).then(function(response){
         _this.subCategories = response.data.results
+        _this.loading = false
+    }).catch(function(err){
+        _this.loading = false
     })
 }
 
 function getServiceCategories(_this) {
+    _this.loading = true
     let api_url = `/api/services/${_this.currentService.id}/categories/`
     _this.$http.get(api_url).then(function(response){
         _this.serviceCategories = response.body
+        _this.loading = false
+    }).catch(function(err){
+        _this.loading = false
     })
 }
 

@@ -3,4 +3,5 @@
     <select class="form-control" id="parent_category" @change="getSubCategories()" v-model="parentCategoryId">
         <option v-for="category in parentCategories" :value="category.id">${category.name}</option>
     </select>
+    <div class="loading" v-if="loading===true">Loading&#8230;</div>
 </div>
