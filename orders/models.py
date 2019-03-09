@@ -91,7 +91,7 @@ class EntryModel(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
 
     def clean(self, *args, **kwargs):
-        if self.cart.cart_entries:
+        if self.cart:
             if self.cart.cart_entries.filter(service=self.service):
                 raise ValidationError("Service already in cart")
         if self.order and self.cart:

@@ -1,0 +1,34 @@
+{% load static %}
+<div>
+    <div v-for="entry in entryOrders">
+        <div class="row">
+            <div class="col-xl-7 offset-xl-2 col-lg-7 offset-lg-2 col-md-8 offset-md-1 col-sm-10 col-10" id="entry-order-section">
+                <div class="card">
+                    <div class="card-header-section text-center"><h5>${entry.service.name}</h5><span><strong>$${entry.service.price}</strong></span></div>
+                  <div class="card-body">
+                    <img v-if="entry.service.photos.length > 0" class="img-fluid" :src="entry.service.photos[0]">
+                    <img v-else class="img-fluid" src="{% static 'static/img/ULance_black.png' %}">
+                    <p class="card-text text-center">${entry.service.description}</p>
+                    <form>
+                        <select class="form-control" name="status" style="width:40%">
+                            <option value="ORD">Ordered</option>
+                            <option value="INP">In Progress</option>
+                        </select>
+                    </form>
+                    <button class="btn ulance-btn">Change Status</button>
+                  </div>
+                    <div class="form-control btn ulance-btn" style="width:40%">Complete Order</div>
+                  <div class="card-footer">
+                     <div id="requested-user-section">
+                         <div><span>Requested by: <a :href="entry.order.buyer.profile.url"><strong>${entry.order.buyer.username}</strong></a></span>
+                            <img class="img-fluid rounded-circle" :src="entry.order.buyer.profile.profile_pic"></div>
+                     </div>
+                </div>
+            </div>
+
+            </div>
+
+
+        </div>
+    </div>
+</div>

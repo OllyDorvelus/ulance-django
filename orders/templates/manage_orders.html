@@ -1,0 +1,35 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div id="manage-orders-app" class="container">
+    {% include '_entry_order_list.html' %}
+    <div class="loading" v-if="loading===true">Loading&#8230;</div>
+</div>
+
+<script>
+    Vue.http.headers.common['X-CSRFToken'] = "{{ csrf_token }}";
+    var manageOrders = new Vue({
+        el:'#manage-orders-app',
+        delimiters: ['${','}'],
+        data: {
+            entryOrders: [],
+            loading: true
+        },
+
+        mounted: function() {
+            this.getEntryOrders()
+        },
+
+        methods: {
+
+            getEntryOrders: function() {
+               let api_url = `/api/orders/manage/`
+               this.$http.get(api_url).then(function(response){
+                  this.entryOrders = response.data.results
+                  this.loading = false
+               })
+            }
+        }
+    })
+</script>
+{% endblock content %}

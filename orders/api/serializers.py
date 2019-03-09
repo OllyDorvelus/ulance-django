@@ -17,7 +17,27 @@ class EntrySerializer(serializers.ModelSerializer):
     class Meta:
         model = EntryModel
         fields = '__all__'
-        read_only_fields = ['days_remaining', 'is_ordered', 'order', 'cart', 'service', 'seller_notes', 'status', 'is_delivered']
+        read_only_fields = ['days_remaining', 'is_ordered', 'order', 'cart', 'service', 'seller_notes', 'status',
+                            'is_delivered']
+
+
+class ServiceOrderUserSerializer(serializers.ModelSerializer):
+    buyer = UserModelSerializer(read_only=True)
+
+    class Meta:
+        model = ServiceOrderModel
+        fields = '__all__'
+
+
+class EntryServiceOrderSerializer(serializers.ModelSerializer):
+    service = ServiceSerializer(read_only=True)
+    order = ServiceOrderUserSerializer(read_only=True)
+
+    class Meta:
+        model = EntryModel
+        fields = '__all__'
+        read_only_fields = ['days_remaining', 'is_ordered', 'order', 'cart', 'service', 'seller_notes', 'status',
+                            'is_delivered']
 
 
 class ServiceOwnerEntrySerializer(serializers.ModelSerializer):

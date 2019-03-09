@@ -4,13 +4,14 @@ from rest_framework.filters import OrderingFilter
 from django_filters.rest_framework import DjangoFilterBackend
 from ulance import pagination
 from .serializers import ( ServiceOrderSerializer, ServiceOrderCreateSerializer, CartSerializer,
-                           EntrySerializer, EntryCreateSerializer, ServiceOwnerEntrySerializer, ComplaintSerializer )
+                           EntrySerializer, EntryCreateSerializer, ServiceOwnerEntrySerializer, ComplaintSerializer, EntryServiceOrderSerializer )
 from orders.models import ServiceOrderModel, EntryModel, CartModel, ComplaintModel
 from services.models import ServiceModel
 from django.shortcuts import get_object_or_404
 from ulance.custom_permissions import EntryUserPermissions, EntryServiceUserPermissions, ComplaintUserPermissions
 from rest_framework.response import Response
 from rest_framework import status
+from django.db.models import Q
 
 
 User = get_user_model()
@@ -55,13 +56,26 @@ class OrderCreateAPIView(generics.CreateAPIView):
 
 
 class ServiceOrderListAPIView(generics.ListAPIView):
-    serializer_class = EntrySerializer
+    serializer_class = EntryServiceOrderSerializer
     pagination_class = pagination.StandardResultsPagination
     permission_classes = [permissions.IsAuthenticated, EntryServiceUserPermissions]
 
     def get_queryset(self, *args, **kwargs):
         user = self.request.user
-        qs = EntryModel.objects.filter(service__user=user, is_ordered=True)
+        valid_status = ['ORD', 'INP']
+        qs = EntryModel.objects.filter(service__user=user, is_ordered=True, status__in=valid_status)
+        return qs
+
+
+class ServiceOrderCompleteListAPIView(generics.ListAPIView):
+    serializer_class = EntryServiceOrderSerializer
+    pagination_class = pagination.StandardResultsPagination
+    permission_classes = [permissions.IsAuthenticated, EntryServiceUserPermissions]
+
+    def get_queryset(self, *args, **kwargs):
+        user = self.request.user
+        valid_status = ['COM']
+        qs = EntryModel.objects.filter(service__user=user, is_ordered=True, status__in=valid_status)
         return qs
 
 
