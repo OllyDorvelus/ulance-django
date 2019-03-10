@@ -1,6 +1,6 @@
 from rest_framework import generics, permissions, mixins
-from .serializers import ( ServiceSerializer, CategorySerializer, ServiceCreateSerializer )
-from services.models import ServiceModel, CategoryModel
+from .serializers import ( ServiceSerializer, CategorySerializer, ServiceCreateSerializer, JobSerializer )
+from services.models import ServiceModel, CategoryModel, JobModel
 from ulance import pagination
 from ulance.custom_permissions import MyUserPermissions, MyAdminPermission, StrictUserPermissions
 from django.contrib.auth import get_user_model
@@ -128,8 +128,86 @@ class AddCategoryAPIView(APIView):
             return Response({"message": "Category added"}, status=201)
         return Response({'message': message}, status=400)
 
+# JOBS
+
+
+class RemoveJobCategoryAPIView(APIView):
+    permission_classes = [permissions.IsAuthenticated]
+
+    def post(self, request, *args, **kwargs):
+        category_pk = self.kwargs['category_pk']
+        service_pk = self.kwargs['service_pk']
+
+        category = CategoryModel.objects.filter(pk=category_pk).first()#get_object_or_404(CategoryModel, category_pk)
+        job = JobModel.objects.filter(pk=service_pk).first()#get_object_or_404(ServiceModel, service_pk)
+        if category is None or job is None:
+            return Response({'message': 'Invalid category or job'}, status=404)
+        if request.user != job.user or not request.user.is_superuser:
+            return Response({'message': 'Not Authorized To Perform This Action'}, status=401)
+        message = "Category is not listed in service"
+        if job.category.filter(pk=category.pk).exists():
+            job.category.remove(category)
+            job.save()
+            return Response({"message": "Category removed"}, status=201)
+        return Response({'message': message}, status=400)
+
+
+class AddJobCategoryAPIView(APIView):
+    permission_classes = [permissions.IsAuthenticated]
+
+    def post(self, request, *args, **kwargs):
+        category_pk = self.kwargs['category_pk']
+        job_pk = self.kwargs['job_pk']
+
+        category = CategoryModel.objects.filter(pk=category_pk).first()
+        job = JobModel.objects.filter(pk=job_pk).first()
+        if category is None or job is None:
+            return Response({'message': 'Invalid category or job'}, status=404)
+        if request.user != job.user or not request.user.is_superuser:
+            return Response({'message': 'Not Authorized To Perform This Action'}, status=401)
+        message = "Service already has this category"
+        if not job.category.filter(pk=category.pk).exists():
+            if job.category.filter(is_parent=False).count() > 10:
+                return Response({'message': 'Can not exceed more than 10 sub categories'}, status=400)
+            if job.category.filter(is_parent=True).count() > 3:
+                return Response({'message': 'Can not exceed more than 3 main categories'}, status=400)
+            job.category.add(category)
+            job.save()
+            return Response({"message": "Category added"}, status=201)
+        return Response({'message': message}, status=400)
+
+
+class JobListAPIView(generics.ListAPIView):
+    serializer_class = JobSerializer
+    queryset = JobModel.objects.all().order_by('created_at')
+    pagination_class = pagination.StandardResultsPagination
+    filter_backends = (DjangoFilterBackend, OrderingFilter)
+    ordering_fields = ("name",)
+  #  filterset_class = JobFilter
+
+
+class JobCreateAPIView(generics.CreateAPIView):
+    serializer_class = JobSerializer
+    permission_classes = [permissions.IsAuthenticated]
+
+    def perform_create(self, serializer):
+        serializer.save(user=self.request.user)
+
+
+class JobDetailAPIView(generics.RetrieveAPIView, mixins.DestroyModelMixin, mixins.UpdateModelMixin):
+    serializer_class = JobSerializer
+    queryset = JobModel.objects.all()
+    permission_classes = [MyUserPermissions]
+
+    def put(self, request, *args, **kwargs):
+        return self.update(request, *args, **kwargs)
+
+    def delete(self, request, *args, **kwargs):
+        return self.destroy(self, request, *args, **kwargs)
 
 # CATEGORIES
+
+
 class CategoryListAPIView(generics.ListAPIView):
     serializer_class = CategorySerializer
     queryset = CategoryModel.objects.all().order_by('name')

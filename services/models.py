@@ -96,7 +96,10 @@ class JobModel(models.Model):
         ('COM', 'Completed'),
     )
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-    freelancer = models.OneToOneField(settings.AUTH_USER_MODEL, null=True, blank=True, on_delete=models.SET_NULL)
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, null=True, blank=True, on_delete=models.SET_NULL,
+                             related_name='jobs')
+    freelancer = models.ForeignKey(settings.AUTH_USER_MODEL, null=True, blank=True, on_delete=models.SET_NULL,
+                                   related_name='tasks')
     name = models.CharField(max_length=75, blank=False, null=False)
     category = models.ManyToManyField(CategoryModel, related_name='job', blank=True)
     description = models.TextField(max_length=10000, blank=False, null=False)
@@ -104,6 +107,12 @@ class JobModel(models.Model):
     status = models.CharField(choices=STATUS_CHOICES, default='NT', max_length=3)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return self.name
+
+    def get_absolute_url(self):
+        return reverse('services:job-detail', kwargs={'pk': self.pk})
 
 
 

@@ -5,85 +5,14 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="63eb0b42-2425-4a5e-8c02-66b32c04a7c1" name="Default" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/accounts/__init__.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/accounts/admin.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/accounts/api/__init__.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/accounts/api/permissions.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/accounts/api/serializers.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/accounts/api/urls.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/accounts/api/views.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/accounts/apps.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/accounts/migrations/__init__.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/accounts/templates/loginform.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/accounts/templates/registerform.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/accounts/tests/test_urls.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/accounts/tests/test_views.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/accounts/urls.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/accounts/validations.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/accounts/views.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/db.sqlite3" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/orders/admin.py" beforeDir="false" afterPath="$PROJECT_DIR$/orders/admin.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/orders/api/serializers.py" beforeDir="false" afterPath="$PROJECT_DIR$/orders/api/serializers.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/orders/api/urls.py" beforeDir="false" afterPath="$PROJECT_DIR$/orders/api/urls.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/orders/api/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/orders/api/views.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/orders/migrations/0001_initial.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/orders/migrations/0002_auto_20190201_2059.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/orders/migrations/0003_auto_20190201_2059.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/orders/migrations/0004_auto_20190201_2128.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/orders/migrations/0005_auto_20190201_2133.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/orders/migrations/0006_auto_20190202_1934.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/orders/migrations/0007_historicalserviceordermodel.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/orders/migrations/0008_remove_serviceordermodel_service.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/orders/migrations/0009_entrymodel_isordered.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/orders/migrations/0010_auto_20190202_2029.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/orders/migrations/0011_auto_20190202_2334.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/orders/migrations/0012_auto_20190203_0308.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/orders/migrations/0013_auto_20190203_1755.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/orders/migrations/0014_entrymodel_status.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/orders/migrations/0015_entrymodel_is_delivered.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/orders/migrations/0016_complaintmodel.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/orders/migrations/0017_auto_20190205_1730.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/orders/migrations/0018_auto_20190205_1737.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/orders/migrations/0019_auto_20190206_0059.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/orders/migrations/0020_auto_20190206_0102.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/orders/migrations/0021_auto_20190207_0329.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/orders/migrations/__init__.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/orders/models.py" beforeDir="false" afterPath="$PROJECT_DIR$/orders/models.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/orders/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/orders/views.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/profiles/admin.py" beforeDir="false" afterPath="$PROJECT_DIR$/profiles/admin.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/profiles/api/serializers.py" beforeDir="false" afterPath="$PROJECT_DIR$/profiles/api/serializers.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/profiles/api/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/profiles/api/views.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/profiles/migrations/0001_initial.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/profiles/migrations/0002_auto_20190127_0401.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/profiles/migrations/__init__.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/profiles/models.py" beforeDir="false" afterPath="$PROJECT_DIR$/profiles/models.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/db.sqlite3" beforeDir="false" afterPath="$PROJECT_DIR$/db.sqlite3" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/services/admin.py" beforeDir="false" afterPath="$PROJECT_DIR$/services/admin.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/services/api/filters.py" beforeDir="false" afterPath="$PROJECT_DIR$/services/api/filters.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/services/api/serializers.py" beforeDir="false" afterPath="$PROJECT_DIR$/services/api/serializers.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/services/api/urls.py" beforeDir="false" afterPath="$PROJECT_DIR$/services/api/urls.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/services/api/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/services/api/views.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/services/migrations/0001_initial.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/services/migrations/0002_auto_20190202_2302.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/services/migrations/0003_auto_20190202_2317.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/services/migrations/0004_auto_20190203_0308.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/services/migrations/0005_auto_20190205_0100.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/services/migrations/0006_auto_20190215_1736.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/services/migrations/0007_auto_20190216_1629.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/services/migrations/0008_servicemodel_delivery_time.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/services/migrations/0009_auto_20190217_2346.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/services/migrations/0010_auto_20190222_0324.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/services/migrations/0011_auto_20190222_0324.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/services/migrations/0012_auto_20190222_0331.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/services/migrations/__init__.py" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/services/models.py" beforeDir="false" afterPath="$PROJECT_DIR$/services/models.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/services/templates/_service_list.html" beforeDir="false" afterPath="$PROJECT_DIR$/services/templates/_service_list.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/services/templates/service_detail.html" beforeDir="false" afterPath="$PROJECT_DIR$/services/templates/service_detail.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/services/urls.py" beforeDir="false" afterPath="$PROJECT_DIR$/services/urls.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/services/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/services/views.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/templates/navbar.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/navbar.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ulance/context_processors.py" beforeDir="false" afterPath="$PROJECT_DIR$/ulance/context_processors.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ulance/custom_permissions.py" beforeDir="false" afterPath="$PROJECT_DIR$/ulance/custom_permissions.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ulance/models.py" beforeDir="false" afterPath="$PROJECT_DIR$/ulance/models.py" afterDir="false" />
     </list>
     <ignored path="src.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -117,18 +46,6 @@
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/profiles/admin.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="782">
-              <caret line="46" column="50" lean-forward="true" selection-start-line="46" selection-start-column="50" selection-end-line="46" selection-end-column="50" />
-              <folding>
-                <element signature="e#0#32#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/services/templates/_service_list.html">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="629">
@@ -149,8 +66,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/orders/api/serializers.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-730">
-              <caret line="28" column="22" selection-start-line="28" selection-start-column="22" selection-end-line="28" selection-end-column="22" />
+            <state relative-caret-position="391">
+              <caret line="23" column="18" selection-start-line="23" selection-start-column="18" selection-end-line="23" selection-end-column="18" />
               <folding>
                 <element signature="e#0#38#0" expanded="true" />
               </folding>
@@ -159,10 +76,46 @@
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/orders/api/views.py">
+        <entry file="file://$PROJECT_DIR$/orders/api/urls.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="783">
-              <caret line="75" column="27" selection-start-line="75" selection-start-column="27" selection-end-line="75" selection-end-column="27" />
+            <state relative-caret-position="136">
+              <caret line="8" column="100" lean-forward="true" selection-start-line="8" selection-start-column="100" selection-end-line="8" selection-end-column="100" />
+              <folding>
+                <element signature="e#0#28#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/services/api/urls.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="357">
+              <caret line="21" column="83" lean-forward="true" selection-start-line="21" selection-start-column="83" selection-end-line="21" selection-end-column="83" />
+              <folding>
+                <element signature="e#0#28#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/profiles/models.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="561">
+              <caret line="48" column="79" lean-forward="true" selection-start-line="48" selection-start-column="79" selection-end-line="48" selection-end-column="79" />
+              <folding>
+                <element signature="e#0#11#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/services/api/views.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="834">
+              <caret line="185" column="32" lean-forward="true" selection-start-line="185" selection-start-column="32" selection-end-line="185" selection-end-column="32" />
               <folding>
                 <element signature="e#0#56#0" expanded="true" />
               </folding>
@@ -170,44 +123,26 @@
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/orders/api/urls.py">
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/services/api/serializers.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="136">
-              <caret line="8" column="100" selection-start-line="8" selection-start-column="100" selection-end-line="8" selection-end-column="100" />
+            <state relative-caret-position="272">
+              <caret line="28" column="56" lean-forward="true" selection-start-line="28" selection-start-column="56" selection-end-line="28" selection-end-column="56" />
               <folding>
-                <element signature="e#0#28#0" expanded="true" />
+                <element signature="e#0#93#0" expanded="true" />
               </folding>
             </state>
           </provider>
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/orders/models.py">
+        <entry file="file://$PROJECT_DIR$/services/models.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="238">
-              <caret line="14" column="95" lean-forward="true" selection-start-line="14" selection-start-column="95" selection-end-line="14" selection-end-column="95" />
+            <state relative-caret-position="389">
+              <caret line="101" column="56" lean-forward="true" selection-start-line="101" selection-start-column="56" selection-end-line="101" selection-end-column="56" />
               <folding>
                 <element signature="e#0#28#0" expanded="true" />
               </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/services/templates/create_job.html">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="51">
-              <caret line="3" lean-forward="true" selection-start-line="3" selection-end-line="3" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/services/views.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="459">
-              <caret line="32" column="54" lean-forward="true" selection-start-line="32" selection-start-column="54" selection-end-line="32" selection-end-column="54" />
             </state>
           </provider>
         </entry>
@@ -225,8 +160,6 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>max_digits</find>
-      <find>decimalField</find>
       <find>user</find>
       <find>service</find>
       <find>portfolio_link</find>
@@ -252,9 +185,11 @@
       <find>length</find>
       <find>search</find>
       <find>perform_create</find>
-      <find>serviceOrderSerializ</find>
       <find>Seller</find>
       <find>addToCar</find>
+      <find>serviceOrderSerializ</find>
+      <find>f</find>
+      <find>JobSer</find>
     </findStrings>
     <replaceStrings>
       <replace>{% load static %}</replace>
@@ -276,8 +211,6 @@
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
       <list>
-        <option value="$PROJECT_DIR$/services/templates/service_category_list.html" />
-        <option value="$PROJECT_DIR$/services/templates/_service_category_list.html" />
         <option value="$PROJECT_DIR$/templates/forms/_category_selection.html" />
         <option value="$PROJECT_DIR$/static-storage/static/js/main.js" />
         <option value="$PROJECT_DIR$/templates/base.html" />
@@ -296,17 +229,13 @@
         <option value="$PROJECT_DIR$/ulance/models.py" />
         <option value="$PROJECT_DIR$/orders/models.py" />
         <option value="$PROJECT_DIR$/profiles/validators.py" />
-        <option value="$PROJECT_DIR$/services/models.py" />
         <option value="$PROJECT_DIR$/profiles/models.py" />
-        <option value="$PROJECT_DIR$/services/api/serializers.py" />
-        <option value="$PROJECT_DIR$/services/api/views.py" />
         <option value="$PROJECT_DIR$/accounts/api/serializers.py" />
         <option value="$PROJECT_DIR$/orders/views.py" />
         <option value="$PROJECT_DIR$/profiles/api/views.py" />
         <option value="$PROJECT_DIR$/ulance/custom_permissions.py" />
         <option value="$PROJECT_DIR$/services/api/filters.py" />
         <option value="$PROJECT_DIR$/orders/admin.py" />
-        <option value="$PROJECT_DIR$/services/admin.py" />
         <option value="$PROJECT_DIR$/services/validators.py" />
         <option value="$PROJECT_DIR$/ulance/settings/local.py" />
         <option value="$PROJECT_DIR$/ulance/context_processors.py" />
@@ -320,13 +249,19 @@
         <option value="$PROJECT_DIR$/services/templates/service_detail.html" />
         <option value="$PROJECT_DIR$/services/templates/_job_list.html" />
         <option value="$PROJECT_DIR$/services/templates/create_job.html" />
-        <option value="$PROJECT_DIR$/services/views.py" />
-        <option value="$PROJECT_DIR$/services/urls.py" />
         <option value="$PROJECT_DIR$/templates/navbar.html" />
         <option value="$PROJECT_DIR$/services/templates/_service_list.html" />
-        <option value="$PROJECT_DIR$/orders/api/urls.py" />
         <option value="$PROJECT_DIR$/orders/api/views.py" />
         <option value="$PROJECT_DIR$/orders/api/serializers.py" />
+        <option value="$PROJECT_DIR$/orders/api/urls.py" />
+        <option value="$PROJECT_DIR$/services/admin.py" />
+        <option value="$PROJECT_DIR$/services/templates/job_detail.html" />
+        <option value="$PROJECT_DIR$/services/views.py" />
+        <option value="$PROJECT_DIR$/services/urls.py" />
+        <option value="$PROJECT_DIR$/services/api/urls.py" />
+        <option value="$PROJECT_DIR$/services/models.py" />
+        <option value="$PROJECT_DIR$/services/api/serializers.py" />
+        <option value="$PROJECT_DIR$/services/api/views.py" />
       </list>
     </option>
   </component>
@@ -362,6 +297,28 @@
               <item name="src" type="462c0819:PsiDirectoryNode" />
               <item name="orders" type="462c0819:PsiDirectoryNode" />
               <item name="api" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="src" type="b2602c69:ProjectViewProjectNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="profiles" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="src" type="b2602c69:ProjectViewProjectNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="services" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="src" type="b2602c69:ProjectViewProjectNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="services" type="462c0819:PsiDirectoryNode" />
+              <item name="api" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="src" type="b2602c69:ProjectViewProjectNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="services" type="462c0819:PsiDirectoryNode" />
+              <item name="templates" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
               <item name="src" type="b2602c69:ProjectViewProjectNode" />
@@ -521,7 +478,7 @@
       <workItem from="1548987835442" duration="143430000" />
       <workItem from="1550287738375" duration="80517000" />
       <workItem from="1550965356036" duration="10583000" />
-      <workItem from="1550991506475" duration="72717000" />
+      <workItem from="1550991506475" duration="75520000" />
     </task>
     <servers />
   </component>
@@ -537,7 +494,7 @@
     </history-entry>
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="338465000" />
+    <option name="totallyTimeSpent" value="341268000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="-1928" y="-8" width="1936" height="1056" extended-state="6" />
@@ -605,23 +562,6 @@
     </option>
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/services/templates/create_service.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="816">
-          <caret line="48" column="27" lean-forward="true" selection-start-line="48" selection-start-column="27" selection-end-line="48" selection-end-column="27" />
-          <folding>
-            <element signature="n#style#0;n#div#5;n#fieldset#0;n#form#0;n#div#0;n#div#0;n#!!top" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/ulance/pagination.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="68">
-          <caret line="4" column="18" selection-start-line="4" selection-start-column="18" selection-end-line="4" selection-end-column="18" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/templates/forms/_education_forms.html">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="742">
@@ -751,23 +691,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/services/api/serializers.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="102">
-          <caret line="6" column="67" selection-start-line="6" selection-start-column="67" selection-end-line="6" selection-end-column="67" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/services/api/views.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="406">
-          <caret line="202" column="1" lean-forward="true" selection-start-line="202" selection-start-column="1" selection-end-line="202" selection-end-column="1" />
-          <folding>
-            <element signature="e#0#56#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/accounts/api/serializers.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="153">
@@ -824,26 +747,6 @@
           <caret line="17" column="44" selection-start-line="17" selection-start-column="44" selection-end-line="17" selection-end-column="44" />
           <folding>
             <element signature="e#0#32#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/services/admin.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="323">
-          <caret line="19" column="66" selection-start-line="19" selection-start-column="66" selection-end-line="19" selection-end-column="66" />
-          <folding>
-            <element signature="e#0#32#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/services/models.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="272">
-          <caret line="68" column="38" selection-start-line="68" selection-start-column="34" selection-end-line="68" selection-end-column="38" />
-          <folding>
-            <element signature="e#0#28#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -907,16 +810,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/profiles/models.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="510">
-          <caret line="193" column="44" selection-start-line="193" selection-start-column="44" selection-end-line="193" selection-end-column="44" />
-          <folding>
-            <element signature="e#0#11#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/profiles/views.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="544">
@@ -954,23 +847,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/services/urls.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="119">
-          <caret line="7" column="68" selection-start-line="7" selection-start-column="68" selection-end-line="7" selection-end-column="68" />
-          <folding>
-            <element signature="e#0#28#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/services/views.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="459">
-          <caret line="32" column="54" lean-forward="true" selection-start-line="32" selection-start-column="54" selection-end-line="32" selection-end-column="54" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/services/templates/create_job.html">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="51">
@@ -998,22 +874,59 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/orders/api/serializers.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-730">
-          <caret line="28" column="22" selection-start-line="28" selection-start-column="22" selection-end-line="28" selection-end-column="22" />
-          <folding>
-            <element signature="e#0#38#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/profiles/admin.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="782">
           <caret line="46" column="50" lean-forward="true" selection-start-line="46" selection-start-column="50" selection-end-line="46" selection-end-column="50" />
           <folding>
             <element signature="e#0#32#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/services/templates/job_detail.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="68">
+          <caret line="4" column="4" selection-start-line="4" selection-start-column="4" selection-end-line="4" selection-end-column="4" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/services/views.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="525">
+          <caret line="36" column="4" selection-start-line="36" selection-start-column="4" selection-end-line="36" selection-end-column="4" />
+          <folding>
+            <element signature="e#255#322#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/services/urls.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="136">
+          <caret line="8" column="71" lean-forward="true" selection-start-line="8" selection-start-column="71" selection-end-line="8" selection-end-column="71" />
+          <folding>
+            <element signature="e#0#28#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/services/admin.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="357">
+          <caret line="21" column="52" lean-forward="true" selection-start-line="21" selection-start-column="52" selection-end-line="21" selection-end-column="52" />
+          <folding>
+            <element signature="e#0#32#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/orders/api/urls.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="136">
+          <caret line="8" column="100" lean-forward="true" selection-start-line="8" selection-start-column="100" selection-end-line="8" selection-end-column="100" />
+          <folding>
+            <element signature="e#0#28#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -1041,12 +954,62 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/orders/api/urls.py">
+    <entry file="file://$PROJECT_DIR$/services/models.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="136">
-          <caret line="8" column="100" selection-start-line="8" selection-start-column="100" selection-end-line="8" selection-end-column="100" />
+        <state relative-caret-position="389">
+          <caret line="101" column="56" lean-forward="true" selection-start-line="101" selection-start-column="56" selection-end-line="101" selection-end-column="56" />
           <folding>
             <element signature="e#0#28#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/orders/api/serializers.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="391">
+          <caret line="23" column="18" selection-start-line="23" selection-start-column="18" selection-end-line="23" selection-end-column="18" />
+          <folding>
+            <element signature="e#0#38#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/services/api/serializers.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="272">
+          <caret line="28" column="56" lean-forward="true" selection-start-line="28" selection-start-column="56" selection-end-line="28" selection-end-column="56" />
+          <folding>
+            <element signature="e#0#93#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/services/api/views.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="834">
+          <caret line="185" column="32" lean-forward="true" selection-start-line="185" selection-start-column="32" selection-end-line="185" selection-end-column="32" />
+          <folding>
+            <element signature="e#0#56#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/services/api/urls.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="357">
+          <caret line="21" column="83" lean-forward="true" selection-start-line="21" selection-start-column="83" selection-end-line="21" selection-end-column="83" />
+          <folding>
+            <element signature="e#0#28#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/profiles/models.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="561">
+          <caret line="48" column="79" lean-forward="true" selection-start-line="48" selection-start-column="79" selection-end-line="48" selection-end-column="79" />
+          <folding>
+            <element signature="e#0#11#0" expanded="true" />
           </folding>
         </state>
       </provider>

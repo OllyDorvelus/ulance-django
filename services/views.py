@@ -7,7 +7,7 @@ from django.views.generic import DetailView, ListView, TemplateView
 from django.contrib.auth import get_user_model
 from django.shortcuts import render, redirect, get_object_or_404
 # from profiles.models import ProfileModel, SkillModel, LevelModel, CertificationModel, EducationModel, LinkModel
-from services.models import ServiceModel, CategoryModel
+from services.models import ServiceModel, CategoryModel, JobModel
 from django.contrib.auth.mixins import LoginRequiredMixin
 
 User = get_user_model()
@@ -33,6 +33,16 @@ class ServiceCreateView(LoginRequiredMixin, TemplateView):
 class JobCreateView(LoginRequiredMixin, TemplateView):
     template_name = 'create_job.html'
     login_url = '/login/'
+
+
+class JobDetailView(DetailView):
+    template_name = 'job_detail.html'
+    queryset = JobModel.objects.all()
+    context_object_name = 'Job'
+
+    def get_object(self):
+        job = get_object_or_404(JobModel, pk=self.kwargs.get("pk"))
+        return job
 
 
 class ServiceCategoryListView(DetailView):

@@ -21,6 +21,30 @@ class CategorySerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 
+class JobSerializer(serializers.ModelSerializer):
+    user = UserModelSerializer(read_only=True)
+    freelancer = UserModelSerializer(read_only=True)
+    url = serializers.SerializerMethodField()
+    category = CategorySerializer(many=True, read_only=True)
+    status_display = serializers.SerializerMethodField()
+
+    class Meta:
+        model = JobModel
+        fields = '__all__'
+        read_only_fields = ['status', 'freelancer']
+
+    def get_url(self, obj):
+        return obj.get_absolute_url()
+
+    def get_status_display(self, obj):
+        if obj.status == 'NT':
+            return 'Not Taken'
+        elif obj.status == 'T':
+            return "Taken"
+        else:
+            return ''
+
+
 class ServicePhotoSerializer(serializers.ModelSerializer):
 
     class Meta:
