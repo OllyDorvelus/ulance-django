@@ -1,5 +1,4 @@
 from rest_framework import permissions
-from orders.models import CartModel
 from django.contrib.auth import get_user_model
 
 User = get_user_model()
@@ -46,11 +45,12 @@ class MyAdminPermission(permissions.BasePermission):
 class EntryUserPermissions(permissions.BasePermission):
 
     def has_object_permission(self, request, view, obj):
-        if request.user.is_superuser:
-            return True
-        if obj.is_ordered:
-            return False
-        return obj.cart.user == request.user
+        pass
+        # if request.user.is_superuser:
+        #     return True
+        # if obj.is_ordered:
+        #     return False
+        # return obj.cart.user == request.user
 
 
 class EntryServiceUserPermissions(permissions.BasePermission):

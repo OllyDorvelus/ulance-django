@@ -1,6 +1,6 @@
 from rest_framework import generics, permissions, mixins
-from .serializers import ( ServiceSerializer, CategorySerializer, ReviewSerializer, ServiceCreateSerializer )
-from services.models import ServiceModel, CategoryModel, ReviewModel
+from .serializers import ( ServiceSerializer, CategorySerializer, ServiceCreateSerializer )
+from services.models import ServiceModel, CategoryModel
 from ulance import pagination
 from ulance.custom_permissions import MyUserPermissions, MyAdminPermission, StrictUserPermissions
 from django.contrib.auth import get_user_model
@@ -72,14 +72,15 @@ class CategoryServiceListAPIView(generics.ListAPIView):
 
 
 class ServiceReviewListAPIView(generics.ListAPIView):
-    serializer_class = ReviewSerializer
-    pagination_class = pagination.StandardResultsPagination
-
-    def get_queryset(self, *args, **kwargs):
-        pk = self.kwargs['pk']
-        service = ServiceModel.objects.get(pk=pk)
-        qs = ReviewModel.objects.filter(service=service).order_by('updated_at')
-        return qs
+    pass
+    # serializer_class = ReviewSerializer
+    # pagination_class = pagination.StandardResultsPagination
+    #
+    # def get_queryset(self, *args, **kwargs):
+    #     pk = self.kwargs['pk']
+    #     service = ServiceModel.objects.get(pk=pk)
+    #     qs = ReviewModel.objects.filter(service=service).order_by('updated_at')
+    #     return qs
 
 
 class RemoveCategoryAPIView(APIView):
@@ -182,37 +183,39 @@ class CategoryDetailAPIView(generics.RetrieveAPIView, mixins.DestroyModelMixin, 
 
 
 class ReviewCreateAPIView(generics.CreateAPIView):
-    serializer_class = ReviewSerializer
-    permission_classes = [permissions.IsAuthenticated]
-
-    def create(self, request, *args, **kwargs):
-        serializer = self.get_serializer(data=request.data)
-        serializer.is_valid(raise_exception=True)
-        user = self.request.user
-        service_id = self.kwargs['pk']
-        service = ServiceModel.objects.get(pk=service_id)
-        if service.reviews.filter(user=user).exists():
-            return Response({"message": "You already wrote a review for this service"}, status=status.HTTP_400_BAD_REQUEST)
-        serializer.validated_data['service'] = service
-        serializer.validated_data['user'] = user
-        self.perform_create(serializer)
-        headers = self.get_success_headers(serializer.data)
-        return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
-
-    def perform_create(self, serializer, *args, **kwargs):
-        serializer.save()
-
-
+        pass
+#     serializer_class = ReviewSerializer
+#     permission_classes = [permissions.IsAuthenticated]
+#
+#     def create(self, request, *args, **kwargs):
+#         serializer = self.get_serializer(data=request.data)
+#         serializer.is_valid(raise_exception=True)
+#         user = self.request.user
+#         service_id = self.kwargs['pk']
+#         service = ServiceModel.objects.get(pk=service_id)
+#         if service.reviews.filter(user=user).exists():
+#             return Response({"message": "You already wrote a review for this service"}, status=status.HTTP_400_BAD_REQUEST)
+#         serializer.validated_data['service'] = service
+#         serializer.validated_data['user'] = user
+#         self.perform_create(serializer)
+#         headers = self.get_success_headers(serializer.data)
+#         return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
+#
+#     def perform_create(self, serializer, *args, **kwargs):
+#         serializer.save()
+#
+#
 class ReviewDetailAPIView(generics.RetrieveAPIView, mixins.DestroyModelMixin, mixins.UpdateModelMixin):
-    serializer_class = ReviewSerializer
-    queryset = ReviewModel.objects.all()
-    permission_classes = [MyUserPermissions]
-
-    def put(self, request, *args, **kwargs):
-        return self.update(request, *args, **kwargs)
-
-    def delete(self, request, *args, **kwargs):
-        return self.destroy(self, request, *args, **kwargs)
+    pass
+#     serializer_class = ReviewSerializer
+#     queryset = ReviewModel.objects.all()
+#     permission_classes = [MyUserPermissions]
+#
+#     def put(self, request, *args, **kwargs):
+#         return self.update(request, *args, **kwargs)
+#
+#     def delete(self, request, *args, **kwargs):
+#         return self.destroy(self, request, *args, **kwargs)
 
 
 

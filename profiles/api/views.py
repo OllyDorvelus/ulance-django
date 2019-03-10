@@ -2,7 +2,7 @@ from rest_framework import generics, permissions, mixins
 from rest_framework.parsers import FileUploadParser
 from .serializers import ( ProfileSerializer, SkillSerializer, LinkSerializer, PortfolioSerializer, LevelSerializer, CertificationSerializer, ProfilePictureSerializer, EducationSerializer, MajorSerializer,
 SchoolSerializer)
-from profiles.models import ProfileModel, SkillModel, LinkModel, PortfolioModel, LevelModel, CertificationModel, EducationModel, MajorModel, SchoolModel
+from profiles.models import ProfileModel, SkillModel, LinkModel, LevelModel, CertificationModel, EducationModel, MajorModel, SchoolModel
 from ulance import pagination
 from ulance.custom_permissions import MyUserPermissions, MyAdminPermission
 from django.contrib.auth import get_user_model
@@ -135,25 +135,27 @@ class UserLinkListAPIView(generics.ListAPIView):
 
 
 class PortfolioCreateAPIView(generics.CreateAPIView):
-    serializer_class = PortfolioSerializer
-    queryset = PortfolioModel.objects.all()
-    permission_classes = [permissions.IsAuthenticated]
-
-    def perform_create(self, serializer, *args, **kwargs):
-        serializer.save(user=self.request.user)
+    pass
+    # serializer_class = PortfolioSerializer
+    # queryset = PortfolioModel.objects.all()
+    # permission_classes = [permissions.IsAuthenticated]
+    #
+    # def perform_create(self, serializer, *args, **kwargs):
+    #     serializer.save(user=self.request.user)
 
 
 class PortfolioDetailAPIView(generics.RetrieveAPIView, mixins.DestroyModelMixin, mixins.UpdateModelMixin):
-    serializer_class = PortfolioSerializer
-    queryset = PortfolioModel.objects.all()
-    lookup_field = 'user__username'
-    permission_classes = [MyUserPermissions]
-
-    def put(self, request, *args, **kwargs):
-        return self.update(request, *args, **kwargs)
-
-    def delete(self, request, *args, **kwargs):
-        return self.destroy(self, request, *args, **kwargs)
+    pass
+    # serializer_class = PortfolioSerializer
+    # queryset = PortfolioModel.objects.all()
+    # lookup_field = 'user__username'
+    # permission_classes = [MyUserPermissions]
+    #
+    # def put(self, request, *args, **kwargs):
+    #     return self.update(request, *args, **kwargs)
+    #
+    # def delete(self, request, *args, **kwargs):
+    #     return self.destroy(self, request, *args, **kwargs)
 
 
 # LEVELS

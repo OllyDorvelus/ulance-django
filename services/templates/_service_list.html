@@ -9,8 +9,6 @@
                     <img v-else class="card-img-top img-fluid" style="height:8rem;width:15rem" src="{% static 'static/img/ULance_black.png' %}" alt="Card image cap" >
 
 
-
-
                   <div class="card-body" style="height:11rem">
                     <a :href="service.url"><span class="card-title">${service.name}</span></a>
                     <span class="small-font" style="display:block" v-if='service.description.length > 100'>${service.description.substring(0,100)}...</span>
@@ -18,8 +16,8 @@
 
                     <div style="display:inline">
                         <strong><span style="font-size:.8rem" >$${service.price}</span></strong>
-                        <span style="font-weight:bold" class="tiny-font" v-if="service.average_rating"> ${service.average_rating}/10</span>
-                        <span v-else class="tiny-font">No Ratings</span>
+                        <!--<span style="font-weight:bold" class="tiny-font" v-if="service.average_rating"> ${service.average_rating}/10</span>-->
+                        <!--<span v-else class="tiny-font">No Ratings</span>-->
                         <span class="tiny-font"><i class="fa fa-credit-card"></i> ${service.purchases}</span>
                     </div>
 
@@ -34,9 +32,9 @@
                                 <i class="fa fa-trash-alt" v-on:click="deleteService(service.id)"></i><i class="fa fa-edit" v-on:click="getService(service.id)"></i>
                             </div>
                         {% endif %}
-                            <div v-if="service.user.id != {{user.pk}}">
-                                <i class="fa fa-plus-circle" v-on:click="addToCart(service.id)" style="font-size:1.25rem"></i>
-                            </div>
+                            <!--<div v-if="service.user.id != {{user.pk}}">-->
+                                <!--<i class="fa fa-plus-circle" v-on:click="addToCart(service.id)" style="font-size:1.25rem"></i>-->
+                            <!--</div>-->
                         </div>
                     </div>
                   </div>

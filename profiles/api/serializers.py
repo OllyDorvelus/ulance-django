@@ -1,4 +1,4 @@
-from profiles.models import (ProfileModel, SkillModel, PortfolioModel, PictureModel, LinkModel, LevelModel, CertificationModel, EducationModel, MajorModel, SchoolModel)
+from profiles.models import (ProfileModel, SkillModel, PictureModel, LinkModel, LevelModel, CertificationModel, EducationModel, MajorModel, SchoolModel)
 from rest_framework import serializers
 from django.contrib.auth import get_user_model
 from accounts.api.serializers import UserModelSerializer
@@ -108,11 +108,12 @@ class LinkSerializer(serializers.ModelSerializer):
 
 
 class PortfolioSerializer(serializers.ModelSerializer):
-    user = UserModelSerializer(read_only=True)
-
-    class Meta:
-        model = PortfolioModel
-        fields = '__all__'
+    pass
+    # user = UserModelSerializer(read_only=True)
+    #
+    # class Meta:
+    #     model = PortfolioModel
+    #     fields = '__all__'
 
 
 class LevelSerializer(serializers.ModelSerializer):

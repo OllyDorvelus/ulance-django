@@ -8,7 +8,6 @@ from rest_framework.serializers import (
     ValidationError
 )
 from profiles.models import ProfileModel
-from orders.models import CartModel
 
 User = get_user_model()
 
@@ -107,8 +106,6 @@ class UserCreateSerializer(serializers.ModelSerializer):
         new_user.save()
         new_profile = ProfileModel(user=new_user)
         new_profile.save()
-        new_cart = CartModel(user=new_user)
-        new_cart.save()
         return validated_data
 
 

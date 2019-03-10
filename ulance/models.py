@@ -28,7 +28,6 @@ class OrderModel(models.Model):
     buyer = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.SET_NULL, null=True, related_name='orders')
     paid = MoneyField(max_digits=10, decimal_places=2, default_currency='USD')
     status = models.CharField(max_length=3, choices=STATUS_CHOICES, default='ORD')
-
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 

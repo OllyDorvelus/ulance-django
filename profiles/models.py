@@ -1,18 +1,22 @@
+import uuid
 from django.db import models
 from django.conf import settings
 from django.urls import reverse, reverse_lazy
 from ulance.models import PictureModel
-from orders.models import EntryModel
-import uuid
+from django.db.models.signals import post_save, post_delete
+from django.dispatch import receiver
+from django.core.exceptions import ValidationError
+from . import validators
+from decimal import DecimalException
 # Create your models here.
 
 
-class PortfolioModel(models.Model):
-    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-    user = models.OneToOneField(settings.AUTH_USER_MODEL, blank=False, null=False, on_delete=models.CASCADE)
-    description = models.TextField(max_length=500, blank=False, null=True)
-    created_at = models.DateTimeField(auto_now_add=True)
-    updated_at = models.DateTimeField(auto_now=True)
+# class PortfolioModel(models.Model):
+#     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+#     user = models.OneToOneField(settings.AUTH_USER_MODEL, blank=False, null=False, on_delete=models.CASCADE)
+#     description = models.TextField(max_length=500, blank=False, null=True)
+#     created_at = models.DateTimeField(auto_now_add=True)
+#     updated_at = models.DateTimeField(auto_now=True)
 
 
 class SkillModel(models.Model):
@@ -51,9 +55,14 @@ class ProfileModel(models.Model):
     profile_pic = models.ImageField(default='tc.png', upload_to='profile_pics')
     first_name = models.CharField(max_length=30, blank=True, null=True)
     last_name = models.CharField(max_length=30, blank=True, null=True)
-    description = models.TextField(max_length=1000, blank=True, null = True)
+    description = models.TextField(max_length=10000, blank=True, null=True)
     skills = models.ManyToManyField(SkillModel, max_length=50, blank=True)
     services_completed = models.PositiveIntegerField(blank=True, null=False, default=0)
+    instagram = models.URLField(blank=True, null=True)
+    facebook = models.URLField(blank=True, null=True)
+    twitter = models.URLField(blank=True, null=True)
+    phone = models.CharField(max_length=15, blank=True, null=True)
+    average_rating = models.DecimalField(null=True, blank=True, decimal_places=2, max_digits=4)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
@@ -63,13 +72,24 @@ class ProfileModel(models.Model):
     def get_absolute_url(self):
         return reverse('profiles:profile-detail', kwargs={'username': self.user.username})
 
-    def get_services_completed(self):
-        user = self.user
-        services = user.services.all()
-        services_completed = 0
-        for service in services:
-            services_completed += EntryModel.objects.filter(service=service, is_ordered=True, status='COM').count()
-        return services_completed
+    def get_avg_rating(self):
+        if self.user.reviews.count():
+            total = 0
+            count = 0
+            for review in self.user.reviews.all():
+                total += review.rate
+                count += 1
+            avg = total / count
+            return round(avg, 2)
+        return 0.00
+
+    # def get_services_completed(self):
+    #     user = self.user
+    #     services = user.services.all()
+    #     services_completed = 0
+    #     for service in services:
+    #         services_completed += EntryModel.objects.filter(service=service, is_ordered=True, status='COM').count()
+    #     return services_completed
 
 
 class LinkModel(models.Model):
@@ -152,6 +172,42 @@ class CertificationModel(models.Model):
     def __str__(self):
         return self.name
 
+
+class ReviewModel(models.Model):
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='reviewer')
+    description = models.TextField(blank=False, null=False, max_length=300)
+    rate = models.IntegerField(validators=[validators.validate_rate])
+    freelancer = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='reviews')
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return f'{self.user.username} - {self.rate}'
+
+    def clean(self, *args, **kwargs):
+        if self.freelancer.profile.reviews.filter(user=self.user):
+            raise ValidationError("You already wrote an review")
+
+
+@receiver(post_save, sender=ReviewModel)
+def update_avg_rating_add_or_update(sender, instance, **kwargs):
+    if instance.freelancer:
+        try:
+            freelancer = instance.freelancer
+            profile = freelancer.profile
+            profile.average_rating = profile.get_avg_rating()
+            profile.save()
+        except (ValueError, DecimalException):
+            pass
+
+
+@receiver(post_delete, sender=ReviewModel)
+def update_avg_rating_delete(sender, instance, **kwargs):
+    freelancer = instance.freelancer
+    profile = freelancer.profile
+    profile.average_rating = profile.get_avg_rating()
+    profile.save()
 
 
 

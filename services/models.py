@@ -2,7 +2,6 @@ from django.db import models
 from django.conf import settings
 from django.urls import reverse, reverse_lazy
 from djmoney.models.fields import MoneyField
-from . import validators
 import uuid
 from ulance.models import PictureModel
 from django.db.models.signals import post_save, post_delete
@@ -58,25 +57,26 @@ class ServiceModel(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     purchases = models.PositiveIntegerField(default=0)
-    average_rating = models.DecimalField(null=True, blank=True, decimal_places=2, max_digits=4)
+    portfolio_link = models.URLField(null=True, blank=True)
+  #  average_rating = models.DecimalField(null=True, blank=True, decimal_places=2, max_digits=4)
     # objects = ServiceManager()
 
-    def get_avg_rating(self):
-        if self.reviews.count():
-            total = 0
-            count = 0
-            for review in self.reviews.all():
-                total += review.rate
-                count += 1
-            avg = total / count
-            return round(avg, 2)
-        return 0.00
+    # def get_avg_rating(self):
+    #     if self.reviews.count():
+    #         total = 0
+    #         count = 0
+    #         for review in self.reviews.all():
+    #             total += review.rate
+    #             count += 1
+    #         avg = total / count
+    #         return round(avg, 2)
+    #     return 0.00
 
-    def get_purchases(self):
-        total = 0
-        for entry in self.service_entries.filter(is_ordered=True):
-            total += entry.quantity
-        return total
+    # def get_purchases(self):
+    #     total = 0
+    #     for entry in self.service_entries.filter(is_ordered=True):
+    #         total += entry.quantity
+    #     return total
 
     def __str__(self):
         return self.name
@@ -89,39 +89,24 @@ class ServicePictureModel(PictureModel):
     service = models.ForeignKey(ServiceModel, null=False, on_delete=models.CASCADE, blank=False, related_name='photos')
 
 
-class ReviewModel(models.Model):
+class JobModel(models.Model):
+    STATUS_CHOICES = (
+        ('NT', 'Not Taken'),
+        ('T', 'Taken'),
+        ('COM', 'Completed'),
+    )
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='reviewer')
-    description = models.TextField(blank=False, null=False, max_length=300)
-    rate = models.IntegerField(validators=[validators.validate_rate])
-    service = models.ForeignKey(ServiceModel, on_delete=models.CASCADE, related_name='reviews')
+    freelancer = models.OneToOneField(settings.AUTH_USER_MODEL, null=True, blank=True, on_delete=models.SET_NULL)
+    name = models.CharField(max_length=75, blank=False, null=False)
+    category = models.ManyToManyField(CategoryModel, related_name='job', blank=True)
+    description = models.TextField(max_length=10000, blank=False, null=False)
+    budget = models.DecimalField(max_digits=10, decimal_places=2, null=False, blank=False)
+    status = models.CharField(choices=STATUS_CHOICES, default='NT', max_length=3)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
-    def __str__(self):
-        return f'{self.user.username} - {self.rate}'
-
-    def clean(self, *args, **kwargs):
-        if self.service.reviews.filter(user=self.user):
-            raise ValidationError("You already wrote an review")
 
 
-@receiver(post_save, sender=ReviewModel)
-def update_avg_rating_add_or_update(sender, instance, **kwargs):
-    if instance.service:
-        try:
-            service = instance.service
-            service.average_rating = service.get_avg_rating()
-            service.save()
-        except (ValueError, DecimalException):
-            pass
-
-
-@receiver(post_delete, sender=ReviewModel)
-def update_avg_rating_delete(sender, instance, **kwargs):
-    service = instance.service
-    service.average_rating = service.get_avg_rating()
-    service.save()
 
 
 

@@ -1,4 +1,4 @@
-from services.models import ServiceModel, CategoryModel, ReviewModel
+from services.models import ServiceModel, CategoryModel
 from django_filters import FilterSet
 import django_filters
 

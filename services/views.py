@@ -30,6 +30,11 @@ class ServiceCreateView(LoginRequiredMixin, TemplateView):
     login_url = '/login/'
 
 
+class JobCreateView(LoginRequiredMixin, TemplateView):
+    template_name = 'create_job.html'
+    login_url = '/login/'
+
+
 class ServiceCategoryListView(DetailView):
     template_name = 'service_category_list.html'
     queryset = CategoryModel.objects.all()
