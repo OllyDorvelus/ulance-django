@@ -4,6 +4,7 @@ from django.urls import reverse, reverse_lazy
 from djmoney.models.fields import MoneyField
 import uuid
 from ulance.models import PictureModel
+from profiles.models import SkillModel
 from django.db.models.signals import post_save, post_delete
 from django.dispatch import receiver
 from django.core.exceptions import ValidationError
@@ -51,7 +52,7 @@ class ServiceModel(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='services')
     name = models.CharField(max_length=100, blank=False, null=False)
     price = MoneyField(max_digits=10, decimal_places=2, default_currency='USD')
-    category = models.ManyToManyField(CategoryModel, related_name='service', blank=True)
+    categories = models.ManyToManyField(CategoryModel, related_name='service', blank=True)
     description = models.TextField(blank=False, null=False, max_length=500)
     delivery_time = models.CharField(max_length=20, choices=DELIVERY_CHOICES, blank=False, null=False, default='Normal')
     created_at = models.DateTimeField(auto_now_add=True)
@@ -101,7 +102,8 @@ class JobModel(models.Model):
     freelancer = models.ForeignKey(settings.AUTH_USER_MODEL, null=True, blank=True, on_delete=models.SET_NULL,
                                    related_name='tasks')
     name = models.CharField(max_length=75, blank=False, null=False)
-    category = models.ManyToManyField(CategoryModel, related_name='job', blank=True)
+    categories = models.ManyToManyField(CategoryModel, related_name='job', blank=True)
+    skills = models.ManyToManyField(SkillModel, blank=True)
     description = models.TextField(max_length=10000, blank=False, null=False)
     budget = models.DecimalField(max_digits=10, decimal_places=2, null=False, blank=False)
     status = models.CharField(choices=STATUS_CHOICES, default='NT', max_length=3)

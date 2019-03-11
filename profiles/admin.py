@@ -1,5 +1,5 @@
 from django.contrib import admin
-from profiles.models import PictureModel, SkillModel, ProfileModel, LinkModel, LevelModel, EducationModel, \
+from profiles.models import PictureModel, SkillModel, ProfileModel, LinkModel, EducationModel, \
     CertificationModel, MajorModel, SchoolModel, ReviewModel
 # Register your models here.
 
@@ -8,8 +8,8 @@ class SkillModelAdmin(admin.ModelAdmin):
     list_display = ['id', 'name']
 
 
-class LevelModelAdmin(admin.ModelAdmin):
-    list_display = ['id', 'user', 'skill', 'skill_level']
+# class LevelModelAdmin(admin.ModelAdmin):
+#     list_display = ['id', 'user', 'skill', 'skill_level']
 
 
 class LinkModelAdmin(admin.ModelAdmin):
@@ -39,7 +39,6 @@ class ReviewModelAdmin(admin.ModelAdmin):
 admin.site.register(SkillModel, SkillModelAdmin)
 admin.site.register(ProfileModel)
 admin.site.register(LinkModel, LinkModelAdmin)
-admin.site.register(LevelModel, LevelModelAdmin)
 admin.site.register(EducationModel, EducationModelAdmin)
 admin.site.register(CertificationModel, CertificationModelAdmin)
 admin.site.register(MajorModel, MajorModelAdmin)

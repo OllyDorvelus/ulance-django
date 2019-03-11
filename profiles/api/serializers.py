@@ -1,4 +1,4 @@
-from profiles.models import (ProfileModel, SkillModel, PictureModel, LinkModel, LevelModel, CertificationModel, EducationModel, MajorModel, SchoolModel)
+from profiles.models import (ProfileModel, SkillModel, PictureModel, LinkModel, CertificationModel, EducationModel, MajorModel, SchoolModel)
 from rest_framework import serializers
 from django.contrib.auth import get_user_model
 from accounts.api.serializers import UserModelSerializer
@@ -116,22 +116,22 @@ class PortfolioSerializer(serializers.ModelSerializer):
     #     fields = '__all__'
 
 
-class LevelSerializer(serializers.ModelSerializer):
-    user = UserModelSerializer(read_only=True)
-    skill = serializers.ChoiceField(choices=list(SkillModel.objects.all().values_list('name', flat=True)))
-
-    class Meta:
-        model = LevelModel
-        fields = '__all__'
-        read_only_fields = ['user']
-
-    def update(self, instance, validated_data):
-        skill_name = validated_data['skill']
-        skill = SkillModel.objects.get(name__iexact=skill_name)
-        instance.skill = skill
-        instance.skill_level = validated_data.get('skill_level', instance.skill_level)
-        instance.save()
-        return instance
+# class LevelSerializer(serializers.ModelSerializer):
+#     user = UserModelSerializer(read_only=True)
+#     skill = serializers.ChoiceField(choices=list(SkillModel.objects.all().values_list('name', flat=True)))
+#
+#     class Meta:
+#         model = LevelModel
+#         fields = '__all__'
+#         read_only_fields = ['user']
+#
+#     def update(self, instance, validated_data):
+#         skill_name = validated_data['skill']
+#         skill = SkillModel.objects.get(name__iexact=skill_name)
+#         instance.skill = skill
+#         instance.skill_level = validated_data.get('skill_level', instance.skill_level)
+#         instance.save()
+#         return instance
 
 
 class CertificationSerializer(serializers.ModelSerializer):

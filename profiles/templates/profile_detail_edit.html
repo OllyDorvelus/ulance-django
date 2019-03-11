@@ -8,7 +8,7 @@
 {% include 'forms/_skill_forms.html' %}
 {% include 'forms/_education_forms.html' %}
     <div class="text-center" style="padding-bottom:20px">
-        <img :src="user.profile_pic" class="rounded-circle" style="height:150px;width:200px"/>
+        <img :src="profile.profile_pic" class="rounded-circle" style="height:150px;width:200px"/>
 
         <form id="formpic" v-on:submit.prevent="onUpload()" enctype="multipart/form-data">
         <input type="file" @change="onFileSelected" name="profile_pic">
@@ -22,7 +22,7 @@
             <div class="card text-center">
                 <div class="card-body">
                     <p class="card-header-section">Description{% if request.user == user %}<i class="fa fa-edit" data-toggle="modal" data-target="#editDescriptionModal"></i>{% endif %}</p>
-                    <p v-if="user.description" id="description" class="description">${user.description}</p>
+                    <p v-if="profile.description" id="description" class="description">${profile.description}</p>
                     <p v-else id="description" class="description">No Description</p>
                 </div>
             </div>
@@ -54,13 +54,14 @@
                         {% if request.user == User %} <i class="fa fa-plus-circle" aria-hidden="true" data-toggle="modal" data-target="#addSkillModal"></i> {% endif %}
                         </p>
                         <div v-if="skills.length != 0">
-                            <div v-for="skill in skills" style="display:inline">
-                                <span style="margin-left:.125rem;margin-right:.125rem" class="badge badge-pill badge-info">${skill.skill} - ${skill.skill_level}
-                                    {% if request.user == User %}
-                                        <i class="fa fa-edit" v-on:click="getSkill(skill.id)"></i><i class="fa fa-trash-alt" v-on:click="deleteSkill(skill.id)"></i>
-                                    {% endif %}
-                                </span>
-                            </div>
+                            {% include '_skill_list.html' %}
+                            <!--<div v-for="skill in skills" style="display:inline">-->
+                                <!--<span style="margin-left:.125rem;margin-right:.125rem" class="badge badge-pill badge-info">${skill.name}-->
+                                    <!--{% if request.user == User %}-->
+                                        <!--<i class="fa fa-edit" v-on:click="getSkill(skill.id)"></i><i class="fa fa-trash-alt" v-on:click="deleteSkill(skill.id)"></i>-->
+                                    <!--{% endif %}-->
+                                <!--</span>-->
+                            <!--</div>-->
                         </div>
 
                         <div v-else><p>No Skills</p></div>
@@ -146,38 +147,42 @@ var demo = new Vue({
     parentCategories: [{'name': 'Choose Main Category', id: '0'}],
     parentCategoryId: "",
     subCategories: [],
-    serviceCategories: [],
+    categories: [],
     services: [],
     currentService: {},
     newEducation: {'school': null, 'major': null, 'status': null, 'degree_type': null},
     schoolSearches: [],
     majorSearches: [],
+    parentSkills: [],
+    subSkills: [],
+    currentSkills: [],
     skills: [],
+    parentSkillId: "",
     skillSearches: [],
     currentSkill: {},
-    newSkill: {'skill': null, 'skill_level': null},
+    newSkill: {},
     loading: true,
     currentLink: {},
     newLink: {'link': null, 'brief_description': null},
     certifications: [],
     currentCertification: {},
     newCertification: {'name': null, 'issued_form': null, 'year_issued': null},
-    user: {},
+    profile: {},
     user_url: '/api/profiles/user/{{User.username}}/',
     selectedFile: null,
-    loading: true,
     nextUrl: null,
 
   },
 
   mounted: function() {
+    this.getUserPage();
     this.getLinks();
     this.getCertifications();
-    this.getUserPage();
     this.getSkills();
     this.searchSkills();
     this.getEducations();
     this.getParentCategories();
+    this.getParentSkills()
     this.getServices();
   },
 
@@ -207,15 +212,36 @@ var demo = new Vue({
           addCategory(categoryId, this)
       },
 
+      getParentSkills: function() {
+          getParentSkills(this)
+      },
+
+      getSubSkills: function() {
+        getSubSkills(this)
+      },
+
+      addSkill: function(skillId) {
+          addSkill(skillId, this)
+      },
+
+      removeSkill: function(skillId) {
+        removeSkill(skillId, this)
+      },
+
+      getSkills: function() {
+          getUserSkills(this, "/api/profiles/{{User.username}}/skills/")
+      },
+
       loadMore: function() {
         this.getServices(this.nextUrl)
       },
 
-      getServices: function(next_url) {
+      getServices: function() {
         this.loading = true
-        const api_url = next_url ? next_url : '/api/services/{{User.username}}/services/'
+        //const api_url = next_url ? next_url : '/api/services/{{User.username}}/services/'
+        const api_url = '/api/services/{{User.username}}/services/'
         this.$http.get(api_url).then(function(response){
-            this.services = this.services.concat(response.data.results)
+            this.services = response.data.results //.concat(response.data.results)
         //    this.nextUrl = response.data.next
             this.loading = false
         }).catch(function(err){
@@ -234,6 +260,7 @@ var demo = new Vue({
       updateService: function() {
         this.loading = true
         let api_url = `/api/services/${this.currentService.id}/`
+       // this.currentService.categories = this.categories
         this.$http.put(api_url, this.currentService).then(function(response){
             $('#editServiceModal').modal('toggle')
             this.getServices()
@@ -378,69 +405,69 @@ var demo = new Vue({
           })
       },
 
-      getSkill: function(id) {
-          this.loading = true
-          let api_url = `/api/profiles/levels/${id}/`
-          this.$http.get(api_url).then(function(response){
-              this.currentSkill = response.data
-              this.loading = false
-              $('#editSkillModal').modal('show')
-          }).catch(function(err){
-              this.loading = false
-          })
-      },
+      // getSkill: function(id) {
+      //     this.loading = true
+      //     let api_url = `/api/profiles/levels/${id}/`
+      //     this.$http.get(api_url).then(function(response){
+      //         this.currentSkill = response.data
+      //         this.loading = false
+      //         $('#editSkillModal').modal('show')
+      //     }).catch(function(err){
+      //         this.loading = false
+      //     })
+      // },
+      //
+      // getSkills: function() {
+      //   this.loading = true
+      //   let api_url = '/api/profiles/{{User.username}}/skills/'
+      //   this.$http.get(api_url).then(function(response){
+      //       this.skills = response.data.results
+      //       this.loading = false
+      //   }).catch(function(err){
+      //       this.loading = false
+      //   })
+      // },
 
-      getSkills: function() {
-        this.loading = true
-        let api_url = '/api/profiles/{{User.username}}/levels/'
-        this.$http.get(api_url).then(function(response){
-            this.skills = response.data.results
-            this.loading = false
-        }).catch(function(err){
-            this.loading = false
-        })
-      },
+      // addSkill: function() {
+      //     let api_url = '/api/profiles/levels/create/'
+      //     this.$http.post(api_url, this.newSkill).then(function(resposne){
+      //         this.getSkills()
+      //         $('#addSkillModal').modal('toggle')
+      //         this.newSkill = {}
+      //     }).catch(function(err){
+      //         console.log(err)
+      //         let jsonerr = JSON.parse(err.bodyText)
+      //         attachFormErrors(jsonerr)
+      //     })
+      // },
 
-      addSkill: function() {
-          let api_url = '/api/profiles/levels/create/'
-          this.$http.post(api_url, this.newSkill).then(function(resposne){
-              this.getSkills()
-              $('#addSkillModal').modal('toggle')
-              this.newSkill = {}
-          }).catch(function(err){
-              console.log(err)
-              let jsonerr = JSON.parse(err.bodyText)
-              attachFormErrors(jsonerr)
-          })
-      },
-
-      updateSkill: function() {
-        this.loading = true
-        let api_url = `/api/profiles/levels/${this.currentSkill.id}/`
-        this.$http.put(api_url, this.currentSkill).then(function(resposne){
-            this.getSkills()
-            $('#editSkillModal').modal('toggle')
-        }).catch(function(err){
-            this.loading = false
-            let jsonerr = JSON.parse(err.bodyText)
-            attachFormErrors(jsonerr, true)
-        })
-      },
-
-      deleteSkill: function(id) {
-          let api_url = `/api/profiles/levels/${id}/`
-          const self = this
-          onDeletion("Are you sure you want to delete this skill?", function(value){
-              if(value){
-                  self.$http.delete(api_url).then(function (response) {
-                      onWarning('Skill has been deleted.')
-                      self.getSkills()
-                  }).catch(function (err) {
-
-                  })
-              }
-          })
-      },
+      // updateSkill: function() {
+      //   this.loading = true
+      //   let api_url = `/api/profiles/levels/${this.currentSkill.id}/`
+      //   this.$http.put(api_url, this.currentSkill).then(function(resposne){
+      //       this.getSkills()
+      //       $('#editSkillModal').modal('toggle')
+      //   }).catch(function(err){
+      //       this.loading = false
+      //       let jsonerr = JSON.parse(err.bodyText)
+      //       attachFormErrors(jsonerr, true)
+      //   })
+      // },
+      //
+      // deleteSkill: function(id) {
+      //     let api_url = `/api/profiles/levels/${id}/`
+      //     const self = this
+      //     onDeletion("Are you sure you want to delete this skill?", function(value){
+      //         if(value){
+      //             self.$http.delete(api_url).then(function (response) {
+      //                 onWarning('Skill has been deleted.')
+      //                 self.getSkills()
+      //             }).catch(function (err) {
+      //
+      //             })
+      //         }
+      //     })
+      // },
 
       getEducation: function(id) {
         this.loading = true
@@ -538,7 +565,7 @@ var demo = new Vue({
 
       getUserPage: function() {
           this.$http.get(this.user_url).then(function(response){
-            this.user = response.data
+            this.profile = response.data
           })
       },
 
@@ -553,8 +580,8 @@ var demo = new Vue({
       },
 
       getDescription: function() {
-          this.$http.get(this.user_url, this.user).then(function(response){
-              this.user.description = response.data.description
+          this.$http.get(this.user_url, this.profile).then(function(response){
+              this.profile.description = response.data.description
           })
       },
 
@@ -574,7 +601,7 @@ var demo = new Vue({
       },
 
       updatePicture: function() {
-          this.$http.put(this.user_url + 'picture/', this.user).then(function(response){
+          this.$http.put(this.user_url + 'picture/', this.profile).then(function(response){
 
           }).catch(function(err){
               let jsonerr = JSON.parse(err.bodyText)

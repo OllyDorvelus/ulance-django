@@ -33,8 +33,8 @@
             <div class="col-6">
             {% include 'forms/_category_selection.html' %}
             </div>
-            {% include '_service_category_list.html' %}<hr>
-            {% include '_category_list.html' %}
+            {% include '_category_list.html' %}<hr>
+            {% include '_sub_category_list.html' %}
 
         <div class="form-actions" style="padding-top:2rem">
             <button type="submit" class="btn ulance-btn">Create Service</button>
@@ -52,9 +52,9 @@
         data: {
             parentCategories: [],
             subCategories: [],
-            serviceCategories: [],
+            categories: [],
             parentCategoryId: "",
-            newService: {name: "", description: "", price: "", delivery_time: "", category: []}
+            newService: {name: "", description: "", price: "", delivery_time: "", categories: []}
 
         },
 
@@ -86,22 +86,22 @@
                 const category = this.subCategories.find(function(obj){
                     return categoryId == obj.id
                 })
-                if ( !this.serviceCategories.includes(category) ){
-                    this.serviceCategories.push(category)
-                    this.newService.category.push(category.id)
+                if ( !this.categories.includes(category) ){
+                    this.categories.push(category)
+                    this.newService.categories.push(category.id)
                 } else onWarning('Category already added!')
 
           },
 
          removeCategory: function(categoryId) {
-             const serviceCategories = this.serviceCategories.filter(function(obj){
+             const categories = this.categories.filter(function(obj){
                  return categoryId != obj.id
              })
-              const category = this.newService.category.filter(function(id){
+              const new_categories = this.newService.categories.filter(function(id){
                  return categoryId != id
              })
-             this.newService.category = category
-             this.serviceCategories = serviceCategories
+             this.newService.categories = new_categories
+             this.categories = categories
          },
 
         }

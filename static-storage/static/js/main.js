@@ -92,6 +92,7 @@ function getService(serviceId, _this) {
     _this.loading = true
     let api_url = `/api/services/${serviceId}/`
     _this.$http.get(api_url).then(function(response){
+        console.log(response.data)
       _this.currentService = response.data;
       _this.getServiceCategories()
       _this.loading = false
@@ -143,7 +144,7 @@ function getServiceCategories(_this) {
     _this.loading = true
     let api_url = `/api/services/${_this.currentService.id}/categories/`
     _this.$http.get(api_url).then(function(response){
-        _this.serviceCategories = response.body
+        _this.categories = response.body
         _this.loading = false
     }).catch(function(err){
         _this.loading = false
@@ -153,7 +154,9 @@ function getServiceCategories(_this) {
 function addCategory(categoryId, _this) {
     let api_url = `/api/services/${_this.currentService.id}/add/${categoryId}/`
     _this.$http.post(api_url).then(function(response){
+      _this.currentService = _this.getService(_this.currentService.id)
       _this.getServiceCategories()
+
     }).catch(function(err){
           const message = err.body.message
           onWarning(message)
@@ -163,7 +166,95 @@ function addCategory(categoryId, _this) {
 function removeCategory(categoryId, _this) {
     let api_url = `/api/services/${_this.currentService.id}/remove/${categoryId}/`
     _this.$http.post(api_url).then(function(response){
+    _this.currentService = _this.getService(_this.currentService.id)
     _this.getServiceCategories()
+    }).catch(function(err){
+          const message = err.body.message
+          onWarning(message)
+      })
+}
+
+function getJobCategories(_this) {
+    _this.loading = true
+    let api_url = `/api/services/${_this.currentService.id}/categories/`
+    _this.$http.get(api_url).then(function(response){
+        _this.categories = response.body
+        _this.loading = false
+    }).catch(function(err){
+        _this.loading = false
+    })
+}
+
+function getJobSkills(_this) {
+
+}
+
+function addJobCategory(categoryId, _this) {
+
+}
+
+function removeJobCategory(categoryId, _this) {
+
+}
+
+// function getJobCategories(_this) {
+//     _this.loading = true
+//     let api_url = `/api/services/jobs/${_this.currentJob.id}/categories/`
+//     _this.$http.get(api_url).then(function(response){
+//         _this.jobCategories = response.body
+//         _this.loading = false
+//     }).catch(function(err){
+//         _this.loading = false
+//     })
+// }
+
+// EDITING SKILLS
+function getParentSkills(_this) {
+    let api_url = '/api/profiles/main-skills/'
+    _this.$http.get(api_url).then(function(response){
+        _this.parentSkills = response.data
+        if(_this.parentSkills[0]) {
+            _this.parentSkillId = _this.parentSkills[0].id
+            getSubSkills(_this)
+        }
+    })
+}
+
+function getSubSkills(_this) {
+   // _this.loading = true
+    let api_url = `/api/profiles/sub-skills/${_this.parentSkillId}/`
+    _this.$http.get(api_url).then(function(response){
+        _this.subSkills = response.data.results
+        _this.loading = false
+    }).catch(function(err){
+        _this.loading = false
+    })
+}
+
+function getUserSkills(_this, api_url) {
+   // _this.loading = true
+    _this.$http.get(api_url).then(function(response){
+        _this.skills = response.data.results
+        _this.loading = false
+    }).catch(function(err){
+        _this.loading = false
+    })
+}
+
+function addSkill(skillId, _this) {
+    let api_url = `/api/profiles/skills/${_this.profile.id}/add/${skillId}/`
+    _this.$http.post(api_url).then(function(response){
+      _this.getSkills()
+    }).catch(function(err){
+          const message = err.body.message
+          onWarning(message)
+      })
+}
+
+function removeSkill(skillId, _this) {
+    let api_url = `/api/profiles/skills/${_this.profile.id}/remove/${skillId}/`
+    _this.$http.post(api_url).then(function(response){
+    _this.getSkills()
     }).catch(function(err){
           const message = err.body.message
           onWarning(message)

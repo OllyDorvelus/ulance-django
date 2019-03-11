@@ -1,0 +1,5 @@
+<div v-for="skill in userSkills">
+    <span class="badge badge-info badge-pill" style="font-size:.8rem">${skill.name}
+        <i class="fa fa-times" v-on:click="removeSkill(skill.id)"></i></span>
+</div>
+<div class="loading" v-if="loading===true">Loading&#8230;</div>

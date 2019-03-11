@@ -1,8 +1,10 @@
 from rest_framework import generics, permissions, mixins
 from rest_framework.parsers import FileUploadParser
-from .serializers import ( ProfileSerializer, SkillSerializer, LinkSerializer, PortfolioSerializer, LevelSerializer, CertificationSerializer, ProfilePictureSerializer, EducationSerializer, MajorSerializer,
+from rest_framework.views import APIView
+from rest_framework.response import Response
+from .serializers import ( ProfileSerializer, SkillSerializer, LinkSerializer, PortfolioSerializer, CertificationSerializer, ProfilePictureSerializer, EducationSerializer, MajorSerializer,
 SchoolSerializer)
-from profiles.models import ProfileModel, SkillModel, LinkModel, LevelModel, CertificationModel, EducationModel, MajorModel, SchoolModel
+from profiles.models import ProfileModel, SkillModel, LinkModel, CertificationModel, EducationModel, MajorModel, SchoolModel
 from ulance import pagination
 from ulance.custom_permissions import MyUserPermissions, MyAdminPermission
 from django.contrib.auth import get_user_model
@@ -11,6 +13,8 @@ from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework.filters import SearchFilter, OrderingFilter
 from django_filters.rest_framework import DjangoFilterBackend
 from .filters import MajorFilter, SkillFilter, SchoolFilter, ProfileFilter
+from django.shortcuts import get_object_or_404
+
 
 User = get_user_model()
 
@@ -70,6 +74,66 @@ class ProfilePictureDetailAPIView(generics.RetrieveAPIView, mixins.DestroyModelM
         return self.destroy(self, request, *args, **kwargs)
 
 # SKILLS
+
+
+class MainSkillListAPIView(generics.ListAPIView):
+    serializer_class = SkillSerializer
+    queryset = SkillModel.objects.filter(is_parent=True).order_by('name')
+
+
+class SubSkillListAPIView(generics.ListAPIView):
+    serializer_class = SkillSerializer
+    pagination_class = pagination.StandardResultsPagination
+
+    def get_queryset(self):
+        skill_parent_id = self.kwargs['pk']
+        skill = get_object_or_404(SkillModel, pk=skill_parent_id)
+        sub_skills = skill.children.all().order_by('name')
+        return sub_skills
+
+
+class AddSkillAPIView(APIView):
+    permission_classes = [permissions.IsAuthenticated]
+
+    def post(self, request, *args, **kwargs):
+        skill_pk = self.kwargs['skill_pk']
+        profile_pk = self.kwargs['profile_pk']
+
+        skill = SkillModel.objects.filter(pk=skill_pk).first()
+        profile = ProfileModel.objects.filter(pk=profile_pk).first()
+        if profile is None or skill is None:
+            return Response({'message': 'Invalid skill or profile'}, status=404)
+        if request.user != profile.user or not request.user.is_superuser:
+            return Response({'message': 'Not Authorized To Perform This Action'}, status=401)
+        message = "Profile already has this skill"
+        if not profile.skills.filter(pk=skill.pk).exists():
+            if profile.skills.filter(is_parent=False).count() > 30:
+                return Response({'message': 'Can not exceed more than 30 skills'}, status=400)
+            profile.skills.add(skill)
+            profile.save()
+            return Response({"message": "skill added"}, status=201)
+        return Response({'message': message}, status=400)
+
+
+class RemoveSkillAPIView(APIView):
+    permission_classes = [permissions.IsAuthenticated]
+
+    def post(self, request, *args, **kwargs):
+        skill_pk = self.kwargs['skill_pk']
+        profile_pk = self.kwargs['profile_pk']
+
+        skill = SkillModel.objects.filter(pk=skill_pk).first()#get_object_or_404(SkillModel, skill_pk)
+        profile = ProfileModel.objects.filter(pk=profile_pk).first()#get_object_or_404(ServiceModel, service_pk)
+        if skill is None or profile is None:
+            return Response({'message': 'Invalid skill or profile'}, status=404)
+        if request.user != profile.user or not request.user.is_superuser:
+            return Response({'message': 'Not Authorized To Perform This Action'}, status=401)
+        message = "skill is not listed in service"
+        if profile.skills.filter(pk=skill.pk).exists():
+            profile.skills.remove(skill)
+            profile.save()
+            return Response({"message": "Skill removed"}, status=201)
+        return Response({'message': message}, status=400)
 
 
 class SkillListAPIView(generics.ListAPIView):
@@ -158,40 +222,17 @@ class PortfolioDetailAPIView(generics.RetrieveAPIView, mixins.DestroyModelMixin,
     #     return self.destroy(self, request, *args, **kwargs)
 
 
-# LEVELS
+# SKILLS
 
-class LevelCreateAPIView(generics.CreateAPIView):
-    serializer_class = LevelSerializer
-    queryset = LevelModel.objects.all()
-    permission_classes = [permissions.IsAuthenticated]
-
-    def perform_create(self, serializer, *args, **kwargs):
-        skill_name = serializer.validated_data['skill']
-        skill = SkillModel.objects.get(name__iexact=skill_name)
-        serializer.save(user=self.request.user, skill=skill)
-
-
-class LevelDetailAPIView(generics.RetrieveAPIView, mixins.DestroyModelMixin, mixins.UpdateModelMixin):
-    serializer_class = LevelSerializer
-    queryset = LevelModel.objects.all()
-    permission_classes = [MyUserPermissions]
-
-    def put(self, request, *args, **kwargs):
-        return self.update(request, *args, **kwargs)
-
-    def delete(self, request, *args, **kwargs):
-        return self.destroy(self, request, *args, **kwargs)
-
-
-class UserLevelListAPIView(generics.ListAPIView):
-    serializer_class = LevelSerializer
-    model = LevelModel.objects.all()
+class UserSkillListAPIView(generics.ListAPIView):
+    serializer_class = SkillSerializer
+    model = SkillModel.objects.all()
     pagination_class = pagination.StandardResultsPagination
 
     def get_queryset(self):
         username = self.kwargs['user__username']
-        user = User.objects.get(username=username)
-        qs = LevelModel.objects.filter(user=user)
+        user = get_object_or_404(User, username=username)
+        qs = SkillModel.objects.filter(profile=user.profile)
         return qs
 
 # CERTIFICATIONS

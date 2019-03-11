@@ -1,5 +1,157 @@
 {% extends 'base.html' %}
 
 {% block content %}
+<div id="job-create-app">
+    <div class="well tab-content" align="center">
+        <form id="create-service-form" v-on:submit.prevent="createJob()" class="form-horizontal">
+            <fieldset>
+            <div class="form-group col-6">
+                <span class="text-center text-danger" id="name"></span>
+                <span class="text-center text-danger"></span>
+                <input type="text"  v-model="newJob.name" class="form-control" placeholder="Job Name">
+            </div>
+            <div class="form-group col-6">
+                <span class="text-center text-danger" id="budget"></span>
+                <span class="text-center text-danger"></span>
+                <input type="number" step="0.01"  v-model="newJob.budget" class="form-control" placeholder="Enter your max budget $">
+            </div>
+            <!--<div class="form-group col-6">-->
+                <!--<span class="text-center" text-danger id="delivery_time"></span>-->
+                <!--<span class="text-center"></span>-->
+                <!--<select class="form-control" v-model="newService.delivery_time">-->
+                    <!--<option value="" disabled selected>Choose estimated delivery time</option>-->
+                    <!--<option value="Early">1-3</option>-->
+                    <!--<option value="Normal">3-5</option>-->
+                    <!--<option value="Later">7+</option>-->
+                <!--</select>-->
+            <!--</div>-->
+            <div class="form-group col-6">
+                <span class="text-center text-danger" id="description"></span>
+                <span class="text-center text-danger"></span>
+                <textarea class="form-control" rows="5" v-model="newJob.description" placeholder="Description for your job, please be very detailed in what you are looking for!"></textarea>
+            </div>
+            <div class="col-6">
+            <label>Add any skills that you feel are needed for this job.</label>
+            {% include 'forms/_skill_selection.html' %}
+            </div>
+            {% include '_sub_skill_list.html' %}<hr>
+            {% include '_skill_list.html' %}
 
+            <div class="col-6">
+            <label>Add any categories so freelancers that are appropriate can find this job.</label>
+            {% include 'forms/_category_selection.html' %}
+            </div>
+            {% include '_category_list.html' %}<hr>
+            {% include '_sub_category_list.html' %}
+
+        <div class="form-actions" style="padding-top:2rem">
+            <button type="submit" class="btn ulance-btn">Create job</button>
+        </div>
+        </fieldset>
+        </form>
+    </div>
+</div>
+<script>
+    Vue.http.headers.common['X-CSRFToken'] = "{{ csrf_token }}";
+    var job = new Vue({
+        el:'#job-create-app',
+        delimiters: ['${','}'],
+
+        data: {
+            newJob: {name: "", description: "", budget:"", skills: [], categories: []},
+            parentSkills: [],
+            parentSkillId: "",
+            skills: [],
+            subSkills: [],
+            parentCategories: [],
+            subCategories: [],
+            categories: [],
+            parentCategoryId: "",
+            loading: false,
+        },
+
+        mounted: function() {
+            this.getParentSkills()
+            this.getParentCategories()
+        },
+
+        methods: {
+
+          createJob: function() {
+              let api_url = '/api/services/jobs/create/'
+              this.$http.post(api_url, this.newJob).then(function(response){
+                  jobId = response.body.id
+                  window.location.replace(`/jobs/${jobId}/`)
+              }).catch(function(err){
+                  let jsonerr = JSON.parse(err.bodyText)
+                  attachFormErrors(jsonerr)
+              })
+          },
+
+
+          getParentCategories: function() {
+            getParentCategories(this)
+          },
+
+          getSubCategories: function() {
+            getSubCategories(this)
+            },
+
+          addCategory: function(categoryId) {
+                const category = this.subCategories.find(function(obj){
+                    return categoryId == obj.id
+                })
+                if ( !this.categories.includes(category) ){
+                    this.categories.push(category)
+                    this.newJob.categories.push(category.id)
+                } else onWarning('Category already added!')
+
+          },
+
+         removeCategory: function(categoryId) {
+             const categories = this.categories.filter(function(obj){
+                 return categoryId != obj.id
+             })
+              const new_categories = this.newJob.categories.filter(function(id){
+                 return categoryId != id
+             })
+             this.newJob.categories = new_categories
+             this.categories = categories
+         },
+
+          getParentSkills: function() {
+              getParentSkills(this)
+          },
+
+          getSubSkills: function() {
+            getSubSkills(this)
+          },
+
+          addSkill: function(skillId) {
+                const skill = this.subSkills.find(function(obj){
+                    return skillId == obj.id
+                })
+                if ( !this.skills.includes(skill) ){
+                    this.skills.push(skill)
+                    this.newJob.skills.push(skill.id)
+                } else onWarning('Skill already added!')
+
+          },
+
+         removeSkill: function(skillId) {
+             const skills = this.skills.filter(function(obj){
+                 return skillId != obj.id
+             })
+              const new_skills = this.newJob.skills.filter(function(id){
+                 return skillId != id
+             })
+             this.newJob.skills = new_skills
+             this.skills = skills
+         },
+
+        }
+
+
+    })
+</script>
 {% endblock content %}

@@ -1,6 +1,8 @@
 from rest_framework import generics, permissions, mixins
-from .serializers import ( ServiceSerializer, CategorySerializer, ServiceCreateSerializer, JobSerializer )
+from .serializers import ( ServiceSerializer, CategorySerializer, ServiceCreateSerializer, JobSerializer, JobCreateSerializer )
+from profiles.api.serializers import SkillSerializer
 from services.models import ServiceModel, CategoryModel, JobModel
+from profiles.models import SkillModel
 from ulance import pagination
 from ulance.custom_permissions import MyUserPermissions, MyAdminPermission, StrictUserPermissions
 from django.contrib.auth import get_user_model
@@ -97,8 +99,8 @@ class RemoveCategoryAPIView(APIView):
         if request.user != service.user or not request.user.is_superuser:
             return Response({'message': 'Not Authorized To Perform This Action'}, status=401)
         message = "Category is not listed in service"
-        if service.category.filter(pk=category.pk).exists():
-            service.category.remove(category)
+        if service.categories.filter(pk=category.pk).exists():
+            service.categories.remove(category)
             service.save()
             return Response({"message": "Category removed"}, status=201)
         return Response({'message': message}, status=400)
@@ -118,12 +120,12 @@ class AddCategoryAPIView(APIView):
         if request.user != service.user or not request.user.is_superuser:
             return Response({'message': 'Not Authorized To Perform This Action'}, status=401)
         message = "Service already has this category"
-        if not service.category.filter(pk=category.pk).exists():
-            if service.category.filter(is_parent=False).count() > 10:
+        if not service.categories.filter(pk=category.pk).exists():
+            if service.categories.filter(is_parent=False).count() > 10:
                 return Response({'message': 'Can not exceed more than 10 sub categories'}, status=400)
-            if service.category.filter(is_parent=True).count() > 3:
+            if service.categories.filter(is_parent=True).count() > 3:
                 return Response({'message': 'Can not exceed more than 3 main categories'}, status=400)
-            service.category.add(category)
+            service.categories.add(category)
             service.save()
             return Response({"message": "Category added"}, status=201)
         return Response({'message': message}, status=400)
@@ -136,17 +138,17 @@ class RemoveJobCategoryAPIView(APIView):
 
     def post(self, request, *args, **kwargs):
         category_pk = self.kwargs['category_pk']
-        service_pk = self.kwargs['service_pk']
+        job_pk = self.kwargs['job_pk']
 
         category = CategoryModel.objects.filter(pk=category_pk).first()#get_object_or_404(CategoryModel, category_pk)
-        job = JobModel.objects.filter(pk=service_pk).first()#get_object_or_404(ServiceModel, service_pk)
+        job = JobModel.objects.filter(pk=job_pk).first()#get_object_or_404(ServiceModel, service_pk)
         if category is None or job is None:
             return Response({'message': 'Invalid category or job'}, status=404)
         if request.user != job.user or not request.user.is_superuser:
             return Response({'message': 'Not Authorized To Perform This Action'}, status=401)
-        message = "Category is not listed in service"
-        if job.category.filter(pk=category.pk).exists():
-            job.category.remove(category)
+        message = "Category is not listed in job"
+        if job.categories.filter(pk=category.pk).exists():
+            job.categories.remove(category)
             job.save()
             return Response({"message": "Category removed"}, status=201)
         return Response({'message': message}, status=400)
@@ -165,16 +167,71 @@ class AddJobCategoryAPIView(APIView):
             return Response({'message': 'Invalid category or job'}, status=404)
         if request.user != job.user or not request.user.is_superuser:
             return Response({'message': 'Not Authorized To Perform This Action'}, status=401)
-        message = "Service already has this category"
-        if not job.category.filter(pk=category.pk).exists():
-            if job.category.filter(is_parent=False).count() > 10:
+        message = "Job already has this category"
+        if not job.categories.filter(pk=category.pk).exists():
+            if job.categories.filter(is_parent=False).count() > 10:
                 return Response({'message': 'Can not exceed more than 10 sub categories'}, status=400)
-            if job.category.filter(is_parent=True).count() > 3:
+            if job.categories.filter(is_parent=True).count() > 3:
                 return Response({'message': 'Can not exceed more than 3 main categories'}, status=400)
-            job.category.add(category)
+            job.categories.add(category)
             job.save()
             return Response({"message": "Category added"}, status=201)
         return Response({'message': message}, status=400)
+
+
+class AddJobSkillAPIView(APIView):
+    permission_classes = [permissions.IsAuthenticated]
+
+    def post(self, request, *args, **kwargs):
+        skill_pk = self.kwargs['skill_pk']
+        job_pk = self.kwargs['job_pk']
+
+        skill = SkillModel.objects.filter(pk=skill_pk).first()
+        job = JobModel.objects.filter(pk=job_pk).first()
+        if skill is None or job is None:
+            return Response({'message': 'Invalid skill or job'}, status=404)
+        if request.user != job.user or not request.user.is_superuser:
+            return Response({'message': 'Not Authorized To Perform This Action'}, status=401)
+        message = "Job already has this Skill"
+        if not job.skill.filter(pk=skill.pk).exists():
+            if job.skill.filter(is_parent=False).count() > 30:
+                return Response({'message': 'Can not exceed more than 30 skills'}, status=400)
+            job.skill.add(skill)
+            job.save()
+            return Response({"message": "Skill added"}, status=201)
+        return Response({'message': message}, status=400)
+
+
+class RemoveJobSkillAPIView(APIView):
+    permission_classes = [permissions.IsAuthenticated]
+
+    def post(self, request, *args, **kwargs):
+        skill_pk = self.kwargs['skill_pk']
+        job_pk = self.kwargs['job_pk']
+
+        skill = SkillModel.objects.filter(pk=skill_pk).first()#get_object_or_404(CategoryModel, category_pk)
+        job = JobModel.objects.filter(pk=job_pk).first()#get_object_or_404(ServiceModel, service_pk)
+        if skill is None or job is None:
+            return Response({'message': 'Invalid skill or job'}, status=404)
+        if request.user != job.user or not request.user.is_superuser:
+            return Response({'message': 'Not Authorized To Perform This Action'}, status=401)
+        message = "Skill is not listed in job"
+        if job.skill.filter(pk=skill.pk).exists():
+            job.skill.remove(skill)
+            job.save()
+            return Response({"message": "Category removed"}, status=201)
+        return Response({'message': message}, status=400)
+
+
+class JobSkillListAPIView(generics.ListAPIView):
+    serializer_class = SkillSerializer
+    pagination_class = pagination.StandardResultsPagination
+
+    def get_queryset(self):
+        job_id = self.kwargs['job_id']
+        job = get_object_or_404(JobModel, pk=job_id)
+        job_skills = SkillModel.objects.filter(job=job).order_by("name")
+        return job_skills
 
 
 class JobListAPIView(generics.ListAPIView):
@@ -187,7 +244,7 @@ class JobListAPIView(generics.ListAPIView):
 
 
 class JobCreateAPIView(generics.CreateAPIView):
-    serializer_class = JobSerializer
+    serializer_class = JobCreateSerializer
     permission_classes = [permissions.IsAuthenticated]
 
     def perform_create(self, serializer):

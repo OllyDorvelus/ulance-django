@@ -7,6 +7,7 @@ from rest_framework import serializers
 from services.models import ServiceModel, CategoryModel, JobModel, ServicePictureModel
 from django.contrib.auth import get_user_model
 from accounts.api.serializers import UserModelSerializer
+from profiles.api.serializers import SkillSerializer
 from django.db.models import Count, Avg, Value
 from django.db.models import Sum
 
@@ -25,7 +26,8 @@ class JobSerializer(serializers.ModelSerializer):
     user = UserModelSerializer(read_only=True)
     freelancer = UserModelSerializer(read_only=True)
     url = serializers.SerializerMethodField()
-    category = CategorySerializer(many=True, read_only=True)
+    categories = CategorySerializer(many=True, read_only=True)
+    skills = SkillSerializer(many=True, read_only=True)
     status_display = serializers.SerializerMethodField()
 
     class Meta:
@@ -45,6 +47,13 @@ class JobSerializer(serializers.ModelSerializer):
             return ''
 
 
+class JobCreateSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = JobModel
+        fields = '__all__'
+        read_only_fields = ['status', 'freelancer']
+
+
 class ServicePhotoSerializer(serializers.ModelSerializer):
 
     class Meta:
@@ -56,7 +65,7 @@ class ServiceSerializer(serializers.ModelSerializer):
     user = UserModelSerializer(read_only=True)
     photos = ServicePhotoSerializer(many=True, read_only=True)
     url = serializers.SerializerMethodField()
-    category = CategorySerializer(many=True, read_only=True)
+    categories = CategorySerializer(many=True, read_only=True)
     delivery_time_display = serializers.SerializerMethodField()
 
     class Meta:

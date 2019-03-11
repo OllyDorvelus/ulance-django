@@ -1,8 +1,5 @@
-<div class="container">
-    <div class="row" style="display:inline">
-        <div v-for="category in subCategories">
-            <span class="badge badge-info badge-pill" style="margin:.25rem;font-size:.8rem" >${category.name}
-                <i class="fa fa-plus-circle" v-on:click="addCategory(category.id)"></i></span>
-        </div>
-    </div>
+<div v-for="category in categories">
+    <span class="badge badge-info badge-pill" style="font-size:.8rem">${category.name}
+        <i class="fa fa-times" v-on:click="removeCategory(category.id)"></i></span>
 </div>
+<div class="loading" v-if="loading===true">Loading&#8230;</div>

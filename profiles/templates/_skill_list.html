@@ -1,0 +1,8 @@
+<div class="container">
+    <div class="row" style="display:inline">
+        <div v-for="skill in skills">
+            <span class="badge badge-info badge-pill" style="margin:.25rem;font-size:.8rem" >${skill.name}
+                <i class="fa fa-times" v-on:click="removeSkill(skill.id)"></i></span>
+        </div>
+    </div>
+</div>

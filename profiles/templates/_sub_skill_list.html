@@ -1,0 +1,8 @@
+<div class="container">
+    <div class="row" style="display:inline">
+        <div v-for="skill in subSkills">
+            <span class="badge badge-info badge-pill" style="margin:.25rem;font-size:.8rem" >${skill.name}
+                <i class="fa fa-plus-circle" v-on:click="addSkill(skill.id)"></i></span>
+        </div>
+    </div>
+</div>

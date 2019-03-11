@@ -1,0 +1,7 @@
+<div class="form-group">
+    <label>Main Skills:</label>
+    <select class="form-control" id="parent_skill" @change="getSubSkills()" v-model="parentSkillId">
+        <option v-for="skill in parentSkills" :value="skill.id">${skill.name}</option>
+    </select>
+    <div class="loading" v-if="loading===true">Loading&#8230;</div>
+</div>

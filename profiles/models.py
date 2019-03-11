@@ -22,31 +22,36 @@ from decimal import DecimalException
 class SkillModel(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     name = models.CharField(max_length=50, null=False, blank=False, unique=True)
+    parent = models.ForeignKey('self', null=True, blank=True, related_name='children', on_delete=models.CASCADE)
+    is_parent = models.BooleanField(verbose_name='is a parent category', default=False)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
     def __str__(self):
-        return self.name
+        if self.parent:
+            return f'{self.parent.name} - {self.name}'
+        else:
+            return self.name
 
 
-class LevelModel(models.Model):
-    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-    user = models.ForeignKey(settings.AUTH_USER_MODEL, blank=False, null=False, on_delete=models.CASCADE, related_name='skills')
-    skill = models.ForeignKey(SkillModel, blank=False, null=False, on_delete=models.CASCADE)
-    BEGINNER = 'BG'
-    INTERMEDIATE = 'IT'
-    EXPERT = 'EX'
-    SKILL_LEVEL_CHOICES = (
-        (BEGINNER, 'Beginner'),
-        (INTERMEDIATE, 'Intermediate'),
-        (EXPERT, 'Expert'),
-    )
-    skill_level = models.CharField(max_length=2, choices=SKILL_LEVEL_CHOICES, default=BEGINNER)
-    created_at = models.DateTimeField(auto_now_add=True)
-    updated_at = models.DateTimeField(auto_now=True)
-
-    def __str__(self):
-        return f'{self.skill.name} - {self.skill_level} - {self.user.username}'
+# class LevelModel(models.Model):
+#     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+#     user = models.ForeignKey(settings.AUTH_USER_MODEL, blank=False, null=False, on_delete=models.CASCADE, related_name='skills')
+#     skill = models.ForeignKey(SkillModel, blank=False, null=False, on_delete=models.CASCADE)
+#     BEGINNER = 'BG'
+#     INTERMEDIATE = 'IT'
+#     EXPERT = 'EX'
+#     SKILL_LEVEL_CHOICES = (
+#         (BEGINNER, 'Beginner'),
+#         (INTERMEDIATE, 'Intermediate'),
+#         (EXPERT, 'Expert'),
+#     )
+#     skill_level = models.CharField(max_length=2, choices=SKILL_LEVEL_CHOICES, default=BEGINNER)
+#     created_at = models.DateTimeField(auto_now_add=True)
+#     updated_at = models.DateTimeField(auto_now=True)
+#
+#     def __str__(self):
+#         return f'{self.skill.name} - {self.skill_level} - {self.user.username}'
 
 
 class ProfileModel(models.Model):
@@ -56,7 +61,7 @@ class ProfileModel(models.Model):
     first_name = models.CharField(max_length=30, blank=True, null=True)
     last_name = models.CharField(max_length=30, blank=True, null=True)
     description = models.TextField(max_length=10000, blank=True, null=True)
-    skills = models.ManyToManyField(SkillModel, max_length=50, blank=True)
+    skills = models.ManyToManyField(SkillModel, blank=True, related_name='profile')
     services_completed = models.PositiveIntegerField(blank=True, null=False, default=0)
     instagram = models.URLField(blank=True, null=True)
     facebook = models.URLField(blank=True, null=True)
