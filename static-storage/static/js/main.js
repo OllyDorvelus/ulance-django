@@ -130,11 +130,11 @@ function getParentCategories(_this) {
 }
 
 function getSubCategories(_this) {
-    _this.loading = true
+   // _this.loading = true
     let api_url = `/api/services/sub-categories/${_this.parentCategoryId}/`
     _this.$http.get(api_url).then(function(response){
         _this.subCategories = response.data.results
-        _this.loading = false
+       // _this.loading = false
     }).catch(function(err){
         _this.loading = false
     })

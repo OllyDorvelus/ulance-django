@@ -9,6 +9,7 @@ User = get_user_model()
 
 # Create your views here.
 
+
 class UserDetailView(DetailView):
    # template_name = 'profile_detail.html'
     queryset = User.objects.all()

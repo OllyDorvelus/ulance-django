@@ -45,6 +45,10 @@ class JobDetailView(DetailView):
         return job
 
 
+class JobListView(TemplateView):
+    template_name = 'jobs.html'
+
+
 class ServiceCategoryListView(DetailView):
     template_name = 'service_category_list.html'
     queryset = CategoryModel.objects.all()

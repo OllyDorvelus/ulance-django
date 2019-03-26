@@ -1,0 +1,32 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <div id="jobs-app" class="container">
+        {% include '_job_list.html' %}
+    </div>
+<script>
+    Vue.http.headers.common['X-CSRFToken'] = "{{ csrf_token }}";
+    var jobs = new Vue({
+        el:'#jobs-app',
+        delimiters: ['${','}'],
+        data: {
+            jobs: [],
+            api_url: '/api/services/jobs/',
+        },
+        mounted: function() {
+            this.getJobs()
+        },
+
+        methods: {
+            getJobs: function() {
+                const api_url = this.api_url
+                this.$http.get(api_url).then(function(response){
+                    this.jobs = response.data.results
+                }).catch(function(err){
+
+                })
+            },
+        },
+    })
+</script>
+{% endblock content %}

@@ -1,10 +1,8 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
-
-</body>
-</html>
+{% load static %}
+<div id="jobs">
+    <div v-for="job in jobs">
+        <div class="row">
+            ${job.name}
+        </div>
+    </div>
+</div>
