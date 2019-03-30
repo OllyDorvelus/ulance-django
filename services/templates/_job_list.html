@@ -1,8 +1,32 @@
 {% load static %}
 <div id="jobs">
     <div v-for="job in jobs">
-        <div class="row">
-            ${job.name}
+        <div style="padding-top:2rem" >
+            <div class="card">
+                <div class="card-body">
+                    <div class="card-header-section" style="margin-bottom:.4rem">
+                    <h5 class="card-title text-center"><a :href="job.url">${job.name}</a></h5></div>
+                    <h6><strong>Status:</strong> ${job.status_display}</h6>
+                    <p>${job.description}</p>
+                    <ul v-if="job.skills.length > 0"><span class="job-sub-list">skills needed:</span>
+                        <li class="badge badge-info" v-for="skill in job.skills">
+                            ${skill.name}
+                        </li>
+                    </ul>
+                    <div class="job-sub-list" v-else><strong>no skills</strong></div>
+                    <ul v-if="job.categories.length > 0"><span class="job-sub-list">categories:</span>
+                        <li class="badge badge-info" v-for="category in job.categories">
+                            ${category.name}
+                        </li>
+                    </ul>
+                    <div class="job-sub-list" v-else><strong>No categories</strong></div>
+                </div>
+                <div class="card-footer">
+                    <img style="height:1.4rem;width:1.4rem" :src="job.user.profile.profile_pic" class="rounded-circle img-fluid">
+                    <span><a :href="job.user.profile.url">${job.user.username}</a></span>
+                    <span><small>(${job.timesince})</small></span>
+                </div>
+            </div>
         </div>
     </div>
 </div>

@@ -8,6 +8,7 @@ from services.models import ServiceModel, CategoryModel, JobModel, ServicePictur
 from django.contrib.auth import get_user_model
 from accounts.api.serializers import UserModelSerializer
 from profiles.api.serializers import SkillSerializer
+from django.utils.timesince import timesince
 from django.db.models import Count, Avg, Value
 from django.db.models import Sum
 
@@ -28,12 +29,15 @@ class JobSerializer(serializers.ModelSerializer):
     url = serializers.SerializerMethodField()
     categories = CategorySerializer(many=True, read_only=True)
     skills = SkillSerializer(many=True, read_only=True)
+    timesince = serializers.SerializerMethodField()
     status_display = serializers.SerializerMethodField()
+
 
     class Meta:
         model = JobModel
         fields = '__all__'
         read_only_fields = ['status', 'freelancer']
+
 
     def get_url(self, obj):
         return obj.get_absolute_url()
@@ -45,6 +49,9 @@ class JobSerializer(serializers.ModelSerializer):
             return "Taken"
         else:
             return ''
+
+    def get_timesince(self, obj):
+        return f'{timesince(obj.created_at)} days ago'
 
 
 class JobCreateSerializer(serializers.ModelSerializer):
